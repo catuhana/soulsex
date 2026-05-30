@@ -1,4 +1,7 @@
 _build/
+
+.direnv/
+
 .elixir_ls/
 cover/
 deps/
