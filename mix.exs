@@ -6,7 +6,16 @@ defmodule SoulsexUmbrella.MixProject do
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
+      releases: releases(),
       deps: deps()
+    ]
+  end
+
+  defp releases do
+    [
+      soulsex: [
+        applications: [soulsex: :permanent]
+      ]
     ]
   end
 
