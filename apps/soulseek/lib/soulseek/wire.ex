@@ -28,7 +28,6 @@ defmodule Soulseek.Wire do
 
   def take_string(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}
-
   def take_bytes(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}
 end
