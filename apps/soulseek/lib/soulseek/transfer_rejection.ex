@@ -1,0 +1,47 @@
+defmodule Soulseek.TransferRejection do
+  @moduledoc "Reasons for rejecting a file transfer."
+
+  @typedoc """
+  - `:banned` - Peer is banned
+  - `:cancelled` - Transfer was cancelled by the peer
+  - `:complete` - Transfer is already complete
+  - `:file_not_shared` - File is not shared by the peer
+  - `:file_read_error` - There was an error reading the file
+  - `:pending_shutdown` - The peer is pending shutdown
+  - `:queued` - The transfer is queued
+  - `:too_many_files` - The peer has too many files shared
+  - `:too_many_megabytes` - The peer has too many megabytes shared
+  """
+  @type t ::
+          :banned
+          | :cancelled
+          | :complete
+          | :file_not_shared
+          | :file_read_error
+          | :pending_shutdown
+          | :queued
+          | :too_many_files
+          | :too_many_megabytes
+
+  @spec to_wire(t()) :: String.t()
+  def to_wire(:banned), do: "Banned"
+  def to_wire(:cancelled), do: "Cancelled"
+  def to_wire(:complete), do: "Complete"
+  def to_wire(:file_not_shared), do: "File not shared."
+  def to_wire(:file_read_error), do: "File read error."
+  def to_wire(:pending_shutdown), do: "Pending shutdown."
+  def to_wire(:queued), do: "Queued"
+  def to_wire(:too_many_files), do: "Too many files"
+  def to_wire(:too_many_megabytes), do: "Too many megabytes"
+
+  @spec from_wire(String.t()) :: t()
+  def from_wire("Banned"), do: :banned
+  def from_wire("Cancelled"), do: :cancelled
+  def from_wire("Complete"), do: :complete
+  def from_wire("File not shared."), do: :file_not_shared
+  def from_wire("File read error."), do: :file_read_error
+  def from_wire("Pending shutdown."), do: :pending_shutdown
+  def from_wire("Queued"), do: :queued
+  def from_wire("Too many files"), do: :too_many_files
+  def from_wire("Too many megabytes"), do: :too_many_megabytes
+end
