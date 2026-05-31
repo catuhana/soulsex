@@ -1,6 +1,12 @@
 defmodule Soulseek.LoginRejectionDetail do
   @moduledoc "Details for login rejection."
 
+  @typedoc """
+  - `:nick_empty` - Nick empty
+  - `:nick_too_long` - Nick too long (maximum 30 characters allowed)
+  - `:nick_invalid_characters` - Invalid characters in nick (only printable ASCII characters allowed)
+  - `:nick_leading_or_trailing_space` - No leading and trailing spaces allowed
+  """
   @type t :: :nick_empty | :nick_too_long | :nick_invalid_characters | :nick_leading_or_trailing_space
 
   @spec to_wire(t()) :: String.t()
