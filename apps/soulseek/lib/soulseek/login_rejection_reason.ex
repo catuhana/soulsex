@@ -9,7 +9,13 @@ defmodule Soulseek.LoginRejectionReason do
   - `:server_full` - Server does not accept new connections
   - `:server_private` - Server does not accept registrations
   """
-  @type t :: :invalid_username | :empty_password | :invalid_password | :invalid_version | :server_full | :server_private
+  @type t ::
+          :invalid_username
+          | :empty_password
+          | :invalid_password
+          | :invalid_version
+          | :server_full
+          | :server_private
 
   @spec to_wire(t()) :: String.t()
   def to_wire(:invalid_username), do: "INVALIDUSERNAME"
