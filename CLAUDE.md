@@ -21,8 +21,8 @@ Before committing, ALWAYS run and ensure these pass:
 3. `mix dialyzer`
 4. `mix test`
 
-Every commit you make MUST include an attribution trailer in the commit
-message body, similar to the [kernel convention](https://docs.kernel.org/process/coding-assistants.html#attribution):
+In every commit you make, instead of using `Co-Authored-By`, you MUST use a convention similar to
+the [kernel convention](https://docs.kernel.org/process/coding-assistants.html#attribution):
 
 ```text
 Assisted-by: AGENT_NAME:MODEL_VERSION
