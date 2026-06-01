@@ -1,10 +1,10 @@
 defmodule Soulseek.ConnectionType do
-  @moduledoc "Types of connections."
+  @moduledoc "Connection types negotiated during peer initialization."
 
   @typedoc """
-  - `:peer` - Peer to Peer
-  - `:file` - File Transfer
-  - `:distributed` - Distributed Network
+  - `:peer` - Peer to peer (`"P"`)
+  - `:file` - File transfer (`"F"`)
+  - `:distributed` - Distributed network (`"D"`)
   """
   @type t :: :peer | :file | :distributed
 

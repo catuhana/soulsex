@@ -1,9 +1,9 @@
 defmodule Soulseek.TransferDirection do
-  @moduledoc "File transfer direction."
+  @moduledoc "The direction of a file transfer relative to the peer."
 
   @typedoc """
-  - `:download` - Download from Peer
-  - `:upload` - Upload to Peer
+  - `:download` - Download from peer (`0`)
+  - `:upload` - Upload to peer (`1`)
   """
   @type t :: :download | :upload
 

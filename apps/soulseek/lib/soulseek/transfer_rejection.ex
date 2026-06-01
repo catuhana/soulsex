@@ -1,16 +1,18 @@
 defmodule Soulseek.TransferRejection do
-  @moduledoc "Reasons for rejecting a file transfer."
+  @moduledoc "Reasons a peer gives for rejecting a file transfer."
 
   @typedoc """
-  - `:banned` - Peer is banned
-  - `:cancelled` - Transfer was cancelled by the peer
-  - `:complete` - Transfer is already complete
-  - `:file_not_shared` - File is not shared by the peer
-  - `:file_read_error` - There was an error reading the file
-  - `:pending_shutdown` - The peer is pending shutdown
-  - `:queued` - The transfer is queued
-  - `:too_many_files` - The peer has too many files shared
-  - `:too_many_megabytes` - The peer has too many megabytes shared
+  Wire strings are matched exactly; note the ones that end with a dot.
+
+  - `:banned` - Peer is banned (`"Banned"`)
+  - `:cancelled` - Transfer was cancelled by the peer (`"Cancelled"`)
+  - `:complete` - Transfer is already complete (`"Complete"`)
+  - `:file_not_shared` - File is not shared by the peer (`"File not shared."`)
+  - `:file_read_error` - There was an error reading the file (`"File read error."`)
+  - `:pending_shutdown` - The peer is pending shutdown (`"Pending shutdown."`)
+  - `:queued` - The transfer is queued (`"Queued"`)
+  - `:too_many_files` - The peer has too many files shared (`"Too many files"`)
+  - `:too_many_megabytes` - The peer has too many megabytes shared (`"Too many megabytes"`)
   """
   @type t ::
           :banned

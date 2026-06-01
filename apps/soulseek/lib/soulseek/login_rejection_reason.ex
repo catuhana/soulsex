@@ -1,13 +1,13 @@
 defmodule Soulseek.LoginRejectionReason do
-  @moduledoc "Reasons for login rejection."
+  @moduledoc "Reasons the server gives for rejecting a login."
 
   @typedoc """
-  - `:invalid_username` - Username is invalid
-  - `:empty_password` - Password is empty
-  - `:invalid_password` - Password for existing user is incorrect
-  - `:invalid_version` - Client version is outdated
-  - `:server_full` - Server does not accept new connections
-  - `:server_private` - Server does not accept registrations
+  - `:invalid_username` - Username is invalid (`"INVALIDUSERNAME"`)
+  - `:empty_password` - Password is empty (`"EMPTYPASSWORD"`)
+  - `:invalid_password` - Password for existing user is incorrect (`"INVALIDPASS"`)
+  - `:invalid_version` - Client version is outdated (`"INVALIDVERSION"`)
+  - `:server_full` - Server does not accept new connections (`"SVRFULL"`)
+  - `:server_private` - Server does not accept registrations (`"SVRPRIVATE"`)
   """
   @type t ::
           :invalid_username

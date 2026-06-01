@@ -1,11 +1,11 @@
 defmodule Soulseek.UploadPermission do
-  @moduledoc "Upload permissions."
+  @moduledoc "Who a user permits to upload to them."
 
   @typedoc """
-  - `:no_one` - No One
-  - `:everyone` - Everyone
-  - `:users_in_list` - Users in List
-  - `:permitted_users` - Permitted Users
+  - `:no_one` - No one (`0`)
+  - `:everyone` - Everyone (`1`)
+  - `:users_in_list` - Users in list (`2`)
+  - `:permitted_users` - Permitted users (`3`)
   """
   @type t :: :no_one | :everyone | :users_in_list | :permitted_users
 

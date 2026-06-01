@@ -1,10 +1,10 @@
 defmodule Soulseek.UserStatusCode do
-  @moduledoc "User status codes."
+  @moduledoc "A user's presence status."
 
   @typedoc """
-  - `:offline` - Offline
-  - `:away` - Away
-  - `:online` - Online
+  - `:offline` - Offline (`0`)
+  - `:away` - Away (`1`)
+  - `:online` - Online (`2`)
   """
   @type t :: :offline | :away | :online
 
