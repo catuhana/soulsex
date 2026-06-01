@@ -45,6 +45,11 @@ defmodule Soulseek.Wire do
   def bool(true), do: <<1>>
   def bool(false), do: <<0>>
 
+  @doc "Encodes a boolean as a `uint32`, `1` for `true` and `0` for `false`."
+  @spec uint32_bool(boolean()) :: binary()
+  def uint32_bool(true), do: uint32(1)
+  def uint32_bool(false), do: uint32(0)
+
   @doc """
   Encodes a string as a `uint32` byte length followed by the raw bytes.
 
@@ -62,6 +67,15 @@ defmodule Soulseek.Wire do
   """
   @spec bytes(binary()) :: iodata()
   def bytes(value) when is_binary(value), do: [uint32(byte_size(value)), value]
+
+  @doc """
+  Encodes a list as a `uint32` element count followed by each element encoded
+  with `encode_fun`. Returns iodata. Inverse of `take_array/2`.
+  """
+  @spec array([term()], (term() -> iodata())) :: iodata()
+  def array(items, encode_fun) when is_list(items) do
+    [uint32(length(items)) | Enum.map(items, encode_fun)]
+  end
 
   @doc "Decodes an 8-bit unsigned integer, returning `{value, rest}`."
   @spec take_uint8(binary()) :: {non_neg_integer(), binary()}
@@ -88,6 +102,11 @@ defmodule Soulseek.Wire do
   def take_bool(<<1, rest::binary>>), do: {true, rest}
   def take_bool(<<0, rest::binary>>), do: {false, rest}
 
+  @doc "Decodes a `uint32`-encoded boolean, returning `{value, rest}`."
+  @spec take_uint32_bool(binary()) :: {boolean(), binary()}
+  def take_uint32_bool(<<1::little-32, rest::binary>>), do: {true, rest}
+  def take_uint32_bool(<<0::little-32, rest::binary>>), do: {false, rest}
+
   @doc """
   Decodes a length-prefixed string, returning `{value, rest}`.
 
@@ -105,4 +124,13 @@ defmodule Soulseek.Wire do
   @spec take_bytes(binary()) :: {binary(), binary()}
   def take_bytes(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}
+
+  @doc """
+  Decodes a `uint32` element count followed by that many elements, each read
+  with `take_fun`, returning `{values, rest}`. Inverse of `array/2`.
+  """
+  @spec take_array(binary(), (binary() -> {term(), binary()})) :: {[term()], binary()}
+  def take_array(<<count::little-32, rest::binary>>, take_fun) do
+    Enum.map_reduce(1..count//1, rest, fn _, acc -> take_fun.(acc) end)
+  end
 end

@@ -209,6 +209,48 @@ defmodule Soulseek.WireTest do
     end
   end
 
+  describe "uint32_bool/1" do
+    test "encodes true and false as four-byte values" do
+      assert Wire.uint32_bool(true) == <<1, 0, 0, 0>>
+      assert Wire.uint32_bool(false) == <<0, 0, 0, 0>>
+    end
+  end
+
+  describe "take_uint32_bool/1" do
+    test "decodes 1 as true and 0 as false, returning the rest" do
+      assert Wire.take_uint32_bool(<<1, 0, 0, 0, "rest">>) == {true, "rest"}
+      assert Wire.take_uint32_bool(<<0, 0, 0, 0, "rest">>) == {false, "rest"}
+    end
+
+    test "raises on values other than 0 or 1" do
+      assert_raise FunctionClauseError, fn -> Wire.take_uint32_bool(<<2, 0, 0, 0>>) end
+    end
+  end
+
+  describe "array/2" do
+    test "prefixes the elements with their count as a uint32" do
+      encoded = IO.iodata_to_binary(Wire.array(["a", "bc"], &Wire.string/1))
+
+      assert encoded == <<2, 0, 0, 0, 1, 0, 0, 0, "a", 2, 0, 0, 0, "bc">>
+    end
+
+    test "encodes an empty list as a zero count" do
+      assert IO.iodata_to_binary(Wire.array([], &Wire.string/1)) == <<0, 0, 0, 0>>
+    end
+  end
+
+  describe "take_array/2" do
+    test "reads the count and then that many elements, returning the rest" do
+      binary = <<2, 0, 0, 0, 1, 0, 0, 0, "a", 2, 0, 0, 0, "bc", "rest">>
+
+      assert Wire.take_array(binary, &Wire.take_string/1) == {["a", "bc"], "rest"}
+    end
+
+    test "decodes an empty array" do
+      assert Wire.take_array(<<0, 0, 0, 0, "rest">>, &Wire.take_string/1) == {[], "rest"}
+    end
+  end
+
   describe "round trips" do
     test "uint8" do
       for value <- [0, 1, 2, 127, 128, 200, 254, 255] do
@@ -261,6 +303,19 @@ defmodule Soulseek.WireTest do
     test "bool" do
       for value <- [true, false] do
         assert {^value, <<>>} = Wire.take_bool(Wire.bool(value))
+      end
+    end
+
+    test "uint32_bool" do
+      for value <- [true, false] do
+        assert {^value, <<>>} = Wire.take_uint32_bool(Wire.uint32_bool(value))
+      end
+    end
+
+    test "array" do
+      for value <- [[], ["a"], ["a", "bc", "def"]] do
+        encoded = IO.iodata_to_binary(Wire.array(value, &Wire.string/1))
+        assert {^value, <<>>} = Wire.take_array(encoded, &Wire.take_string/1)
       end
     end
 
