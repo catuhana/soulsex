@@ -3,19 +3,18 @@ defmodule SoulsexUmbrella.MixProject do
 
   def project do
     [
-      apps_path: "apps",
+      app: :soulsex,
       version: "0.1.0",
+      elixir: "~> 1.19",
       start_permanent: Mix.env() == :prod,
-      releases: releases(),
       deps: deps()
     ]
   end
 
-  defp releases do
+  def application do
     [
-      soulsex: [
-        applications: [soulsex: :permanent]
-      ]
+      extra_applications: [:logger],
+      mod: {Soulsex.Application, []}
     ]
   end
 

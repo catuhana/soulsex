@@ -24,7 +24,6 @@ let
       hash = lib.fakeHash;
     };
   */
-  mixReleaseArgs = "soulsex";
 
   removeCookie = false;
 in
@@ -36,7 +35,6 @@ mixRelease {
     src
 
     mixFodDeps
-    mixReleaseArgs
 
     removeCookie
     ;
