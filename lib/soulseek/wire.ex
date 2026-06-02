@@ -16,11 +16,7 @@ defmodule Soulseek.Wire do
   protocol documentation for the underlying reference.
   """
 
-  @doc """
-  Encodes an 8-bit unsigned integer as a single byte.
-
-  Values wider than a byte are truncated to their low 8 bits.
-  """
+  @doc "Encodes an 8-bit unsigned integer as a single byte."
   @spec uint8(integer()) :: binary()
   def uint8(value) when is_integer(value), do: <<value::little-8>>
 
@@ -40,52 +36,38 @@ defmodule Soulseek.Wire do
   @spec int32(integer()) :: binary()
   def int32(value) when is_integer(value), do: <<value::little-signed-32>>
 
-  @doc "Encodes a boolean as a single byte, `1` for `true` and `0` for `false`."
+  @doc "Encodes a boolean as a single byte."
   @spec bool(boolean()) :: binary()
   def bool(true), do: <<1>>
   def bool(false), do: <<0>>
 
-  @doc "Encodes a boolean as a `uint32`, `1` for `true` and `0` for `false`."
+  @doc "Encodes a boolean as a `uint32`."
   @spec uint32_bool(boolean()) :: binary()
   def uint32_bool(true), do: uint32(1)
   def uint32_bool(false), do: uint32(0)
 
-  @doc """
-  Encodes a string as a `uint32` byte length followed by the raw bytes.
-
-  Returns iodata. Shares its wire format with `bytes/1`; the two differ only in
-  intent, with `string/1` carrying textual data.
-  """
+  @doc "Encodes a string as a `uint32` byte length followed by the raw bytes."
   @spec string(binary()) :: iodata()
   def string(value) when is_binary(value), do: [uint32(byte_size(value)), value]
 
-  @doc """
-  Encodes a byte array as a `uint32` byte length followed by the raw bytes.
-
-  Returns iodata. Shares its wire format with `string/1`; the two differ only in
-  intent, with `bytes/1` carrying arbitrary binary data.
-  """
+  @doc "Encodes a byte array as a `uint32` byte length followed by the raw bytes."
   @spec bytes(binary()) :: iodata()
   def bytes(value) when is_binary(value), do: [uint32(byte_size(value)), value]
 
   @doc """
   Encodes a list as a `uint32` element count followed by each element encoded
-  with `encode_fun`. Returns iodata. Inverse of `take_array/2`.
+  with `encode_fun`..
   """
   @spec array([term()], (term() -> iodata())) :: iodata()
   def array(items, encode_fun) when is_list(items) do
     [uint32(length(items)) | Enum.map(items, encode_fun)]
   end
 
-  @doc """
-  zlib-compresses iodata, returning a binary. Inverse of `decompress/1`.
-
-  Used by the peer responses whose payload is compressed on the wire.
-  """
+  @doc "Zlib-compresses `iodata()`."
   @spec compress(iodata()) :: binary()
   def compress(data), do: :zlib.compress(IO.iodata_to_binary(data))
 
-  @doc "zlib-decompresses a binary, returning a binary. Inverse of `compress/1`."
+  @doc "Zlib-decompresses a binary."
   @spec decompress(binary()) :: binary()
   def decompress(data) when is_binary(data), do: :zlib.uncompress(data)
 
@@ -119,27 +101,19 @@ defmodule Soulseek.Wire do
   def take_uint32_bool(<<1::little-32, rest::binary>>), do: {true, rest}
   def take_uint32_bool(<<0::little-32, rest::binary>>), do: {false, rest}
 
-  @doc """
-  Decodes a length-prefixed string, returning `{value, rest}`.
-
-  Reads a `uint32` length and then that many bytes. Inverse of `string/1`.
-  """
+  @doc "Decodes a length-prefixed string, returning `{value, rest}`."
   @spec take_string(binary()) :: {binary(), binary()}
   def take_string(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}
 
-  @doc """
-  Decodes a length-prefixed byte array, returning `{value, rest}`.
-
-  Reads a `uint32` length and then that many bytes. Inverse of `bytes/1`.
-  """
+  @doc "Decodes a length-prefixed byte array, returning `{value, rest}`."
   @spec take_bytes(binary()) :: {binary(), binary()}
   def take_bytes(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}
 
   @doc """
   Decodes a `uint32` element count followed by that many elements, each read
-  with `take_fun`, returning `{values, rest}`. Inverse of `array/2`.
+  with `take_fun`, returning `{values, rest}`.
   """
   @spec take_array(binary(), (binary() -> {term(), binary()})) :: {[term()], binary()}
   def take_array(<<count::little-32, rest::binary>>, take_fun) do

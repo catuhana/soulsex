@@ -1,7 +1,5 @@
 defmodule Soulseek do
-  @moduledoc """
-  Documentation for `Soulseek`.
-  """
+  @moduledoc "Documentation for `Soulseek`."
 
   @doc """
   Greet the input `name`.
