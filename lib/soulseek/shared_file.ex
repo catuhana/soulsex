@@ -29,7 +29,6 @@ defmodule Soulseek.SharedFile do
           attributes: [Attribute.t()]
         }
 
-  @doc "Encodes a file entry (including its leading `1` code byte) as iodata."
   @spec encode(t()) :: iodata()
   def encode(%__MODULE__{} = file) do
     [
@@ -45,7 +44,6 @@ defmodule Soulseek.SharedFile do
     [Wire.uint32(FileAttributeType.to_wire(type)), Wire.uint32(value)]
   end
 
-  @doc "Decodes one file entry, returning `{file, rest}`. Inverse of `encode/1`."
   @spec take(binary()) :: {t(), binary()}
   def take(<<1, rest::binary>>) do
     {filename, rest} = Wire.take_string(rest)

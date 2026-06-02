@@ -13,13 +13,11 @@ defmodule Soulseek.SharedDirectory do
 
   @type t :: %__MODULE__{name: String.t(), files: [SharedFile.t()]}
 
-  @doc "Encodes a directory entry as iodata."
   @spec encode(t()) :: iodata()
   def encode(%__MODULE__{} = directory) do
     [Wire.string(directory.name), Wire.array(directory.files, &SharedFile.encode/1)]
   end
 
-  @doc "Decodes one directory entry, returning `{directory, rest}`. Inverse of `encode/1`."
   @spec take(binary()) :: {t(), binary()}
   def take(binary) do
     {name, rest} = Wire.take_string(binary)
