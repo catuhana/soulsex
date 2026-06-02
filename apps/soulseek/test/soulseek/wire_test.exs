@@ -251,6 +251,22 @@ defmodule Soulseek.WireTest do
     end
   end
 
+  describe "compress/1" do
+    test "compresses iodata to the zlib binary" do
+      assert Wire.compress(["foo", "bar"]) == :zlib.compress("foobar")
+    end
+  end
+
+  describe "decompress/1" do
+    test "decompresses a zlib binary" do
+      assert Wire.decompress(:zlib.compress("foobar")) == "foobar"
+    end
+
+    test "round trips with compress/1" do
+      assert Wire.decompress(Wire.compress(["hello, ", "world"])) == "hello, world"
+    end
+  end
+
   describe "round trips" do
     test "uint8" do
       for value <- [0, 1, 2, 127, 128, 200, 254, 255] do

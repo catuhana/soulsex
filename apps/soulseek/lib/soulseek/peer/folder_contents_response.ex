@@ -24,18 +24,16 @@ defmodule Soulseek.Peer.FolderContentsResponse do
 
   @impl true
   def encode(%__MODULE__{} = struct) do
-    :zlib.compress(
-      IO.iodata_to_binary([
-        Wire.uint32(struct.token),
-        Wire.string(struct.folder),
-        Wire.array(struct.folders, &Directory.encode/1)
-      ])
-    )
+    Wire.compress([
+      Wire.uint32(struct.token),
+      Wire.string(struct.folder),
+      Wire.array(struct.folders, &Directory.encode/1)
+    ])
   end
 
   @impl true
   def decode(binary) do
-    data = :zlib.uncompress(binary)
+    data = Wire.decompress(binary)
     {token, rest} = Wire.take_uint32(data)
     {folder, rest} = Wire.take_string(rest)
     {folders, <<>>} = Wire.take_array(rest, &Directory.take/1)

@@ -77,6 +77,18 @@ defmodule Soulseek.Wire do
     [uint32(length(items)) | Enum.map(items, encode_fun)]
   end
 
+  @doc """
+  zlib-compresses iodata, returning a binary. Inverse of `decompress/1`.
+
+  Used by the peer responses whose payload is compressed on the wire.
+  """
+  @spec compress(iodata()) :: binary()
+  def compress(data), do: :zlib.compress(IO.iodata_to_binary(data))
+
+  @doc "zlib-decompresses a binary, returning a binary. Inverse of `compress/1`."
+  @spec decompress(binary()) :: binary()
+  def decompress(data) when is_binary(data), do: :zlib.uncompress(data)
+
   @doc "Decodes an 8-bit unsigned integer, returning `{value, rest}`."
   @spec take_uint8(binary()) :: {non_neg_integer(), binary()}
   def take_uint8(<<value::little-8, rest::binary>>), do: {value, rest}

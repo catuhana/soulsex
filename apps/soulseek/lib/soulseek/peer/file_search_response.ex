@@ -41,23 +41,21 @@ defmodule Soulseek.Peer.FileSearchResponse do
 
   @impl true
   def encode(%__MODULE__{} = struct) do
-    :zlib.compress(
-      IO.iodata_to_binary([
-        Wire.string(struct.username),
-        Wire.uint32(struct.token),
-        Wire.array(struct.results, &File.encode/1),
-        Wire.bool(struct.slot_free),
-        Wire.uint32(struct.avg_speed),
-        Wire.uint32(struct.queue_length),
-        Wire.uint32(0),
-        Wire.array(struct.private_results, &File.encode/1)
-      ])
-    )
+    Wire.compress([
+      Wire.string(struct.username),
+      Wire.uint32(struct.token),
+      Wire.array(struct.results, &File.encode/1),
+      Wire.bool(struct.slot_free),
+      Wire.uint32(struct.avg_speed),
+      Wire.uint32(struct.queue_length),
+      Wire.uint32(0),
+      Wire.array(struct.private_results, &File.encode/1)
+    ])
   end
 
   @impl true
   def decode(binary) do
-    data = :zlib.uncompress(binary)
+    data = Wire.decompress(binary)
     {username, rest} = Wire.take_string(data)
     {token, rest} = Wire.take_uint32(rest)
     {results, rest} = Wire.take_array(rest, &File.take/1)
