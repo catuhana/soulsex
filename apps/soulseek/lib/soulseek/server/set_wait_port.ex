@@ -11,36 +11,22 @@ defmodule Soulseek.Server.SetWaitPort do
 
   alias Soulseek.{ObfuscationType, Wire}
 
-  defmodule Obfuscation do
-    @moduledoc "Optional peer-message obfuscation settings for a `SetWaitPort` message."
-
-    @enforce_keys [:type, :port]
-    defstruct [:type, :port]
-
-    @type t :: %__MODULE__{
-            type: ObfuscationType.t(),
-            port: 0..65_535
-          }
-  end
-
   @enforce_keys [:port]
-  defstruct [:port, :obfuscation]
+  defstruct [:port, :obfuscation_type, :obfuscated_port]
 
   @type t :: %__MODULE__{
           port: 0..65_535,
-          obfuscation: Obfuscation.t() | nil
+          obfuscation_type: ObfuscationType.t() | nil,
+          obfuscated_port: 0..65_535 | nil
         }
 
   @impl true
-  def encode(%__MODULE__{port: port, obfuscation: nil}) do
+  def encode(%__MODULE__{port: port, obfuscation_type: nil}) do
     Wire.uint32(port)
   end
 
   @impl true
-  def encode(%__MODULE__{
-        port: port,
-        obfuscation: %Obfuscation{type: type, port: obfuscated_port}
-      }) do
+  def encode(%__MODULE__{port: port, obfuscation_type: type, obfuscated_port: obfuscated_port}) do
     [
       Wire.uint32(port),
       Wire.uint32(ObfuscationType.to_wire(type)),
@@ -55,10 +41,8 @@ defmodule Soulseek.Server.SetWaitPort do
   def decode(<<port::little-32, obfuscation_type::little-32, obfuscated_port::little-32>>) do
     %__MODULE__{
       port: port,
-      obfuscation: %Obfuscation{
-        type: ObfuscationType.from_wire(obfuscation_type),
-        port: obfuscated_port
-      }
+      obfuscation_type: ObfuscationType.from_wire(obfuscation_type),
+      obfuscated_port: obfuscated_port
     }
   end
 end

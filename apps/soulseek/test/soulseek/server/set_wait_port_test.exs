@@ -2,7 +2,6 @@ defmodule Soulseek.Server.SetWaitPortTest do
   use ExUnit.Case, async: true
 
   alias Soulseek.Server.SetWaitPort
-  alias Soulseek.Server.SetWaitPort.Obfuscation
   alias Soulseek.Wire
 
   describe "encode/1" do
@@ -13,7 +12,7 @@ defmodule Soulseek.Server.SetWaitPortTest do
     end
 
     test "encodes port with obfuscation" do
-      msg = %SetWaitPort{port: 2234, obfuscation: %Obfuscation{type: :rotated, port: 50_000}}
+      msg = %SetWaitPort{port: 2234, obfuscation_type: :rotated, obfuscated_port: 50_000}
 
       assert IO.iodata_to_binary(SetWaitPort.encode(msg)) ==
                IO.iodata_to_binary([
@@ -41,7 +40,8 @@ defmodule Soulseek.Server.SetWaitPortTest do
 
       assert SetWaitPort.decode(binary) == %SetWaitPort{
                port: 2234,
-               obfuscation: %Obfuscation{type: :rotated, port: 50_000}
+               obfuscation_type: :rotated,
+               obfuscated_port: 50_000
              }
     end
 
@@ -75,7 +75,7 @@ defmodule Soulseek.Server.SetWaitPortTest do
     end
 
     test "port with obfuscation" do
-      msg = %SetWaitPort{port: 2234, obfuscation: %Obfuscation{type: :none, port: 50_000}}
+      msg = %SetWaitPort{port: 2234, obfuscation_type: :none, obfuscated_port: 50_000}
 
       assert msg
              |> SetWaitPort.encode()
@@ -84,7 +84,7 @@ defmodule Soulseek.Server.SetWaitPortTest do
     end
 
     test "port with rotated obfuscation" do
-      msg = %SetWaitPort{port: 2234, obfuscation: %Obfuscation{type: :rotated, port: 50_000}}
+      msg = %SetWaitPort{port: 2234, obfuscation_type: :rotated, obfuscated_port: 50_000}
 
       assert msg
              |> SetWaitPort.encode()
