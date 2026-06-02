@@ -12,7 +12,11 @@ defmodule Soulseek.Peer.FileTest do
       extension: "mp3",
       attributes: [
         %Attribute{type: :bitrate, value: 320},
-        %Attribute{type: :duration, value: 210}
+        %Attribute{type: :duration, value: 210},
+        %Attribute{type: :vbr, value: 0},
+        %Attribute{type: :encoder, value: 1},
+        %Attribute{type: :sample_rate, value: 44_100},
+        %Attribute{type: :bit_depth, value: 16}
       ]
     }
 
@@ -22,11 +26,19 @@ defmodule Soulseek.Peer.FileTest do
         Wire.string("song.mp3"),
         Wire.uint64(4_096),
         Wire.string("mp3"),
-        Wire.uint32(2),
+        Wire.uint32(6),
         Wire.uint32(0),
         Wire.uint32(320),
         Wire.uint32(1),
-        Wire.uint32(210)
+        Wire.uint32(210),
+        Wire.uint32(2),
+        Wire.uint32(0),
+        Wire.uint32(3),
+        Wire.uint32(1),
+        Wire.uint32(4),
+        Wire.uint32(44_100),
+        Wire.uint32(5),
+        Wire.uint32(16)
       ])
 
     %{entry: file, binary: binary}
