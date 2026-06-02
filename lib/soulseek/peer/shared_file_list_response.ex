@@ -13,32 +13,32 @@ defmodule Soulseek.Peer.SharedFileListResponse do
 
   @behaviour Soulseek.Message
 
-  alias Soulseek.Peer.Directory
+  alias Soulseek.SharedDirectory
   alias Soulseek.Wire
 
   @enforce_keys [:directories, :private_directories]
   defstruct [:directories, :private_directories]
 
   @type t :: %__MODULE__{
-          directories: [Directory.t()],
-          private_directories: [Directory.t()]
+          directories: [SharedDirectory.t()],
+          private_directories: [SharedDirectory.t()]
         }
 
   @impl true
   def encode(%__MODULE__{} = struct) do
     Wire.compress([
-      Wire.array(struct.directories, &Directory.encode/1),
+      Wire.array(struct.directories, &SharedDirectory.encode/1),
       Wire.uint32(0),
-      Wire.array(struct.private_directories, &Directory.encode/1)
+      Wire.array(struct.private_directories, &SharedDirectory.encode/1)
     ])
   end
 
   @impl true
   def decode(binary) do
     data = Wire.decompress(binary)
-    {directories, rest} = Wire.take_array(data, &Directory.take/1)
+    {directories, rest} = Wire.take_array(data, &SharedDirectory.take/1)
     {0, rest} = Wire.take_uint32(rest)
-    {private_directories, <<>>} = Wire.take_array(rest, &Directory.take/1)
+    {private_directories, <<>>} = Wire.take_array(rest, &SharedDirectory.take/1)
 
     %__MODULE__{directories: directories, private_directories: private_directories}
   end

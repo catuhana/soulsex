@@ -1,4 +1,4 @@
-defmodule Soulseek.Peer.File do
+defmodule Soulseek.SharedFile do
   @moduledoc """
   A file entry shared by peer file listings and search results (SharedFileList,
   FileSearch, FolderContents responses): a filename, size, extension, and a list

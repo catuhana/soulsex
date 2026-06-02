@@ -10,7 +10,7 @@ defmodule Soulseek.Peer.FolderContentsResponse do
 
   @behaviour Soulseek.Message
 
-  alias Soulseek.Peer.Directory
+  alias Soulseek.SharedDirectory
   alias Soulseek.Wire
 
   @enforce_keys [:token, :folder, :folders]
@@ -19,7 +19,7 @@ defmodule Soulseek.Peer.FolderContentsResponse do
   @type t :: %__MODULE__{
           token: non_neg_integer(),
           folder: String.t(),
-          folders: [Directory.t()]
+          folders: [SharedDirectory.t()]
         }
 
   @impl true
@@ -27,7 +27,7 @@ defmodule Soulseek.Peer.FolderContentsResponse do
     Wire.compress([
       Wire.uint32(struct.token),
       Wire.string(struct.folder),
-      Wire.array(struct.folders, &Directory.encode/1)
+      Wire.array(struct.folders, &SharedDirectory.encode/1)
     ])
   end
 
@@ -36,7 +36,7 @@ defmodule Soulseek.Peer.FolderContentsResponse do
     data = Wire.decompress(binary)
     {token, rest} = Wire.take_uint32(data)
     {folder, rest} = Wire.take_string(rest)
-    {folders, <<>>} = Wire.take_array(rest, &Directory.take/1)
+    {folders, <<>>} = Wire.take_array(rest, &SharedDirectory.take/1)
 
     %__MODULE__{token: token, folder: folder, folders: folders}
   end
