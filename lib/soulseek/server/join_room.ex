@@ -99,7 +99,7 @@ defmodule Soulseek.Server.JoinRoom do
       [
         Wire.string(room),
         Wire.array(users, fn user -> Wire.string(user.username) end),
-        Wire.array(users, fn user -> Wire.uint32(UserStatusCode.to_wire(user.status)) end),
+        Wire.array(users, fn user -> user.status |> UserStatusCode.to_wire() |> Wire.uint32() end),
         Wire.array(users, &encode_stats/1),
         Wire.array(users, fn user -> Wire.uint32_bool(user.slots_full) end),
         Wire.array(users, fn user -> Wire.string(user.country_code) end),

@@ -71,7 +71,7 @@ defmodule Soulseek.Server.WatchUser do
       [
         Wire.string(username),
         Wire.bool(true),
-        Wire.uint32(UserStatusCode.to_wire(info.status)),
+        info.status |> UserStatusCode.to_wire() |> Wire.uint32(),
         Wire.uint32(info.avg_speed),
         Wire.uint32(info.upload_num),
         Wire.uint32(info.unknown),

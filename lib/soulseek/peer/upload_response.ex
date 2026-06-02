@@ -26,7 +26,7 @@ defmodule Soulseek.Peer.UploadResponse do
 
   @impl true
   def encode(%__MODULE__{token: token, allowed: false, reason: reason}) do
-    [Wire.uint32(token), Wire.bool(false), Wire.string(TransferRejection.to_wire(reason))]
+    [Wire.uint32(token), Wire.bool(false), reason |> TransferRejection.to_wire() |> Wire.string()]
   end
 
   @impl true

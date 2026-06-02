@@ -53,7 +53,7 @@ defmodule Soulseek.Server.UserJoinedRoom do
     [
       Wire.string(struct.room),
       Wire.string(struct.username),
-      Wire.uint32(UserStatusCode.to_wire(struct.status)),
+      struct.status |> UserStatusCode.to_wire() |> Wire.uint32(),
       Wire.uint32(struct.avg_speed),
       Wire.uint32(struct.upload_num),
       Wire.uint32(struct.unknown),

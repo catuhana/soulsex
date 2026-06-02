@@ -28,7 +28,7 @@ defmodule Soulseek.Server.ConnectToPeer do
       [
         Wire.uint32(struct.token),
         Wire.string(struct.username),
-        Wire.string(ConnectionType.to_wire(struct.type))
+        struct.type |> ConnectionType.to_wire() |> Wire.string()
       ]
     end
 
@@ -82,12 +82,12 @@ defmodule Soulseek.Server.ConnectToPeer do
     def encode(%__MODULE__{} = struct) do
       [
         Wire.string(struct.username),
-        Wire.string(ConnectionType.to_wire(struct.type)),
+        struct.type |> ConnectionType.to_wire() |> Wire.string(),
         Wire.uint32(struct.ip),
         Wire.uint32(struct.port),
         Wire.uint32(struct.token),
         Wire.bool(struct.privileged),
-        Wire.uint32(ObfuscationType.to_wire(struct.obfuscation_type)),
+        struct.obfuscation_type |> ObfuscationType.to_wire() |> Wire.uint32(),
         Wire.uint32(struct.obfuscated_port)
       ]
     end

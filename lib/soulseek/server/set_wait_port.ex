@@ -29,7 +29,7 @@ defmodule Soulseek.Server.SetWaitPort do
   def encode(%__MODULE__{port: port, obfuscation_type: type, obfuscated_port: obfuscated_port}) do
     [
       Wire.uint32(port),
-      Wire.uint32(ObfuscationType.to_wire(type)),
+      type |> ObfuscationType.to_wire() |> Wire.uint32(),
       Wire.uint32(obfuscated_port)
     ]
   end

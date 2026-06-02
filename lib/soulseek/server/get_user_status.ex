@@ -47,7 +47,7 @@ defmodule Soulseek.Server.GetUserStatus do
     def encode(%__MODULE__{} = struct) do
       [
         Wire.string(struct.username),
-        Wire.uint32(UserStatusCode.to_wire(struct.status)),
+        struct.status |> UserStatusCode.to_wire() |> Wire.uint32(),
         Wire.bool(struct.privileged)
       ]
     end

@@ -40,18 +40,18 @@ defmodule Soulseek.Wire do
   def uint32_bool(false), do: uint32(0)
 
   @spec string(binary()) :: iodata()
-  def string(value) when is_binary(value), do: [uint32(byte_size(value)), value]
+  def string(value) when is_binary(value), do: [value |> byte_size() |> uint32(), value]
 
   @spec bytes(binary()) :: iodata()
-  def bytes(value) when is_binary(value), do: [uint32(byte_size(value)), value]
+  def bytes(value) when is_binary(value), do: [value |> byte_size() |> uint32(), value]
 
   @spec array([term()], (term() -> iodata())) :: iodata()
   def array(items, encode_fun) when is_list(items) do
-    [uint32(length(items)) | Enum.map(items, encode_fun)]
+    [items |> length() |> uint32() | Enum.map(items, encode_fun)]
   end
 
   @spec compress(iodata()) :: binary()
-  def compress(data), do: :zlib.compress(IO.iodata_to_binary(data))
+  def compress(data), do: data |> IO.iodata_to_binary() |> :zlib.compress()
 
   @spec decompress(binary()) :: binary()
   def decompress(data) when is_binary(data), do: :zlib.uncompress(data)

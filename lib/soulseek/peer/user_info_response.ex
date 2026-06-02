@@ -40,7 +40,9 @@ defmodule Soulseek.Peer.UserInfoResponse do
   defp encode_picture(picture), do: [Wire.bool(true), Wire.bytes(picture)]
 
   defp encode_permission(nil), do: []
-  defp encode_permission(permission), do: Wire.uint32(UploadPermission.to_wire(permission))
+
+  defp encode_permission(permission),
+    do: permission |> UploadPermission.to_wire() |> Wire.uint32()
 
   @impl true
   def decode(binary) do

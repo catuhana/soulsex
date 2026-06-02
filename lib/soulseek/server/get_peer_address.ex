@@ -56,7 +56,7 @@ defmodule Soulseek.Server.GetPeerAddress do
         Wire.string(struct.username),
         Wire.uint32(struct.ip),
         Wire.uint32(struct.port),
-        Wire.uint32(ObfuscationType.to_wire(struct.obfuscation_type)),
+        struct.obfuscation_type |> ObfuscationType.to_wire() |> Wire.uint32(),
         Wire.uint16(struct.obfuscated_port)
       ]
     end

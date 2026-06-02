@@ -17,7 +17,7 @@ defmodule Soulseek.Peer.UploadDenied do
 
   @impl true
   def encode(%__MODULE__{filename: filename, reason: reason}) do
-    [Wire.string(filename), Wire.string(TransferRejection.to_wire(reason))]
+    [Wire.string(filename), reason |> TransferRejection.to_wire() |> Wire.string()]
   end
 
   @impl true

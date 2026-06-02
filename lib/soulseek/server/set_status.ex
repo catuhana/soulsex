@@ -16,7 +16,7 @@ defmodule Soulseek.Server.SetStatus do
   @type t :: %__MODULE__{status: UserStatusCode.t()}
 
   @impl true
-  def encode(%__MODULE__{status: status}), do: Wire.int32(UserStatusCode.to_wire(status))
+  def encode(%__MODULE__{status: status}), do: status |> UserStatusCode.to_wire() |> Wire.int32()
 
   @impl true
   def decode(<<status::little-signed-32>>) do

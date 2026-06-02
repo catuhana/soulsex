@@ -101,8 +101,8 @@ defmodule Soulseek.Server.Login do
     def encode(%Failure{reason: :invalid_username, detail: detail}) do
       [
         Wire.bool(false),
-        Wire.string(LoginRejectionReason.to_wire(:invalid_username)),
-        Wire.string(LoginRejectionDetail.to_wire(detail))
+        :invalid_username |> LoginRejectionReason.to_wire() |> Wire.string(),
+        detail |> LoginRejectionDetail.to_wire() |> Wire.string()
       ]
     end
 
@@ -110,7 +110,7 @@ defmodule Soulseek.Server.Login do
     def encode(%Failure{reason: reason}) do
       [
         Wire.bool(false),
-        Wire.string(LoginRejectionReason.to_wire(reason))
+        reason |> LoginRejectionReason.to_wire() |> Wire.string()
       ]
     end
 
