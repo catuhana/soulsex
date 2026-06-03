@@ -33,7 +33,7 @@ Assisted-by: AGENT_NAME:MODEL_VERSION
 
 ## Projects
 
-### soulseek (`apps/soulseek`)
+### soulseek (`lib/soulseek`)
 
 This library is an implementation of the Soulseek protocol. It implements messages,
 constants, framing, and other protocol-level details.
@@ -51,9 +51,9 @@ constants, framing, and other protocol-level details.
 
 #### Protocol References
 
-1. `apps/soulseek/doc/protocol/Nicotine+ SLSKPROTOCOL.md`
-2. `apps/soulseek/doc/protocol/aioslsk SOULSEEK.rst`
+1. `doc/protocol/Nicotine+ SLSKPROTOCOL.md`
+2. `doc/protocol/aioslsk SOULSEEK.rst`
 
-### soulsex (`apps/soulsex`)
+### soulsex (`lib/soulsex`)
 
 This is an OTP application that implements a Soulseek server using `soulseek`.
