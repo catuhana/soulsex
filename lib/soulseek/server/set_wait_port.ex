@@ -25,7 +25,6 @@ defmodule Soulseek.Server.SetWaitPort do
     Wire.uint32(port)
   end
 
-  @impl true
   def encode(%__MODULE__{port: port, obfuscation_type: type, obfuscated_port: obfuscated_port}) do
     [
       Wire.uint32(port),
@@ -37,7 +36,6 @@ defmodule Soulseek.Server.SetWaitPort do
   @impl true
   def decode(<<port::little-32>>), do: %__MODULE__{port: port}
 
-  @impl true
   def decode(<<port::little-32, obfuscation_type::little-32, obfuscated_port::little-32>>) do
     %__MODULE__{
       port: port,

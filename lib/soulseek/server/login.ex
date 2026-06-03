@@ -97,7 +97,6 @@ defmodule Soulseek.Server.Login do
       ]
     end
 
-    @impl true
     def encode(%Failure{reason: :invalid_username, detail: detail}) do
       [
         Wire.bool(false),
@@ -106,7 +105,6 @@ defmodule Soulseek.Server.Login do
       ]
     end
 
-    @impl true
     def encode(%Failure{reason: reason}) do
       [
         Wire.bool(false),
@@ -129,7 +127,6 @@ defmodule Soulseek.Server.Login do
       }
     end
 
-    @impl true
     def decode(<<0, rest::binary>>) do
       {reason, rest} = Wire.take_string(rest)
       decode_failure(reason, rest)

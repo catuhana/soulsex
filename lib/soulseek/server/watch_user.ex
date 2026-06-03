@@ -66,7 +66,6 @@ defmodule Soulseek.Server.WatchUser do
       [Wire.string(username), Wire.bool(false)]
     end
 
-    @impl true
     def encode(%__MODULE__{username: username, info: %Info{} = info}) do
       [
         Wire.string(username),

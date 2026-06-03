@@ -26,7 +26,6 @@ defmodule Soulseek.Peer.TransferRequest do
     [base(struct), Wire.uint64(struct.file_size)]
   end
 
-  @impl true
   def encode(%__MODULE__{direction: :download} = struct), do: base(struct)
 
   defp base(%__MODULE__{direction: direction, token: token, filename: filename}) do
