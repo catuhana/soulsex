@@ -21,7 +21,8 @@ defmodule SoulsexUmbrella.MixProject do
   defp deps do
     [
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ranch, "~> 2.2"}
     ]
   end
 end

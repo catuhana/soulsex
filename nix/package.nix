@@ -2,7 +2,6 @@
   lib,
 
   nix-gitignore,
-  emptyDirectory,
 
   mixRelease,
   fetchMixDeps,
@@ -13,17 +12,12 @@ let
 
   src = nix-gitignore.gitignoreSource [ ] ../.;
 
-  # We don't have a dependency needed on `:prod` env yet,
-  # so just use an empty directory.
-  mixFodDeps = emptyDirectory;
-  /*
-    fetchMixDeps {
-      pname = "${pname}-deps";
-      inherit version src;
+  mixFodDeps = fetchMixDeps {
+    pname = "${pname}-deps";
+    inherit version src;
 
-      hash = lib.fakeHash;
-    };
-  */
+    hash = "sha256-OsRfifiklS+7PwpjvhhZ+wHnYUiSSZwgQTe/adksDSQ=";
+  };
 
   removeCookie = false;
 in
