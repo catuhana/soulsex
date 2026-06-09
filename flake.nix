@@ -25,13 +25,13 @@
       perSystem =
         { lib, pkgs, ... }:
         let
-          beamPackages = pkgs.beam28Packages;
+          beamPackages = pkgs.beam29Packages;
 
           inherit (beamPackages)
             erlang
             ;
 
-          elixir = beamPackages.elixir_1_19;
+          elixir = beamPackages.elixir_1_20;
         in
         {
           packages = {
