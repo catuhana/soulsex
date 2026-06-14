@@ -1,8 +1,5 @@
 # CLAUDE.md
 
-<!-- Maybe should't use GFM to consume less tokens and
-instruct the LLMs better? -->
-
 > [!IMPORTANT]
 > **Do only what I ask and nothing more**. Do not add any extra code, comments, or anything
 > else that I didn't explicitly request. Do not be proactive, do not anticipate my needs,
@@ -60,9 +57,11 @@ constants, framing, and other protocol-level details.
 
 #### Protocol References
 
-1. [Nicotine+ Protocol](https://nicotine-plus.org/doc/SLSKPROTOCOL.html)
-2. [aioslsk Soulseek Protocol](https://aioslsk.readthedocs.io/en/latest/SOULSEEK.html)
-3. [aioslsk Soulseek MESSAGES](https://aioslsk.readthedocs.io/en/latest/MESSAGES.html)
+1. [Nicotine+ Protocol Documentation](https://nicotine-plus.org/doc/SLSKPROTOCOL.html)
+2. [Soulseek.NET Protocol Documentation](https://github.com/jpdillingham/Soulseek.NET/blob/master/docs/Soulseek%20Protocol%20Documentation.html)
+3. [Museek+ Protocol Documentation](https://web.archive.org/web/20220327151706/https://www.museek-plus.org/wiki/SoulseekProtocol)
+4. [aioslsk Soulseek Protocol](https://aioslsk.readthedocs.io/en/latest/SOULSEEK.html)
+5. [aioslsk Soulseek MESSAGES](https://aioslsk.readthedocs.io/en/latest/MESSAGES.html)
 
 ### soulsex (`lib/soulsex`)
 
