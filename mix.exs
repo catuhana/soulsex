@@ -1,4 +1,4 @@
-defmodule SoulsexUmbrella.MixProject do
+defmodule Soulsex.MixProject do
   use Mix.Project
 
   def project do
