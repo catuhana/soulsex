@@ -49,8 +49,8 @@ defmodule Soulseek.Server.UserJoinedRoom do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    [
+  def encode(%__MODULE__{} = struct),
+    do: [
       Wire.string(struct.room),
       Wire.string(struct.username),
       struct.status |> UserStatusCode.to_wire() |> Wire.uint32(),
@@ -62,7 +62,6 @@ defmodule Soulseek.Server.UserJoinedRoom do
       Wire.uint32_bool(struct.slots_full),
       Wire.string(struct.country_code)
     ]
-  end
 
   @impl true
   def decode(binary) do

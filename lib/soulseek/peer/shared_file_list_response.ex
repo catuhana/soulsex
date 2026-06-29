@@ -25,13 +25,13 @@ defmodule Soulseek.Peer.SharedFileListResponse do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    Wire.compress([
-      Wire.array(struct.directories, &SharedDirectory.encode/1),
-      Wire.uint32(0),
-      Wire.array(struct.private_directories, &SharedDirectory.encode/1)
-    ])
-  end
+  def encode(%__MODULE__{} = struct),
+    do:
+      Wire.compress([
+        Wire.array(struct.directories, &SharedDirectory.encode/1),
+        Wire.uint32(0),
+        Wire.array(struct.private_directories, &SharedDirectory.encode/1)
+      ])
 
   @impl true
   def decode(binary) do

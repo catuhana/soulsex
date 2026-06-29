@@ -20,14 +20,14 @@ defmodule Soulseek.Server.CantConnectToPeer do
     @type t :: %__MODULE__{token: non_neg_integer(), username: String.t()}
 
     @impl true
-    def encode(%__MODULE__{token: token, username: username}) do
-      [Wire.uint32(token), Wire.string(username)]
-    end
+    def encode(%__MODULE__{token: token, username: username}),
+      do: [Wire.uint32(token), Wire.string(username)]
 
     @impl true
     def decode(binary) do
       {token, rest} = Wire.take_uint32(binary)
       {username, <<>>} = Wire.take_string(rest)
+
       %__MODULE__{token: token, username: username}
     end
   end

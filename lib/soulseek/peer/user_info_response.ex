@@ -74,6 +74,7 @@ defmodule Soulseek.Peer.UserInfoResponse do
 
   defp take_permission(binary) do
     {value, <<>>} = Wire.take_uint32(binary)
+
     UploadPermission.from_wire(value)
   end
 end

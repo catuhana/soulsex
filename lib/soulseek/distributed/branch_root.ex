@@ -21,6 +21,7 @@ defmodule Soulseek.Distributed.BranchRoot do
   @impl true
   def decode(binary) do
     {branch_root, <<>>} = Wire.take_string(binary)
+
     %__MODULE__{branch_root: branch_root}
   end
 end

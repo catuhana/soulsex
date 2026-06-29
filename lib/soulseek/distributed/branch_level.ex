@@ -21,6 +21,7 @@ defmodule Soulseek.Distributed.BranchLevel do
   @impl true
   def decode(binary) do
     {branch_level, <<>>} = Wire.take_int32(binary)
+
     %__MODULE__{branch_level: branch_level}
   end
 end

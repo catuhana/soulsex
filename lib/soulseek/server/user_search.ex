@@ -16,15 +16,15 @@ defmodule Soulseek.Server.UserSearch do
   @type t :: %__MODULE__{username: String.t(), token: non_neg_integer(), query: String.t()}
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    [Wire.string(struct.username), Wire.uint32(struct.token), Wire.string(struct.query)]
-  end
+  def encode(%__MODULE__{} = struct),
+    do: [Wire.string(struct.username), Wire.uint32(struct.token), Wire.string(struct.query)]
 
   @impl true
   def decode(binary) do
     {username, rest} = Wire.take_string(binary)
     {token, rest} = Wire.take_uint32(rest)
     {query, <<>>} = Wire.take_string(rest)
+
     %__MODULE__{username: username, token: token, query: query}
   end
 end

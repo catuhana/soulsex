@@ -21,6 +21,7 @@ defmodule Soulseek.Server.AdminMessage do
   @impl true
   def decode(binary) do
     {message, <<>>} = Wire.take_string(binary)
+
     %__MODULE__{message: message}
   end
 end

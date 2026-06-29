@@ -22,6 +22,7 @@ defmodule Soulseek.Server.ExcludedSearchPhrases do
   @impl true
   def decode(binary) do
     {phrases, <<>>} = Wire.take_array(binary, &Wire.take_string/1)
+
     %__MODULE__{phrases: phrases}
   end
 end

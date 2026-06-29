@@ -25,6 +25,7 @@ defmodule Soulseek.Server.WatchUser do
     @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
+
       %__MODULE__{username: username}
     end
   end
@@ -62,12 +63,11 @@ defmodule Soulseek.Server.WatchUser do
           }
 
     @impl true
-    def encode(%__MODULE__{username: username, info: nil}) do
-      [Wire.string(username), Wire.bool(false)]
-    end
+    def encode(%__MODULE__{username: username, info: nil}),
+      do: [Wire.string(username), Wire.bool(false)]
 
-    def encode(%__MODULE__{username: username, info: %Info{} = info}) do
-      [
+    def encode(%__MODULE__{username: username, info: %Info{} = info}),
+      do: [
         Wire.string(username),
         Wire.bool(true),
         info.status |> UserStatusCode.to_wire() |> Wire.uint32(),
@@ -78,11 +78,9 @@ defmodule Soulseek.Server.WatchUser do
         Wire.uint32(info.dirs),
         encode_country(info.status, info.country_code)
       ]
-    end
 
-    defp encode_country(status, country_code) when status in [:away, :online] do
-      Wire.string(country_code)
-    end
+    defp encode_country(status, country_code) when status in [:away, :online],
+      do: Wire.string(country_code)
 
     defp encode_country(:offline, _country_code), do: []
 
@@ -90,12 +88,11 @@ defmodule Soulseek.Server.WatchUser do
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {exists, rest} = Wire.take_bool(rest)
+
       decode_info(username, exists, rest)
     end
 
-    defp decode_info(username, false, <<>>) do
-      %__MODULE__{username: username, info: nil}
-    end
+    defp decode_info(username, false, <<>>), do: %__MODULE__{username: username, info: nil}
 
     defp decode_info(username, true, rest) do
       {status, rest} = Wire.take_uint32(rest)
@@ -122,6 +119,7 @@ defmodule Soulseek.Server.WatchUser do
 
     defp decode_country(status, rest) when status in [:away, :online] do
       {country_code, <<>>} = Wire.take_string(rest)
+
       country_code
     end
 

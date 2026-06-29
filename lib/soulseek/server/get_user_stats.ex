@@ -25,6 +25,7 @@ defmodule Soulseek.Server.GetUserStats do
     @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
+
       %__MODULE__{username: username}
     end
   end
@@ -47,8 +48,8 @@ defmodule Soulseek.Server.GetUserStats do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [
+    def encode(%__MODULE__{} = struct),
+      do: [
         Wire.string(struct.username),
         Wire.uint32(struct.avg_speed),
         Wire.uint32(struct.upload_num),
@@ -56,7 +57,6 @@ defmodule Soulseek.Server.GetUserStats do
         Wire.uint32(struct.files),
         Wire.uint32(struct.dirs)
       ]
-    end
 
     @impl true
     def decode(binary) do

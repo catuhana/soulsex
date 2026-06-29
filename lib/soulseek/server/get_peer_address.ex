@@ -22,9 +22,7 @@ defmodule Soulseek.Server.GetPeerAddress do
           }
 
     @impl true
-    def encode(%__MODULE__{username: username}) do
-      Wire.string(username)
-    end
+    def encode(%__MODULE__{username: username}), do: Wire.string(username)
 
     @impl true
     def decode(binary) do
@@ -51,15 +49,14 @@ defmodule Soulseek.Server.GetPeerAddress do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [
+    def encode(%__MODULE__{} = struct),
+      do: [
         Wire.string(struct.username),
         Wire.uint32(struct.ip),
         Wire.uint32(struct.port),
         struct.obfuscation_type |> ObfuscationType.to_wire() |> Wire.uint32(),
         Wire.uint16(struct.obfuscated_port)
       ]
-    end
 
     @impl true
     def decode(binary) do

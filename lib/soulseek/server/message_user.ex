@@ -20,14 +20,14 @@ defmodule Soulseek.Server.MessageUser do
     @type t :: %__MODULE__{username: String.t(), message: String.t()}
 
     @impl true
-    def encode(%__MODULE__{username: username, message: message}) do
-      [Wire.string(username), Wire.string(message)]
-    end
+    def encode(%__MODULE__{username: username, message: message}),
+      do: [Wire.string(username), Wire.string(message)]
 
     @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {message, <<>>} = Wire.take_string(rest)
+
       %__MODULE__{username: username, message: message}
     end
   end
@@ -49,15 +49,14 @@ defmodule Soulseek.Server.MessageUser do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [
+    def encode(%__MODULE__{} = struct),
+      do: [
         Wire.uint32(struct.id),
         Wire.uint32(struct.timestamp),
         Wire.string(struct.username),
         Wire.string(struct.message),
         Wire.bool(struct.new_message)
       ]
-    end
 
     @impl true
     def decode(binary) do

@@ -20,14 +20,14 @@ defmodule Soulseek.Server.FileSearch do
     @type t :: %__MODULE__{token: non_neg_integer(), query: String.t()}
 
     @impl true
-    def encode(%__MODULE__{token: token, query: query}) do
-      [Wire.uint32(token), Wire.string(query)]
-    end
+    def encode(%__MODULE__{token: token, query: query}),
+      do: [Wire.uint32(token), Wire.string(query)]
 
     @impl true
     def decode(binary) do
       {token, rest} = Wire.take_uint32(binary)
       {query, <<>>} = Wire.take_string(rest)
+
       %__MODULE__{token: token, query: query}
     end
   end
@@ -43,15 +43,15 @@ defmodule Soulseek.Server.FileSearch do
     @type t :: %__MODULE__{username: String.t(), token: non_neg_integer(), query: String.t()}
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [Wire.string(struct.username), Wire.uint32(struct.token), Wire.string(struct.query)]
-    end
+    def encode(%__MODULE__{} = struct),
+      do: [Wire.string(struct.username), Wire.uint32(struct.token), Wire.string(struct.query)]
 
     @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {token, rest} = Wire.take_uint32(rest)
       {query, <<>>} = Wire.take_string(rest)
+
       %__MODULE__{username: username, token: token, query: query}
     end
   end

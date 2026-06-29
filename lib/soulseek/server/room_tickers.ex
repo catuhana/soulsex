@@ -25,24 +25,24 @@ defmodule Soulseek.Server.RoomTickers do
   @type t :: %__MODULE__{room: String.t(), tickers: [Ticker.t()]}
 
   @impl true
-  def encode(%__MODULE__{room: room, tickers: tickers}) do
-    [Wire.string(room), Wire.array(tickers, &encode_ticker/1)]
-  end
+  def encode(%__MODULE__{room: room, tickers: tickers}),
+    do: [Wire.string(room), Wire.array(tickers, &encode_ticker/1)]
 
-  defp encode_ticker(%Ticker{username: username, ticker: ticker}) do
-    [Wire.string(username), Wire.string(ticker)]
-  end
+  defp encode_ticker(%Ticker{username: username, ticker: ticker}),
+    do: [Wire.string(username), Wire.string(ticker)]
 
   @impl true
   def decode(binary) do
     {room, rest} = Wire.take_string(binary)
     {tickers, <<>>} = Wire.take_array(rest, &take_ticker/1)
+
     %__MODULE__{room: room, tickers: tickers}
   end
 
   defp take_ticker(binary) do
     {username, rest} = Wire.take_string(binary)
     {ticker, rest} = Wire.take_string(rest)
+
     {%Ticker{username: username, ticker: ticker}, rest}
   end
 end

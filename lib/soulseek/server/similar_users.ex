@@ -46,19 +46,20 @@ defmodule Soulseek.Server.SimilarUsers do
     @impl true
     def encode(%__MODULE__{users: users}), do: Wire.array(users, &encode_user/1)
 
-    defp encode_user(%User{username: username, rating: rating}) do
-      [Wire.string(username), Wire.uint32(rating)]
-    end
+    defp encode_user(%User{username: username, rating: rating}),
+      do: [Wire.string(username), Wire.uint32(rating)]
 
     @impl true
     def decode(binary) do
       {users, <<>>} = Wire.take_array(binary, &take_user/1)
+
       %__MODULE__{users: users}
     end
 
     defp take_user(binary) do
       {username, rest} = Wire.take_string(binary)
       {rating, rest} = Wire.take_uint32(rest)
+
       {%User{username: username, rating: rating}, rest}
     end
   end

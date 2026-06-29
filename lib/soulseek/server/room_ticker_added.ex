@@ -16,15 +16,15 @@ defmodule Soulseek.Server.RoomTickerAdded do
   @type t :: %__MODULE__{room: String.t(), username: String.t(), ticker: String.t()}
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    [Wire.string(struct.room), Wire.string(struct.username), Wire.string(struct.ticker)]
-  end
+  def encode(%__MODULE__{} = struct),
+    do: [Wire.string(struct.room), Wire.string(struct.username), Wire.string(struct.ticker)]
 
   @impl true
   def decode(binary) do
     {room, rest} = Wire.take_string(binary)
     {username, rest} = Wire.take_string(rest)
     {ticker, <<>>} = Wire.take_string(rest)
+
     %__MODULE__{room: room, username: username, ticker: ticker}
   end
 end

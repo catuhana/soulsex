@@ -30,19 +30,17 @@ defmodule Soulseek.SharedFile do
         }
 
   @spec encode(t()) :: iodata()
-  def encode(%__MODULE__{} = file) do
-    [
+  def encode(%__MODULE__{} = file),
+    do: [
       Wire.uint8(1),
       Wire.string(file.filename),
       Wire.uint64(file.size),
       Wire.string(file.extension),
       Wire.array(file.attributes, &encode_attribute/1)
     ]
-  end
 
-  defp encode_attribute(%Attribute{type: type, value: value}) do
-    [type |> FileAttributeType.to_wire() |> Wire.uint32(), Wire.uint32(value)]
-  end
+  defp encode_attribute(%Attribute{type: type, value: value}),
+    do: [type |> FileAttributeType.to_wire() |> Wire.uint32(), Wire.uint32(value)]
 
   @spec take(binary()) :: {t(), binary()}
   def take(<<1, rest::binary>>) do
@@ -58,6 +56,7 @@ defmodule Soulseek.SharedFile do
   defp take_attribute(binary) do
     {code, rest} = Wire.take_uint32(binary)
     {value, rest} = Wire.take_uint32(rest)
+
     {%Attribute{type: FileAttributeType.from_wire(code), value: value}, rest}
   end
 end

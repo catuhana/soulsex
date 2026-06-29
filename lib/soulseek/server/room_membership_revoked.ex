@@ -21,6 +21,7 @@ defmodule Soulseek.Server.RoomMembershipRevoked do
   @impl true
   def decode(binary) do
     {room, <<>>} = Wire.take_string(binary)
+
     %__MODULE__{room: room}
   end
 end

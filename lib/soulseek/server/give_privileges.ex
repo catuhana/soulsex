@@ -16,14 +16,14 @@ defmodule Soulseek.Server.GivePrivileges do
   @type t :: %__MODULE__{username: String.t(), days: non_neg_integer()}
 
   @impl true
-  def encode(%__MODULE__{username: username, days: days}) do
-    [Wire.string(username), Wire.uint32(days)]
-  end
+  def encode(%__MODULE__{username: username, days: days}),
+    do: [Wire.string(username), Wire.uint32(days)]
 
   @impl true
   def decode(binary) do
     {username, rest} = Wire.take_string(binary)
     {days, <<>>} = Wire.take_uint32(rest)
+
     %__MODULE__{username: username, days: days}
   end
 end

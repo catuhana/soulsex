@@ -26,14 +26,13 @@ defmodule Soulseek.Distributed.Search do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    [
+  def encode(%__MODULE__{} = struct),
+    do: [
       Wire.uint32(@identifier),
       Wire.string(struct.username),
       Wire.uint32(struct.token),
       Wire.string(struct.query)
     ]
-  end
 
   @impl true
   def decode(binary) do

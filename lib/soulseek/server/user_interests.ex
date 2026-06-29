@@ -24,6 +24,7 @@ defmodule Soulseek.Server.UserInterests do
     @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
+
       %__MODULE__{username: username}
     end
   end
@@ -39,19 +40,19 @@ defmodule Soulseek.Server.UserInterests do
     @type t :: %__MODULE__{username: String.t(), liked: [String.t()], hated: [String.t()]}
 
     @impl true
-    def encode(%__MODULE__{username: username, liked: liked, hated: hated}) do
-      [
+    def encode(%__MODULE__{username: username, liked: liked, hated: hated}),
+      do: [
         Wire.string(username),
         Wire.array(liked, &Wire.string/1),
         Wire.array(hated, &Wire.string/1)
       ]
-    end
 
     @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {liked, rest} = Wire.take_array(rest, &Wire.take_string/1)
       {hated, <<>>} = Wire.take_array(rest, &Wire.take_string/1)
+
       %__MODULE__{username: username, liked: liked, hated: hated}
     end
   end

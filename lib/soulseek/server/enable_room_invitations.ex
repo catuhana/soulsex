@@ -21,6 +21,7 @@ defmodule Soulseek.Server.EnableRoomInvitations do
   @impl true
   def decode(binary) do
     {enable, <<>>} = Wire.take_bool(binary)
+
     %__MODULE__{enable: enable}
   end
 end

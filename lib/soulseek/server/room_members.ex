@@ -16,14 +16,14 @@ defmodule Soulseek.Server.RoomMembers do
   @type t :: %__MODULE__{room: String.t(), members: [String.t()]}
 
   @impl true
-  def encode(%__MODULE__{room: room, members: members}) do
-    [Wire.string(room), Wire.array(members, &Wire.string/1)]
-  end
+  def encode(%__MODULE__{room: room, members: members}),
+    do: [Wire.string(room), Wire.array(members, &Wire.string/1)]
 
   @impl true
   def decode(binary) do
     {room, rest} = Wire.take_string(binary)
     {members, <<>>} = Wire.take_array(rest, &Wire.take_string/1)
+
     %__MODULE__{room: room, members: members}
   end
 end

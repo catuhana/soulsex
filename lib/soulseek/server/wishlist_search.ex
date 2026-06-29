@@ -16,14 +16,14 @@ defmodule Soulseek.Server.WishlistSearch do
   @type t :: %__MODULE__{token: non_neg_integer(), query: String.t()}
 
   @impl true
-  def encode(%__MODULE__{token: token, query: query}) do
-    [Wire.uint32(token), Wire.string(query)]
-  end
+  def encode(%__MODULE__{token: token, query: query}),
+    do: [Wire.uint32(token), Wire.string(query)]
 
   @impl true
   def decode(binary) do
     {token, rest} = Wire.take_uint32(binary)
     {query, <<>>} = Wire.take_string(rest)
+
     %__MODULE__{token: token, query: query}
   end
 end

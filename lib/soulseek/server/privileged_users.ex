@@ -21,6 +21,7 @@ defmodule Soulseek.Server.PrivilegedUsers do
   @impl true
   def decode(binary) do
     {users, <<>>} = Wire.take_array(binary, &Wire.take_string/1)
+
     %__MODULE__{users: users}
   end
 end

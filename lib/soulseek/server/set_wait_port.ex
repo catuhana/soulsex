@@ -21,26 +21,22 @@ defmodule Soulseek.Server.SetWaitPort do
         }
 
   @impl true
-  def encode(%__MODULE__{port: port, obfuscation_type: nil}) do
-    Wire.uint32(port)
-  end
+  def encode(%__MODULE__{port: port, obfuscation_type: nil}), do: Wire.uint32(port)
 
-  def encode(%__MODULE__{port: port, obfuscation_type: type, obfuscated_port: obfuscated_port}) do
-    [
+  def encode(%__MODULE__{port: port, obfuscation_type: type, obfuscated_port: obfuscated_port}),
+    do: [
       Wire.uint32(port),
       type |> ObfuscationType.to_wire() |> Wire.uint32(),
       Wire.uint32(obfuscated_port)
     ]
-  end
 
   @impl true
   def decode(<<port::little-32>>), do: %__MODULE__{port: port}
 
-  def decode(<<port::little-32, obfuscation_type::little-32, obfuscated_port::little-32>>) do
-    %__MODULE__{
+  def decode(<<port::little-32, obfuscation_type::little-32, obfuscated_port::little-32>>),
+    do: %__MODULE__{
       port: port,
       obfuscation_type: ObfuscationType.from_wire(obfuscation_type),
       obfuscated_port: obfuscated_port
     }
-  end
 end

@@ -50,21 +50,19 @@ defmodule Soulseek.Server.RoomList do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [
+    def encode(%__MODULE__{} = struct),
+      do: [
         encode_rooms(struct.rooms),
         encode_rooms(struct.owned_private_rooms),
         encode_rooms(struct.private_rooms),
         Wire.array(struct.operated_private_rooms, &Wire.string/1)
       ]
-    end
 
-    defp encode_rooms(rooms) do
-      [
+    defp encode_rooms(rooms),
+      do: [
         Wire.array(rooms, fn room -> Wire.string(room.name) end),
         Wire.array(rooms, fn room -> Wire.uint32(room.user_count) end)
       ]
-    end
 
     @impl true
     def decode(binary) do

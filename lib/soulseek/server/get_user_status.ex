@@ -25,6 +25,7 @@ defmodule Soulseek.Server.GetUserStatus do
     @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
+
       %__MODULE__{username: username}
     end
   end
@@ -44,13 +45,12 @@ defmodule Soulseek.Server.GetUserStatus do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [
+    def encode(%__MODULE__{} = struct),
+      do: [
         Wire.string(struct.username),
         struct.status |> UserStatusCode.to_wire() |> Wire.uint32(),
         Wire.bool(struct.privileged)
       ]
-    end
 
     @impl true
     def decode(binary) do

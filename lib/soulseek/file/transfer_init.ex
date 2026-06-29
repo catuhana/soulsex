@@ -20,6 +20,7 @@ defmodule Soulseek.File.TransferInit do
   @impl true
   def decode(binary) do
     {token, <<>>} = Wire.take_uint32(binary)
+
     %__MODULE__{token: token}
   end
 end

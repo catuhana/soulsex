@@ -20,6 +20,7 @@ defmodule Soulseek.File.Offset do
   @impl true
   def decode(binary) do
     {offset, <<>>} = Wire.take_uint64(binary)
+
     %__MODULE__{offset: offset}
   end
 end

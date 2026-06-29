@@ -21,6 +21,7 @@ defmodule Soulseek.Server.ChangePassword do
   @impl true
   def decode(binary) do
     {password, <<>>} = Wire.take_string(binary)
+
     %__MODULE__{password: password}
   end
 end

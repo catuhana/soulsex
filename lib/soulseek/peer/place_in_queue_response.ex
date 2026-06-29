@@ -16,14 +16,14 @@ defmodule Soulseek.Peer.PlaceInQueueResponse do
   @type t :: %__MODULE__{filename: String.t(), place: non_neg_integer()}
 
   @impl true
-  def encode(%__MODULE__{filename: filename, place: place}) do
-    [Wire.string(filename), Wire.uint32(place)]
-  end
+  def encode(%__MODULE__{filename: filename, place: place}),
+    do: [Wire.string(filename), Wire.uint32(place)]
 
   @impl true
   def decode(binary) do
     {filename, rest} = Wire.take_string(binary)
     {place, <<>>} = Wire.take_uint32(rest)
+
     %__MODULE__{filename: filename, place: place}
   end
 end

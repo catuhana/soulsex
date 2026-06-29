@@ -27,6 +27,7 @@ defmodule Soulseek.Server.ItemRecommendations do
     @impl true
     def decode(binary) do
       {item, <<>>} = Wire.take_string(binary)
+
       %__MODULE__{item: item}
     end
   end
@@ -51,24 +52,24 @@ defmodule Soulseek.Server.ItemRecommendations do
     @type t :: %__MODULE__{item: String.t(), recommendations: [Recommendation.t()]}
 
     @impl true
-    def encode(%__MODULE__{item: item, recommendations: recommendations}) do
-      [Wire.string(item), Wire.array(recommendations, &encode_recommendation/1)]
-    end
+    def encode(%__MODULE__{item: item, recommendations: recommendations}),
+      do: [Wire.string(item), Wire.array(recommendations, &encode_recommendation/1)]
 
-    defp encode_recommendation(%Recommendation{item: item, score: score}) do
-      [Wire.string(item), Wire.int32(score)]
-    end
+    defp encode_recommendation(%Recommendation{item: item, score: score}),
+      do: [Wire.string(item), Wire.int32(score)]
 
     @impl true
     def decode(binary) do
       {item, rest} = Wire.take_string(binary)
       {recommendations, <<>>} = Wire.take_array(rest, &take_recommendation/1)
+
       %__MODULE__{item: item, recommendations: recommendations}
     end
 
     defp take_recommendation(binary) do
       {item, rest} = Wire.take_string(binary)
       {score, rest} = Wire.take_int32(rest)
+
       {%Recommendation{item: item, score: score}, rest}
     end
   end

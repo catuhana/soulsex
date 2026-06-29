@@ -21,6 +21,7 @@ defmodule Soulseek.Server.RemoveThingILike do
   @impl true
   def decode(binary) do
     {item, <<>>} = Wire.take_string(binary)
+
     %__MODULE__{item: item}
   end
 end

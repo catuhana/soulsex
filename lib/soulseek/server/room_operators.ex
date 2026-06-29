@@ -16,14 +16,14 @@ defmodule Soulseek.Server.RoomOperators do
   @type t :: %__MODULE__{room: String.t(), operators: [String.t()]}
 
   @impl true
-  def encode(%__MODULE__{room: room, operators: operators}) do
-    [Wire.string(room), Wire.array(operators, &Wire.string/1)]
-  end
+  def encode(%__MODULE__{room: room, operators: operators}),
+    do: [Wire.string(room), Wire.array(operators, &Wire.string/1)]
 
   @impl true
   def decode(binary) do
     {room, rest} = Wire.take_string(binary)
     {operators, <<>>} = Wire.take_array(rest, &Wire.take_string/1)
+
     %__MODULE__{room: room, operators: operators}
   end
 end

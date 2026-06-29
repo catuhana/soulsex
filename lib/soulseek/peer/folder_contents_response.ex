@@ -23,13 +23,13 @@ defmodule Soulseek.Peer.FolderContentsResponse do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    Wire.compress([
-      Wire.uint32(struct.token),
-      Wire.string(struct.folder),
-      Wire.array(struct.folders, &SharedDirectory.encode/1)
-    ])
-  end
+  def encode(%__MODULE__{} = struct),
+    do:
+      Wire.compress([
+        Wire.uint32(struct.token),
+        Wire.string(struct.folder),
+        Wire.array(struct.folders, &SharedDirectory.encode/1)
+      ])
 
   @impl true
   def decode(binary) do

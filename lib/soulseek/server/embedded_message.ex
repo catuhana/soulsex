@@ -18,12 +18,8 @@ defmodule Soulseek.Server.EmbeddedMessage do
   @type t :: %__MODULE__{code: non_neg_integer(), message: binary()}
 
   @impl true
-  def encode(%__MODULE__{code: code, message: message}) do
-    [Wire.uint8(code), message]
-  end
+  def encode(%__MODULE__{code: code, message: message}), do: [Wire.uint8(code), message]
 
   @impl true
-  def decode(<<code, message::binary>>) do
-    %__MODULE__{code: code, message: message}
-  end
+  def decode(<<code, message::binary>>), do: %__MODULE__{code: code, message: message}
 end

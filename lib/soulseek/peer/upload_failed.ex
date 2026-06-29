@@ -21,6 +21,7 @@ defmodule Soulseek.Peer.UploadFailed do
   @impl true
   def decode(binary) do
     {filename, <<>>} = Wire.take_string(binary)
+
     %__MODULE__{filename: filename}
   end
 end

@@ -20,14 +20,14 @@ defmodule Soulseek.Server.JoinRoom do
     @type t :: %__MODULE__{room: String.t(), private: boolean()}
 
     @impl true
-    def encode(%__MODULE__{room: room, private: private}) do
-      [Wire.string(room), Wire.uint32_bool(private)]
-    end
+    def encode(%__MODULE__{room: room, private: private}),
+      do: [Wire.string(room), Wire.uint32_bool(private)]
 
     @impl true
     def decode(binary) do
       {room, rest} = Wire.take_string(binary)
       {private, <<>>} = Wire.take_uint32_bool(rest)
+
       %__MODULE__{room: room, private: private}
     end
   end
@@ -95,8 +95,8 @@ defmodule Soulseek.Server.JoinRoom do
           }
 
     @impl true
-    def encode(%__MODULE__{room: room, users: users, private: private}) do
-      [
+    def encode(%__MODULE__{room: room, users: users, private: private}),
+      do: [
         Wire.string(room),
         Wire.array(users, fn user -> Wire.string(user.username) end),
         Wire.array(users, fn user -> user.status |> UserStatusCode.to_wire() |> Wire.uint32() end),
@@ -105,23 +105,20 @@ defmodule Soulseek.Server.JoinRoom do
         Wire.array(users, fn user -> Wire.string(user.country_code) end),
         encode_private(private)
       ]
-    end
 
-    defp encode_stats(user) do
-      [
+    defp encode_stats(user),
+      do: [
         Wire.uint32(user.avg_speed),
         Wire.uint32(user.upload_num),
         Wire.uint32(user.unknown),
         Wire.uint32(user.files),
         Wire.uint32(user.dirs)
       ]
-    end
 
     defp encode_private(nil), do: []
 
-    defp encode_private(%Private{owner: owner, operators: operators}) do
-      [Wire.string(owner), Wire.array(operators, &Wire.string/1)]
-    end
+    defp encode_private(%Private{owner: owner, operators: operators}),
+      do: [Wire.string(owner), Wire.array(operators, &Wire.string/1)]
 
     @impl true
     def decode(binary) do
@@ -141,6 +138,7 @@ defmodule Soulseek.Server.JoinRoom do
 
     defp take_status(binary) do
       {status, rest} = Wire.take_uint32(binary)
+
       {UserStatusCode.from_wire(status), rest}
     end
 
@@ -151,6 +149,8 @@ defmodule Soulseek.Server.JoinRoom do
       {files, rest} = Wire.take_uint32(rest)
       {dirs, rest} = Wire.take_uint32(rest)
 
+      # TODO: Maybe create a custom struct for stats
+      # instead of returning a map?
       {%{
          avg_speed: avg_speed,
          upload_num: upload_num,
@@ -160,29 +160,30 @@ defmodule Soulseek.Server.JoinRoom do
        }, rest}
     end
 
-    defp zip_users(usernames, statuses, stats, slots, countries) do
-      [usernames, statuses, stats, slots, countries]
-      |> Enum.zip()
-      |> Enum.map(fn {username, status, stat, slots_full, country_code} ->
-        %User{
-          username: username,
-          status: status,
-          avg_speed: stat.avg_speed,
-          upload_num: stat.upload_num,
-          unknown: stat.unknown,
-          files: stat.files,
-          dirs: stat.dirs,
-          slots_full: slots_full,
-          country_code: country_code
-        }
-      end)
-    end
+    defp zip_users(usernames, statuses, stats, slots, countries),
+      do:
+        [usernames, statuses, stats, slots, countries]
+        |> Enum.zip()
+        |> Enum.map(fn {username, status, stat, slots_full, country_code} ->
+          %User{
+            username: username,
+            status: status,
+            avg_speed: stat.avg_speed,
+            upload_num: stat.upload_num,
+            unknown: stat.unknown,
+            files: stat.files,
+            dirs: stat.dirs,
+            slots_full: slots_full,
+            country_code: country_code
+          }
+        end)
 
     defp decode_private(<<>>), do: nil
 
     defp decode_private(rest) do
       {owner, rest} = Wire.take_string(rest)
       {operators, <<>>} = Wire.take_array(rest, &Wire.take_string/1)
+
       %Private{owner: owner, operators: operators}
     end
   end

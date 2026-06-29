@@ -25,17 +25,15 @@ defmodule Soulseek.Server.PossibleParents do
   @type t :: %__MODULE__{parents: [Parent.t()]}
 
   @impl true
-  def encode(%__MODULE__{parents: parents}) do
-    Wire.array(parents, &encode_parent/1)
-  end
+  def encode(%__MODULE__{parents: parents}), do: Wire.array(parents, &encode_parent/1)
 
-  defp encode_parent(%Parent{username: username, ip: ip, port: port}) do
-    [Wire.string(username), Wire.uint32(ip), Wire.uint32(port)]
-  end
+  defp encode_parent(%Parent{username: username, ip: ip, port: port}),
+    do: [Wire.string(username), Wire.uint32(ip), Wire.uint32(port)]
 
   @impl true
   def decode(binary) do
     {parents, <<>>} = Wire.take_array(binary, &take_parent/1)
+
     %__MODULE__{parents: parents}
   end
 
@@ -43,6 +41,7 @@ defmodule Soulseek.Server.PossibleParents do
     {username, rest} = Wire.take_string(binary)
     {ip, rest} = Wire.take_uint32(rest)
     {port, rest} = Wire.take_uint32(rest)
+
     {%Parent{username: username, ip: ip, port: port}, rest}
   end
 end

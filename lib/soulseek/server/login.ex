@@ -25,15 +25,14 @@ defmodule Soulseek.Server.Login do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct) do
-      [
+    def encode(%__MODULE__{} = struct),
+      do: [
         Wire.string(struct.username),
         Wire.string(struct.password),
         Wire.uint32(struct.version_major),
         Wire.string(struct.hash),
         Wire.uint32(struct.version_minor)
       ]
-    end
 
     @impl true
     def decode(binary) do
@@ -87,30 +86,27 @@ defmodule Soulseek.Server.Login do
     @type t :: Success.t() | Failure.t()
 
     @impl true
-    def encode(%Success{} = success) do
-      [
+    def encode(%Success{} = success),
+      do: [
         Wire.bool(true),
         Wire.string(success.greet),
         Wire.uint32(success.ip_address),
         Wire.string(success.hash),
         Wire.bool(success.supporter)
       ]
-    end
 
-    def encode(%Failure{reason: :invalid_username, detail: detail}) do
-      [
+    def encode(%Failure{reason: :invalid_username, detail: detail}),
+      do: [
         Wire.bool(false),
         :invalid_username |> LoginRejectionReason.to_wire() |> Wire.string(),
         detail |> LoginRejectionDetail.to_wire() |> Wire.string()
       ]
-    end
 
-    def encode(%Failure{reason: reason}) do
-      [
+    def encode(%Failure{reason: reason}),
+      do: [
         Wire.bool(false),
         reason |> LoginRejectionReason.to_wire() |> Wire.string()
       ]
-    end
 
     @impl true
     def decode(<<1, rest::binary>>) do
@@ -129,6 +125,7 @@ defmodule Soulseek.Server.Login do
 
     def decode(<<0, rest::binary>>) do
       {reason, rest} = Wire.take_string(rest)
+
       decode_failure(reason, rest)
     end
 
@@ -141,8 +138,7 @@ defmodule Soulseek.Server.Login do
       }
     end
 
-    defp decode_failure(reason, <<>>) do
-      %Failure{reason: LoginRejectionReason.from_wire(reason)}
-    end
+    defp decode_failure(reason, <<>>),
+      do: %Failure{reason: LoginRejectionReason.from_wire(reason)}
   end
 end
