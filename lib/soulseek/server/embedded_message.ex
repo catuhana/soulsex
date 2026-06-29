@@ -3,7 +3,8 @@ defmodule Soulseek.Server.EmbeddedMessage do
   The EmbeddedMessage message (server code 93).
 
   The server sends an embedded distributed message (a distributed code and the
-  raw message bytes) when we are a branch root. The client sends no such
+  message bytes) when we are a branch root. The distributed message is the raw
+  remaining bytes of the payload with no length prefix. The client sends no such
   message.
   """
 
@@ -18,13 +19,11 @@ defmodule Soulseek.Server.EmbeddedMessage do
 
   @impl true
   def encode(%__MODULE__{code: code, message: message}) do
-    [Wire.uint8(code), Wire.bytes(message)]
+    [Wire.uint8(code), message]
   end
 
   @impl true
-  def decode(binary) do
-    {code, rest} = Wire.take_uint8(binary)
-    {message, <<>>} = Wire.take_bytes(rest)
+  def decode(<<code, message::binary>>) do
     %__MODULE__{code: code, message: message}
   end
 end
