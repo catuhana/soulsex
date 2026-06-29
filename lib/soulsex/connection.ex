@@ -98,5 +98,8 @@ defmodule Soulsex.Connection do
   defp redact(%Soulseek.Server.Login.Request{} = request),
     do: %{request | password: "[REDACTED]", hash: "[REDACTED]"}
 
+  defp redact(%Soulseek.Server.ChangePassword{} = message),
+    do: %{message | password: "[REDACTED]"}
+
   defp redact(message), do: message
 end
