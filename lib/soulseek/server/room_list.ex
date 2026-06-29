@@ -84,6 +84,7 @@ defmodule Soulseek.Server.RoomList do
     defp take_rooms(binary) do
       {names, rest} = Wire.take_array(binary, &Wire.take_string/1)
       {counts, rest} = Wire.take_array(rest, &Wire.take_uint32/1)
+      true = length(names) == length(counts)
 
       rooms =
         Enum.zip_with(names, counts, fn name, count -> %Room{name: name, user_count: count} end)
