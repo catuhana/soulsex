@@ -27,19 +27,23 @@
         let
           beamPackages = pkgs.beam29Packages;
 
-          inherit (beamPackages)
-            erlang
-            ;
-
+          erlang = beamPackages.erlang;
           elixir = beamPackages.elixir_1_20;
         in
         {
-          packages = {
-            default = pkgs.callPackage ./nix/package.nix {
-              mixRelease = beamPackages.mixRelease.override { inherit elixir; };
-              fetchMixDeps = beamPackages.fetchMixDeps.override { inherit elixir; };
+          packages =
+            let
+              inherit (beamPackages)
+                mixRelease
+                fetchMixDeps
+                ;
+            in
+            {
+              default = pkgs.callPackage ./nix/package.nix {
+                mixRelease = mixRelease.override { inherit elixir; };
+                fetchMixDeps = fetchMixDeps.override { inherit elixir; };
+              };
             };
-          };
 
           devShells.default = pkgs.mkShell {
             packages = [
@@ -55,6 +59,7 @@
             programs = {
               mix-format = {
                 enable = true;
+
                 package = elixir;
               };
 
