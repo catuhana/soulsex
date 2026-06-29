@@ -17,19 +17,19 @@ defmodule Soulseek.Wire do
   """
 
   @spec uint8(integer()) :: binary()
-  def uint8(value) when is_integer(value), do: <<value::little-8>>
+  def uint8(value) when value in 0..255, do: <<value::little-8>>
 
   @spec uint16(integer()) :: binary()
-  def uint16(value) when is_integer(value), do: <<value::little-16>>
+  def uint16(value) when value in 0..65_535, do: <<value::little-16>>
 
   @spec uint32(integer()) :: binary()
-  def uint32(value) when is_integer(value), do: <<value::little-32>>
+  def uint32(value) when value in 0..4_294_967_295, do: <<value::little-32>>
 
   @spec uint64(integer()) :: binary()
-  def uint64(value) when is_integer(value), do: <<value::little-64>>
+  def uint64(value) when value in 0..18_446_744_073_709_551_615, do: <<value::little-64>>
 
   @spec int32(integer()) :: binary()
-  def int32(value) when is_integer(value), do: <<value::little-signed-32>>
+  def int32(value) when value in -2_147_483_648..2_147_483_647, do: <<value::little-signed-32>>
 
   @spec bool(boolean()) :: binary()
   def bool(true), do: <<1>>
@@ -39,6 +39,12 @@ defmodule Soulseek.Wire do
   def uint32_bool(true), do: uint32(1)
   def uint32_bool(false), do: uint32(0)
 
+  @doc """
+  Encodes a length-prefixed string.
+
+  Soulseek strings are UTF-8 on the wire. The value is written verbatim and is
+  not validated, so callers may pass latin-1 produced by older clients.
+  """
   @spec string(binary()) :: iodata()
   def string(value) when is_binary(value), do: [value |> byte_size() |> uint32(), value]
 
@@ -79,6 +85,11 @@ defmodule Soulseek.Wire do
   def take_uint32_bool(<<1::little-32, rest::binary>>), do: {true, rest}
   def take_uint32_bool(<<0::little-32, rest::binary>>), do: {false, rest}
 
+  @doc """
+  Reads a length-prefixed string and returns `{value, rest}`.
+
+  The bytes are returned verbatim with no UTF-8 validation.
+  """
   @spec take_string(binary()) :: {binary(), binary()}
   def take_string(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}
@@ -88,7 +99,7 @@ defmodule Soulseek.Wire do
     do: {value, rest}
 
   @spec take_array(binary(), (binary() -> {term(), binary()})) :: {[term()], binary()}
-  def take_array(<<count::little-32, rest::binary>>, take_fun) do
+  def take_array(<<count::little-32, rest::binary>>, take_fun) when count <= byte_size(rest) do
     Enum.map_reduce(1..count//1, rest, fn _, acc -> take_fun.(acc) end)
   end
 end
