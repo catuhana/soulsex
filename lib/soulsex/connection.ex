@@ -18,13 +18,13 @@ defmodule Soulsex.Connection do
   @max_message_size 469_762_048
 
   @impl true
-  def start_link(ref, transport, opts) do
-    {:ok, :proc_lib.spawn_link(__MODULE__, :init, [ref, transport, opts])}
-  end
+  def start_link(ref, transport, opts),
+    do: {:ok, :proc_lib.spawn_link(__MODULE__, :init, [ref, transport, opts])}
 
   @spec init(:ranch.ref(), module(), term()) :: :ok
   def init(ref, transport, _opts) do
     {:ok, socket} = :ranch.handshake(ref)
+
     loop(socket, transport, <<>>)
   end
 
@@ -78,7 +78,8 @@ defmodule Soulsex.Connection do
       module ->
         decoder = decoder(module)
         message = decoder.decode(payload)
-        Logger.info("recv #{inspect(redact(message))}")
+
+        Logger.debug("recv #{inspect(redact(message))}")
     end
 
     :ok
