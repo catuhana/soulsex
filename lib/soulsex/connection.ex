@@ -83,6 +83,10 @@ defmodule Soulsex.Connection do
 
     :ok
   rescue
+    # The protocol decoders are strict and raise on malformed input. Catching
+    # here to log and skip a bad frame, keeping the connection open as the
+    # official server does, is a deliberate boundary, not control flow by
+    # exception.
     error -> Logger.warning("failed to handle server frame: #{inspect(error)}")
   end
 
