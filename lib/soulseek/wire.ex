@@ -52,9 +52,8 @@ defmodule Soulseek.Wire do
   def bytes(value) when is_binary(value), do: [value |> byte_size() |> uint32(), value]
 
   @spec array([term()], (term() -> iodata())) :: iodata()
-  def array(items, encode_fun) when is_list(items) do
-    [items |> length() |> uint32() | Enum.map(items, encode_fun)]
-  end
+  def array(items, encode_fun) when is_list(items),
+    do: [items |> length() |> uint32() | Enum.map(items, encode_fun)]
 
   @spec compress(iodata()) :: binary()
   def compress(data), do: data |> IO.iodata_to_binary() |> :zlib.compress()
@@ -99,7 +98,6 @@ defmodule Soulseek.Wire do
     do: {value, rest}
 
   @spec take_array(binary(), (binary() -> {term(), binary()})) :: {[term()], binary()}
-  def take_array(<<count::little-32, rest::binary>>, take_fun) when count <= byte_size(rest) do
-    Enum.map_reduce(1..count//1, rest, fn _, acc -> take_fun.(acc) end)
-  end
+  def take_array(<<count::little-32, rest::binary>>, take_fun) when count <= byte_size(rest),
+    do: Enum.map_reduce(1..count//1, rest, fn _, acc -> take_fun.(acc) end)
 end
