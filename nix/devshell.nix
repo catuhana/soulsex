@@ -18,6 +18,4 @@ let
     ];
   };
 in
-{
-  default = shell;
-}
+shell

@@ -31,7 +31,7 @@
           elixir = beamPackages.elixir_1_20;
         in
         {
-          packages =
+          packages.default =
             let
               mixRelease = beamPackages.mixRelease.override { inherit elixir; };
               fetchMixDeps = beamPackages.fetchMixDeps.override { inherit elixir; };
@@ -42,7 +42,7 @@
               inherit lib;
             };
 
-          devShells = import ./nix/devshell.nix {
+          devShells.default = import ./nix/devshell.nix {
             inherit (pkgs) mkShell nixfmt nixd;
             inherit erlang elixir;
           };

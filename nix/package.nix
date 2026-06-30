@@ -45,6 +45,4 @@ let
       };
     };
 in
-{
-  default = soulsex;
-}
+soulsex
