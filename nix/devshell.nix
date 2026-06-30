@@ -7,15 +7,12 @@
   nixfmt,
   nixd,
 }:
-let
-  shell = mkShell {
-    packages = [
-      erlang
-      elixir
+mkShell {
+  packages = [
+    erlang
+    elixir
 
-      nixfmt
-      nixd
-    ];
-  };
-in
-shell
+    nixfmt
+    nixd
+  ];
+}

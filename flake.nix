@@ -37,9 +37,9 @@
               fetchMixDeps = beamPackages.fetchMixDeps.override { inherit elixir; };
             in
             import ./nix/package.nix {
-              inherit mixRelease fetchMixDeps;
-              inherit (pkgs) nix-gitignore;
               inherit lib;
+              inherit (pkgs) nix-gitignore;
+              inherit mixRelease fetchMixDeps;
             };
 
           devShells.default = import ./nix/devshell.nix {
