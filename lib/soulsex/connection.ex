@@ -79,7 +79,7 @@ defmodule Soulsex.Connection do
         decoder = decoder(module)
         message = decoder.decode(payload)
 
-        Logger.debug("recv #{inspect(redact(message))}")
+        Logger.debug("recv #{code} #{inspect(redact(message))}")
     end
 
     :ok
