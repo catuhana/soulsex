@@ -15,7 +15,7 @@ defmodule Soulsex.Connection do
   alias Soulseek.{Frame, Wire}
   alias Soulseek.Server.Codes
 
-  @max_message_size 469_762_048
+  @max_message_size 448 * 1024 * 1024
 
   @impl true
   def start_link(ref, transport, opts),
