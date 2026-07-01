@@ -38,7 +38,7 @@ defmodule Soulsex.Connection do
           {:cont, buffer} ->
             loop(socket, transport, buffer)
 
-          :close ->
+          :stop ->
             transport.close(socket)
             :ok
         end
@@ -46,12 +46,13 @@ defmodule Soulsex.Connection do
       {:tcp_closed, ^socket} ->
         :ok
 
-      {:tcp_error, ^socket, _reason} ->
+      {:tcp_error, ^socket, reason} ->
+        Logger.error("error on socket #{inspect(socket)}: #{inspect(reason)}")
         :ok
     end
   end
 
-  @spec process(binary()) :: {:cont, binary()} | :close
+  @spec process(binary()) :: {:cont, binary()} | :stop
   defp process(buffer) do
     case Frame.decode(buffer, @max_message_size) do
       {:ok, body, rest} ->
@@ -63,7 +64,7 @@ defmodule Soulsex.Connection do
 
       {:error, :too_large} ->
         Logger.warning("server frame exceeds #{@max_message_size} bytes; closing connection")
-        :close
+        :stop
     end
   end
 
