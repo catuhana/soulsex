@@ -7,9 +7,14 @@ defmodule Soulsex.Application do
   def start(_type, _args) do
     children = [
       :ranch.child_spec(
-        :soulseek_server,
+        :soulsex,
         :ranch_tcp,
-        %{socket_opts: [port: port()]},
+        %{
+          socket_opts: [
+            port: port(),
+            keepalive: true
+          ]
+        },
         Soulsex.Connection,
         []
       )
