@@ -91,4 +91,7 @@ defmodule Soulseek.Server.Codes do
 
   @spec code(module()) :: non_neg_integer() | nil
   def code(module), do: Map.get(@modules, module)
+
+  @spec modules() :: [module()]
+  def modules(), do: Map.keys(@modules)
 end
