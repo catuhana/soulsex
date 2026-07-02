@@ -38,7 +38,7 @@
             in
             import ./nix/package.nix {
               inherit lib;
-              inherit (pkgs) nix-gitignore;
+              inherit (pkgs) nix-gitignore sqlite;
               inherit mixRelease fetchMixDeps;
             };
 

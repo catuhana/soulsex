@@ -3,7 +3,9 @@ _build/
 .direnv/
 
 .elixir_ls/
+
 cover/
+data/
 deps/
 
 result

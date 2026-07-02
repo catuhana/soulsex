@@ -5,6 +5,8 @@
 
   mixRelease,
   fetchMixDeps,
+
+  sqlite,
 }:
 let
   pname = "soulsex";
@@ -16,7 +18,7 @@ let
     pname = "${pname}-deps";
     inherit version src;
 
-    hash = "sha256-OsRfifiklS+7PwpjvhhZ+wHnYUiSSZwgQTe/adksDSQ=";
+    hash = "sha256-65eNsH6a3LLhpWC4X1DKLat5ROfbpAJuugvPDlt+b7g=";
   };
 
   removeCookie = false;
@@ -32,6 +34,13 @@ mixRelease {
 
     removeCookie
     ;
+
+  # Make `exqlite` compile (against the system SQLite).
+  env = {
+    EXQLITE_USE_SYSTEM = "1";
+    EXQLITE_SYSTEM_CFLAGS = "-I${sqlite.dev}/include";
+    EXQLITE_SYSTEM_LDFLAGS = "-L${sqlite.out}/lib -lsqlite3";
+  };
 
   meta = {
     description = "Soulseek server implementation in Elixir.";

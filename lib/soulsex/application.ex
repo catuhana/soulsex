@@ -6,6 +6,7 @@ defmodule Soulsex.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      Soulsex.Repo,
       :ranch.child_spec(
         :soulsex,
         :ranch_tcp,

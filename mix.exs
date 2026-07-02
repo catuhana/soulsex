@@ -20,6 +20,8 @@ defmodule Soulsex.MixProject do
 
   defp deps do
     [
+      {:ecto, "~> 3.14"},
+      {:ecto_sqlite3, "~> 0.21"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ranch, "~> 2.2"}
