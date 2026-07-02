@@ -82,6 +82,7 @@ defmodule Soulsex.Connection do
         state
 
       module ->
+        # TODO: Do these shenanigans in the `decoder` helper function.
         decoder = decoder(module)
         message = decoder.decode(payload)
 
@@ -129,6 +130,7 @@ defmodule Soulsex.Connection do
 
   @spec send_message(State.t(), Soulseek.Message.t()) :: :ok
   defp send_message(%State{socket: socket, transport: transport}, response) do
+    # TODO: Do these shenanigans in the `encoder` helper function.
     {namespace, encoder} = encoder(response.__struct__)
     encoded = encoder.encode(response)
     code = Codes.code(namespace)
@@ -136,27 +138,7 @@ defmodule Soulsex.Connection do
     transport.send(socket, [<<code::little-unsigned-32>>, encoded])
   end
 
-  # TODO: Move to a separate module I think. Also fix/improve the discovery
-  # of `encoder` (and `decoder` for the next function).
-  @spec encoder(module()) :: {module(), module()}
-  defp encoder(struct_module) do
-    parent = struct_module |> Module.split() |> Enum.drop(-1) |> Module.concat()
-    response = Module.concat(parent, Response)
+  defp encoder(struct_module), do: Soulseek.Message.resolve_encoder(struct_module)
 
-    if Code.ensure_loaded?(response) and function_exported?(response, :encode, 1) do
-      {parent, response}
-    else
-      {struct_module, struct_module}
-    end
-  end
-
-  # TODO: Ditto.
-  @spec decoder(module()) :: module()
-  defp decoder(module) do
-    request = Module.concat(module, Request)
-
-    if Code.ensure_loaded?(request) and function_exported?(request, :decode, 1),
-      do: request,
-      else: module
-  end
+  defp decoder(module), do: Soulseek.Message.resolve_decoder(module)
 end
