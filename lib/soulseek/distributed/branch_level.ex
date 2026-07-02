@@ -16,12 +16,17 @@ defmodule Soulseek.Distributed.BranchLevel do
   @type t :: %__MODULE__{branch_level: integer()}
 
   @impl true
-  def encode(%__MODULE__{branch_level: branch_level}), do: Wire.int32(branch_level)
-
-  @impl true
   def decode(binary) do
     {branch_level, <<>>} = Wire.take_int32(binary)
 
     %__MODULE__{branch_level: branch_level}
+  end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Distributed.BranchLevel do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Distributed.BranchLevel{branch_level: branch_level}) do
+    Wire.int32(branch_level)
   end
 end

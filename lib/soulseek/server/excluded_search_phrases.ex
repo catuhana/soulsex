@@ -7,22 +7,15 @@ defmodule Soulseek.Server.ExcludedSearchPhrases do
   sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:phrases]
   defstruct [:phrases]
 
   @type t :: %__MODULE__{phrases: [String.t()]}
+end
 
-  @impl true
-  def encode(%__MODULE__{phrases: phrases}), do: Wire.array(phrases, &Wire.string/1)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.ExcludedSearchPhrases do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(binary) do
-    {phrases, <<>>} = Wire.take_array(binary, &Wire.take_string/1)
-
-    %__MODULE__{phrases: phrases}
-  end
+  def encode(%Soulseek.Server.ExcludedSearchPhrases{phrases: phrases}),
+    do: Wire.array(phrases, &Wire.string/1)
 end

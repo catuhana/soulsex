@@ -6,7 +6,7 @@ defmodule Soulseek.Distributed.Search do
   username, the search token, and the query.
 
   Each message carries a leading `uint32` identifier that is always the code
-  point of ASCII character `1` (`49`); it is written and asserted, so it is not
+  point of ASCII character `1` (`0x31`); it is written and asserted, so it is not
   stored on the struct, and any other value is rejected.
   """
 
@@ -14,7 +14,7 @@ defmodule Soulseek.Distributed.Search do
 
   alias Soulseek.Wire
 
-  @identifier 49
+  @identifier 0x31
 
   @enforce_keys [:username, :token, :query]
   defstruct [:username, :token, :query]
@@ -26,15 +26,6 @@ defmodule Soulseek.Distributed.Search do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct),
-    do: [
-      Wire.uint32(@identifier),
-      Wire.string(struct.username),
-      Wire.uint32(struct.token),
-      Wire.string(struct.query)
-    ]
-
-  @impl true
   def decode(binary) do
     {@identifier, rest} = Wire.take_uint32(binary)
     {username, rest} = Wire.take_string(rest)
@@ -43,4 +34,18 @@ defmodule Soulseek.Distributed.Search do
 
     %__MODULE__{username: username, token: token, query: query}
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Distributed.Search do
+  alias Soulseek.Wire
+
+  @identifier 0x31
+
+  def encode(%Soulseek.Distributed.Search{username: username, token: token, query: query}),
+    do: [
+      Wire.uint32(@identifier),
+      Wire.string(username),
+      Wire.uint32(token),
+      Wire.string(query)
+    ]
 end

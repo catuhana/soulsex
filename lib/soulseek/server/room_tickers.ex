@@ -6,10 +6,6 @@ defmodule Soulseek.Server.RoomTickers do
   client sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   defmodule Ticker do
     @moduledoc "A user's ticker in a room."
 
@@ -23,26 +19,16 @@ defmodule Soulseek.Server.RoomTickers do
   defstruct [:room, :tickers]
 
   @type t :: %__MODULE__{room: String.t(), tickers: [Ticker.t()]}
+end
 
-  @impl true
-  def encode(%__MODULE__{room: room, tickers: tickers}),
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.RoomTickers do
+  alias Soulseek.Wire
+
+  alias Soulseek.Server.RoomTickers.Ticker
+
+  def encode(%Soulseek.Server.RoomTickers{room: room, tickers: tickers}),
     do: [Wire.string(room), Wire.array(tickers, &encode_ticker/1)]
 
   defp encode_ticker(%Ticker{username: username, ticker: ticker}),
     do: [Wire.string(username), Wire.string(ticker)]
-
-  @impl true
-  def decode(binary) do
-    {room, rest} = Wire.take_string(binary)
-    {tickers, <<>>} = Wire.take_array(rest, &take_ticker/1)
-
-    %__MODULE__{room: room, tickers: tickers}
-  end
-
-  defp take_ticker(binary) do
-    {username, rest} = Wire.take_string(binary)
-    {ticker, rest} = Wire.take_string(rest)
-
-    {%Ticker{username: username, ticker: ticker}, rest}
-  end
 end

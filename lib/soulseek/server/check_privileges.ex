@@ -18,9 +18,6 @@ defmodule Soulseek.Server.CheckPrivileges do
     @type t :: %__MODULE__{}
 
     @impl true
-    def encode(%__MODULE__{}), do: []
-
-    @impl true
     def decode(<<>>), do: %__MODULE__{}
   end
 
@@ -35,9 +32,17 @@ defmodule Soulseek.Server.CheckPrivileges do
     @type t :: %__MODULE__{time_left: non_neg_integer()}
 
     @impl true
-    def encode(%__MODULE__{time_left: time_left}), do: Wire.uint32(time_left)
-
-    @impl true
     def decode(<<time_left::little-32>>), do: %__MODULE__{time_left: time_left}
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.CheckPrivileges.Request do
+  def encode(%Soulseek.Server.CheckPrivileges.Request{}), do: []
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.CheckPrivileges.Response do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.CheckPrivileges.Response{time_left: time_left}),
+    do: Wire.uint32(time_left)
 end

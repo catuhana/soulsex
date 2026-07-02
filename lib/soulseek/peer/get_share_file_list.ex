@@ -1,6 +1,6 @@
-defmodule Soulseek.Peer.SharedFileListRequest do
+defmodule Soulseek.Peer.GetShareFileList do
   @moduledoc """
-  The SharedFileListRequest message (peer code 4).
+  The GetShareFileList message (peer code 4).
 
   An empty message asking a peer for its list of shared files. The peer replies
   with a `Soulseek.Peer.SharedFileListResponse`.
@@ -13,8 +13,9 @@ defmodule Soulseek.Peer.SharedFileListRequest do
   @type t :: %__MODULE__{}
 
   @impl true
-  def encode(%__MODULE__{}), do: []
-
-  @impl true
   def decode(<<>>), do: %__MODULE__{}
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Peer.GetShareFileList do
+  def encode(%Soulseek.Peer.GetShareFileList{}), do: []
 end

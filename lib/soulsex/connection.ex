@@ -12,7 +12,7 @@ defmodule Soulsex.Connection do
 
   require Logger
 
-  alias Soulseek.{Frame, Wire}
+  alias Soulseek.{Frame, Message, Wire}
   alias Soulseek.Server.Codes
   alias Soulsex.Connection.State
 
@@ -82,11 +82,13 @@ defmodule Soulsex.Connection do
         state
 
       module ->
-        # TODO: Do these shenanigans in the `decoder` helper function.
-        decoder = decoder(module)
-        message = decoder.decode(payload)
+        case decode_payload(module, payload) do
+          :ignore ->
+            state
 
-        dispatch(module, message, state)
+          message ->
+            dispatch(module, message, state)
+        end
     end
   rescue
     # The protocol decoders are strict and raise on malformed input. Catching
@@ -98,7 +100,7 @@ defmodule Soulsex.Connection do
       state
   end
 
-  @spec dispatch(module(), Soulseek.Message.t(), State.t()) :: State.t()
+  @spec dispatch(module(), Message.t(), State.t()) :: State.t()
   defp dispatch(module, message, state) do
     case Soulsex.HandlerRegistry.handler(module) do
       nil ->
@@ -113,7 +115,7 @@ defmodule Soulsex.Connection do
 
   @spec handle_message_result(
           {:ok, State.t()}
-          | {:reply, Soulseek.Message.t(), State.t()}
+          | {:reply, Message.t(), State.t()}
           | {:error, term(), State.t()}
         ) :: State.t()
   defp handle_message_result({:ok, new_state}), do: new_state
@@ -128,17 +130,31 @@ defmodule Soulsex.Connection do
     new_state
   end
 
-  @spec send_message(State.t(), Soulseek.Message.t()) :: :ok
+  @spec send_message(State.t(), Message.t()) :: :ok
   defp send_message(%State{socket: socket, transport: transport}, response) do
-    # TODO: Do these shenanigans in the `encoder` helper function.
-    {namespace, encoder} = encoder(response.__struct__)
-    encoded = encoder.encode(response)
-    code = Codes.code(namespace)
+    encoded = Message.Encoder.encode(response)
+    code = Codes.code(response.__struct__)
 
     transport.send(socket, [<<code::little-unsigned-32>>, encoded])
   end
 
-  defp encoder(struct_module), do: Soulseek.Message.resolve_encoder(struct_module)
+  @spec decode_payload(module(), binary()) :: Message.t() | :ignore
+  defp decode_payload(module, payload) do
+    Code.ensure_loaded(module)
 
-  defp decoder(module), do: Soulseek.Message.resolve_decoder(module)
+    if function_exported?(module, :decode, 1) do
+      # credo:disable-for-next-line
+      apply(module, :decode, [payload])
+    else
+      request_module = Module.concat(module, Request)
+      Code.ensure_loaded(request_module)
+
+      if function_exported?(request_module, :decode, 1) do
+        # credo:disable-for-next-line
+        apply(request_module, :decode, [payload])
+      else
+        :ignore
+      end
+    end
+  end
 end

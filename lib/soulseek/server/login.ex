@@ -25,16 +25,6 @@ defmodule Soulseek.Server.Login do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        Wire.string(struct.username),
-        Wire.string(struct.password),
-        Wire.uint32(struct.version_major),
-        Wire.string(struct.hash),
-        Wire.uint32(struct.version_minor)
-      ]
-
-    @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {password, rest} = Wire.take_string(rest)
@@ -86,29 +76,6 @@ defmodule Soulseek.Server.Login do
     @type t :: Success.t() | Failure.t()
 
     @impl true
-    def encode(%Success{} = success),
-      do: [
-        Wire.bool(true),
-        Wire.string(success.greet),
-        Wire.uint32(success.ip_address),
-        Wire.string(success.hash),
-        Wire.bool(success.supporter)
-      ]
-
-    def encode(%Failure{reason: :invalid_username, detail: detail}),
-      do: [
-        Wire.bool(false),
-        :invalid_username |> LoginRejectionReason.to_wire() |> Wire.string(),
-        detail |> LoginRejectionDetail.to_wire() |> Wire.string()
-      ]
-
-    def encode(%Failure{reason: reason}),
-      do: [
-        Wire.bool(false),
-        reason |> LoginRejectionReason.to_wire() |> Wire.string()
-      ]
-
-    @impl true
     def decode(<<1, rest::binary>>) do
       {greet, rest} = Wire.take_string(rest)
       {ip_address, rest} = Wire.take_uint32(rest)
@@ -141,4 +108,53 @@ defmodule Soulseek.Server.Login do
     defp decode_failure(reason, <<>>),
       do: %Failure{reason: LoginRejectionReason.from_wire(reason)}
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.Login.Request do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.Login.Request{} = struct),
+    do: [
+      Wire.string(struct.username),
+      Wire.string(struct.password),
+      Wire.uint32(struct.version_major),
+      Wire.string(struct.hash),
+      Wire.uint32(struct.version_minor)
+    ]
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.Login.Success do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.Login.Success{} = success),
+    do: [
+      Wire.bool(true),
+      Wire.string(success.greet),
+      Wire.uint32(success.ip_address),
+      Wire.string(success.hash),
+      Wire.bool(success.supporter)
+    ]
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.Login.Failure do
+  alias Soulseek.{LoginRejectionDetail, LoginRejectionReason, Wire}
+
+  def encode(%Soulseek.Server.Login.Failure{reason: :invalid_username, detail: detail}),
+    do: [
+      Wire.bool(false),
+      :invalid_username
+      |> LoginRejectionReason.to_wire()
+      |> Wire.string(),
+      detail
+      |> LoginRejectionDetail.to_wire()
+      |> Wire.string()
+    ]
+
+  def encode(%Soulseek.Server.Login.Failure{reason: reason}),
+    do: [
+      Wire.bool(false),
+      reason
+      |> LoginRejectionReason.to_wire()
+      |> Wire.string()
+    ]
 end

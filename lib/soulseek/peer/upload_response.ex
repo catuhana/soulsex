@@ -20,16 +20,6 @@ defmodule Soulseek.Peer.UploadResponse do
         }
 
   @impl true
-  def encode(%__MODULE__{token: token, allowed: true}), do: [Wire.uint32(token), Wire.bool(true)]
-
-  def encode(%__MODULE__{token: token, allowed: false, reason: reason}),
-    do: [
-      Wire.uint32(token),
-      Wire.bool(false),
-      reason |> TransferRejection.to_wire() |> Wire.string()
-    ]
-
-  @impl true
   def decode(binary) do
     {token, rest} = Wire.take_uint32(binary)
     {allowed, rest} = Wire.take_bool(rest)
@@ -44,4 +34,20 @@ defmodule Soulseek.Peer.UploadResponse do
 
     %__MODULE__{token: token, allowed: false, reason: TransferRejection.from_wire(reason)}
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Peer.UploadResponse do
+  alias Soulseek.{TransferRejection, Wire}
+
+  def encode(%Soulseek.Peer.UploadResponse{token: token, allowed: true}),
+    do: [Wire.uint32(token), Wire.bool(true)]
+
+  def encode(%Soulseek.Peer.UploadResponse{token: token, allowed: false, reason: reason}),
+    do: [
+      Wire.uint32(token),
+      Wire.bool(false),
+      reason
+      |> TransferRejection.to_wire()
+      |> Wire.string()
+    ]
 end

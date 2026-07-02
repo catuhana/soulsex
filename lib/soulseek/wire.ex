@@ -46,17 +46,38 @@ defmodule Soulseek.Wire do
   not validated, so callers may pass latin-1 produced by older clients.
   """
   @spec string(binary()) :: iodata()
-  def string(value) when is_binary(value), do: [value |> byte_size() |> uint32(), value]
+  def string(value) when is_binary(value),
+    do: [
+      value
+      |> byte_size()
+      |> uint32(),
+      value
+    ]
 
   @spec bytes(binary()) :: iodata()
-  def bytes(value) when is_binary(value), do: [value |> byte_size() |> uint32(), value]
+  def bytes(value) when is_binary(value),
+    do: [
+      value
+      |> byte_size()
+      |> uint32(),
+      value
+    ]
 
   @spec array([term()], (term() -> iodata())) :: iodata()
   def array(items, encode_fun) when is_list(items),
-    do: [items |> length() |> uint32() | Enum.map(items, encode_fun)]
+    do: [
+      items
+      |> length()
+      |> uint32()
+      | Enum.map(items, encode_fun)
+    ]
 
   @spec compress(iodata()) :: binary()
-  def compress(data), do: data |> IO.iodata_to_binary() |> :zlib.compress()
+  def compress(data),
+    do:
+      data
+      |> IO.iodata_to_binary()
+      |> :zlib.compress()
 
   @spec decompress(binary()) :: binary()
   def decompress(data) when is_binary(data), do: :zlib.uncompress(data)

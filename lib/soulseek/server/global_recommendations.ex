@@ -18,9 +18,6 @@ defmodule Soulseek.Server.GlobalRecommendations do
     @type t :: %__MODULE__{}
 
     @impl true
-    def encode(%__MODULE__{}), do: []
-
-    @impl true
     def decode(<<>>), do: %__MODULE__{}
   end
 
@@ -47,19 +44,6 @@ defmodule Soulseek.Server.GlobalRecommendations do
           }
 
     @impl true
-    def encode(%__MODULE__{
-          recommendations: recommendations,
-          unrecommendations: unrecommendations
-        }),
-        do: [
-          Wire.array(recommendations, &encode_recommendation/1),
-          Wire.array(unrecommendations, &encode_recommendation/1)
-        ]
-
-    defp encode_recommendation(%Recommendation{item: item, score: score}),
-      do: [Wire.string(item), Wire.int32(score)]
-
-    @impl true
     def decode(binary) do
       {recommendations, rest} = Wire.take_array(binary, &take_recommendation/1)
       {unrecommendations, <<>>} = Wire.take_array(rest, &take_recommendation/1)
@@ -74,4 +58,25 @@ defmodule Soulseek.Server.GlobalRecommendations do
       {%Recommendation{item: item, score: score}, rest}
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GlobalRecommendations.Request do
+  def encode(%Soulseek.Server.GlobalRecommendations.Request{}), do: []
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GlobalRecommendations.Response do
+  alias Soulseek.Server.GlobalRecommendations.Recommendation
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.GlobalRecommendations.Response{
+        recommendations: recommendations,
+        unrecommendations: unrecommendations
+      }),
+      do: [
+        Wire.array(recommendations, &encode_recommendation/1),
+        Wire.array(unrecommendations, &encode_recommendation/1)
+      ]
+
+  defp encode_recommendation(%Recommendation{item: item, score: score}),
+    do: [Wire.string(item), Wire.int32(score)]
 end

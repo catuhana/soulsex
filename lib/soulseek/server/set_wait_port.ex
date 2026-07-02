@@ -9,7 +9,7 @@ defmodule Soulseek.Server.SetWaitPort do
 
   @behaviour Soulseek.Message
 
-  alias Soulseek.{ObfuscationType, Wire}
+  alias Soulseek.ObfuscationType
 
   @enforce_keys [:port]
   defstruct [:port, :obfuscation_type, :obfuscated_port]
@@ -19,16 +19,6 @@ defmodule Soulseek.Server.SetWaitPort do
           obfuscation_type: ObfuscationType.t() | nil,
           obfuscated_port: 0..65_535 | nil
         }
-
-  @impl true
-  def encode(%__MODULE__{port: port, obfuscation_type: nil}), do: Wire.uint32(port)
-
-  def encode(%__MODULE__{port: port, obfuscation_type: type, obfuscated_port: obfuscated_port}),
-    do: [
-      Wire.uint32(port),
-      type |> ObfuscationType.to_wire() |> Wire.uint32(),
-      Wire.uint32(obfuscated_port)
-    ]
 
   @impl true
   def decode(<<port::little-32>>), do: %__MODULE__{port: port}

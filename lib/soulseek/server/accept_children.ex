@@ -16,9 +16,6 @@ defmodule Soulseek.Server.AcceptChildren do
   @type t :: %__MODULE__{accept: boolean()}
 
   @impl true
-  def encode(%__MODULE__{accept: accept}), do: Wire.bool(accept)
-
-  @impl true
   def decode(binary) do
     {accept, <<>>} = Wire.take_bool(binary)
 

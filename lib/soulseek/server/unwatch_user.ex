@@ -16,9 +16,6 @@ defmodule Soulseek.Server.UnwatchUser do
   @type t :: %__MODULE__{username: String.t()}
 
   @impl true
-  def encode(%__MODULE__{username: username}), do: Wire.string(username)
-
-  @impl true
   def decode(binary) do
     {username, <<>>} = Wire.take_string(binary)
 

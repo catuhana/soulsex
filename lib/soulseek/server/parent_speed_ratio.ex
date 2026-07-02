@@ -7,18 +7,14 @@ defmodule Soulseek.Server.ParentSpeedRatio do
   sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:ratio]
   defstruct [:ratio]
 
   @type t :: %__MODULE__{ratio: non_neg_integer()}
+end
 
-  @impl true
-  def encode(%__MODULE__{ratio: ratio}), do: Wire.uint32(ratio)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.ParentSpeedRatio do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(<<ratio::little-32>>), do: %__MODULE__{ratio: ratio}
+  def encode(%Soulseek.Server.ParentSpeedRatio{ratio: ratio}), do: Wire.uint32(ratio)
 end

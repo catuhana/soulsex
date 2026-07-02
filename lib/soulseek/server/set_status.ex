@@ -8,15 +8,12 @@ defmodule Soulseek.Server.SetStatus do
 
   @behaviour Soulseek.Message
 
-  alias Soulseek.{UserStatusCode, Wire}
+  alias Soulseek.UserStatusCode
 
   @enforce_keys [:status]
   defstruct [:status]
 
   @type t :: %__MODULE__{status: UserStatusCode.t()}
-
-  @impl true
-  def encode(%__MODULE__{status: status}), do: status |> UserStatusCode.to_wire() |> Wire.int32()
 
   @impl true
   def decode(<<status::little-signed-32>>),

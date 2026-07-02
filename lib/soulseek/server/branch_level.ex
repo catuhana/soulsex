@@ -8,15 +8,10 @@ defmodule Soulseek.Server.BranchLevel do
 
   @behaviour Soulseek.Message
 
-  alias Soulseek.Wire
-
   @enforce_keys [:level]
   defstruct [:level]
 
   @type t :: %__MODULE__{level: non_neg_integer()}
-
-  @impl true
-  def encode(%__MODULE__{level: level}), do: Wire.uint32(level)
 
   @impl true
   def decode(<<level::little-32>>), do: %__MODULE__{level: level}

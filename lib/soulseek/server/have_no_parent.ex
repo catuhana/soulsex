@@ -16,9 +16,6 @@ defmodule Soulseek.Server.HaveNoParent do
   @type t :: %__MODULE__{no_parent: boolean()}
 
   @impl true
-  def encode(%__MODULE__{no_parent: no_parent}), do: Wire.bool(no_parent)
-
-  @impl true
   def decode(binary) do
     {no_parent, <<>>} = Wire.take_bool(binary)
 

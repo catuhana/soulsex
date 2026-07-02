@@ -18,9 +18,6 @@ defmodule Soulseek.Server.SimilarUsers do
     @type t :: %__MODULE__{}
 
     @impl true
-    def encode(%__MODULE__{}), do: []
-
-    @impl true
     def decode(<<>>), do: %__MODULE__{}
   end
 
@@ -44,12 +41,6 @@ defmodule Soulseek.Server.SimilarUsers do
     @type t :: %__MODULE__{users: [User.t()]}
 
     @impl true
-    def encode(%__MODULE__{users: users}), do: Wire.array(users, &encode_user/1)
-
-    defp encode_user(%User{username: username, rating: rating}),
-      do: [Wire.string(username), Wire.uint32(rating)]
-
-    @impl true
     def decode(binary) do
       {users, <<>>} = Wire.take_array(binary, &take_user/1)
 
@@ -63,4 +54,19 @@ defmodule Soulseek.Server.SimilarUsers do
       {%User{username: username, rating: rating}, rest}
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.SimilarUsers.Request do
+  def encode(%Soulseek.Server.SimilarUsers.Request{}), do: []
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.SimilarUsers.Response do
+  alias Soulseek.Server.SimilarUsers.User
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.SimilarUsers.Response{users: users}),
+    do: Wire.array(users, &encode_user/1)
+
+  defp encode_user(%User{username: username, rating: rating}),
+    do: [Wire.string(username), Wire.uint32(rating)]
 end

@@ -6,22 +6,14 @@ defmodule Soulseek.Server.AdminMessage do
   no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:message]
   defstruct [:message]
 
   @type t :: %__MODULE__{message: String.t()}
+end
 
-  @impl true
-  def encode(%__MODULE__{message: message}), do: Wire.string(message)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.AdminMessage do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(binary) do
-    {message, <<>>} = Wire.take_string(binary)
-
-    %__MODULE__{message: message}
-  end
+  def encode(%Soulseek.Server.AdminMessage{message: message}), do: Wire.string(message)
 end

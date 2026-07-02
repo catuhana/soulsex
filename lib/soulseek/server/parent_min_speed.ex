@@ -6,18 +6,14 @@ defmodule Soulseek.Server.ParentMinSpeed do
   the distributed network. The client sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:speed]
   defstruct [:speed]
 
   @type t :: %__MODULE__{speed: non_neg_integer()}
+end
 
-  @impl true
-  def encode(%__MODULE__{speed: speed}), do: Wire.uint32(speed)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.ParentMinSpeed do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(<<speed::little-32>>), do: %__MODULE__{speed: speed}
+  def encode(%Soulseek.Server.ParentMinSpeed{speed: speed}), do: Wire.uint32(speed)
 end

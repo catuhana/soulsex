@@ -8,15 +8,10 @@ defmodule Soulseek.Server.MessageAcked do
 
   @behaviour Soulseek.Message
 
-  alias Soulseek.Wire
-
   @enforce_keys [:message_id]
   defstruct [:message_id]
 
   @type t :: %__MODULE__{message_id: non_neg_integer()}
-
-  @impl true
-  def encode(%__MODULE__{message_id: message_id}), do: Wire.uint32(message_id)
 
   @impl true
   def decode(<<message_id::little-32>>), do: %__MODULE__{message_id: message_id}

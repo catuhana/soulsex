@@ -24,14 +24,6 @@ defmodule Soulseek.Server.ConnectToPeer do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        Wire.uint32(struct.token),
-        Wire.string(struct.username),
-        struct.type |> ConnectionType.to_wire() |> Wire.string()
-      ]
-
-    @impl true
     def decode(binary) do
       {token, rest} = Wire.take_uint32(binary)
       {username, rest} = Wire.take_string(rest)
@@ -79,19 +71,6 @@ defmodule Soulseek.Server.ConnectToPeer do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        Wire.string(struct.username),
-        struct.type |> ConnectionType.to_wire() |> Wire.string(),
-        Wire.uint32(struct.ip),
-        Wire.uint32(struct.port),
-        Wire.uint32(struct.token),
-        Wire.bool(struct.privileged),
-        struct.obfuscation_type |> ObfuscationType.to_wire() |> Wire.uint32(),
-        Wire.uint32(struct.obfuscated_port)
-      ]
-
-    @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {type, rest} = Wire.take_string(rest)
@@ -114,4 +93,37 @@ defmodule Soulseek.Server.ConnectToPeer do
       }
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.ConnectToPeer.Request do
+  alias Soulseek.{ConnectionType, Wire}
+
+  def encode(%Soulseek.Server.ConnectToPeer.Request{} = struct),
+    do: [
+      Wire.uint32(struct.token),
+      Wire.string(struct.username),
+      struct.type
+      |> ConnectionType.to_wire()
+      |> Wire.string()
+    ]
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.ConnectToPeer.Response do
+  alias Soulseek.{ConnectionType, ObfuscationType, Wire}
+
+  def encode(%Soulseek.Server.ConnectToPeer.Response{} = struct),
+    do: [
+      Wire.string(struct.username),
+      struct.type
+      |> ConnectionType.to_wire()
+      |> Wire.string(),
+      Wire.uint32(struct.ip),
+      Wire.uint32(struct.port),
+      Wire.uint32(struct.token),
+      Wire.bool(struct.privileged),
+      struct.obfuscation_type
+      |> ObfuscationType.to_wire()
+      |> Wire.uint32(),
+      Wire.uint32(struct.obfuscated_port)
+    ]
 end

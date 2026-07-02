@@ -15,13 +15,15 @@ defmodule Soulseek.Server.ChangePassword do
 
   @type t :: %__MODULE__{password: String.t()}
 
-  @impl true
-  def encode(%__MODULE__{password: password}), do: Wire.string(password)
-
-  @impl true
   def decode(binary) do
     {password, <<>>} = Wire.take_string(binary)
 
     %__MODULE__{password: password}
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.ChangePassword do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.ChangePassword{password: password}), do: Wire.string(password)
 end

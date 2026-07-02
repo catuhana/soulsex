@@ -6,10 +6,6 @@ defmodule Soulseek.Server.PossibleParents do
   client sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   defmodule Parent do
     @moduledoc "A possible distributed parent's address."
 
@@ -23,25 +19,16 @@ defmodule Soulseek.Server.PossibleParents do
   defstruct [:parents]
 
   @type t :: %__MODULE__{parents: [Parent.t()]}
+end
 
-  @impl true
-  def encode(%__MODULE__{parents: parents}), do: Wire.array(parents, &encode_parent/1)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.PossibleParents do
+  alias Soulseek.Wire
+
+  alias Soulseek.Server.PossibleParents.Parent
+
+  def encode(%Soulseek.Server.PossibleParents{parents: parents}),
+    do: Wire.array(parents, &encode_parent/1)
 
   defp encode_parent(%Parent{username: username, ip: ip, port: port}),
     do: [Wire.string(username), Wire.uint32(ip), Wire.uint32(port)]
-
-  @impl true
-  def decode(binary) do
-    {parents, <<>>} = Wire.take_array(binary, &take_parent/1)
-
-    %__MODULE__{parents: parents}
-  end
-
-  defp take_parent(binary) do
-    {username, rest} = Wire.take_string(binary)
-    {ip, rest} = Wire.take_uint32(rest)
-    {port, rest} = Wire.take_uint32(rest)
-
-    {%Parent{username: username, ip: ip, port: port}, rest}
-  end
 end

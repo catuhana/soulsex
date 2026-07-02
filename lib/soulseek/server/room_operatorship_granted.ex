@@ -6,22 +6,14 @@ defmodule Soulseek.Server.RoomOperatorshipGranted do
   client sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:room]
   defstruct [:room]
 
   @type t :: %__MODULE__{room: String.t()}
+end
 
-  @impl true
-  def encode(%__MODULE__{room: room}), do: Wire.string(room)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.RoomOperatorshipGranted do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(binary) do
-    {room, <<>>} = Wire.take_string(binary)
-
-    %__MODULE__{room: room}
-  end
+  def encode(%Soulseek.Server.RoomOperatorshipGranted{room: room}), do: Wire.string(room)
 end

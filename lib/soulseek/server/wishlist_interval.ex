@@ -6,18 +6,14 @@ defmodule Soulseek.Server.WishlistInterval do
   no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:interval]
   defstruct [:interval]
 
   @type t :: %__MODULE__{interval: non_neg_integer()}
+end
 
-  @impl true
-  def encode(%__MODULE__{interval: interval}), do: Wire.uint32(interval)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.WishlistInterval do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(<<interval::little-32>>), do: %__MODULE__{interval: interval}
+  def encode(%Soulseek.Server.WishlistInterval{interval: interval}), do: Wire.uint32(interval)
 end

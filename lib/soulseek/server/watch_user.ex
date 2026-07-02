@@ -20,9 +20,6 @@ defmodule Soulseek.Server.WatchUser do
     @type t :: %__MODULE__{username: String.t()}
 
     @impl true
-    def encode(%__MODULE__{username: username}), do: Wire.string(username)
-
-    @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
 
@@ -61,28 +58,6 @@ defmodule Soulseek.Server.WatchUser do
             username: String.t(),
             info: Info.t() | nil
           }
-
-    @impl true
-    def encode(%__MODULE__{username: username, info: nil}),
-      do: [Wire.string(username), Wire.bool(false)]
-
-    def encode(%__MODULE__{username: username, info: %Info{} = info}),
-      do: [
-        Wire.string(username),
-        Wire.bool(true),
-        info.status |> UserStatusCode.to_wire() |> Wire.uint32(),
-        Wire.uint32(info.avg_speed),
-        Wire.uint32(info.upload_num),
-        Wire.uint32(info.unknown),
-        Wire.uint32(info.files),
-        Wire.uint32(info.dirs),
-        encode_country(info.status, info.country_code)
-      ]
-
-    defp encode_country(status, country_code) when status in [:away, :online],
-      do: Wire.string(country_code)
-
-    defp encode_country(:offline, _country_code), do: []
 
     @impl true
     def decode(binary) do
@@ -125,4 +100,38 @@ defmodule Soulseek.Server.WatchUser do
 
     defp decode_country(:offline, <<>>), do: nil
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.WatchUser.Request do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.WatchUser.Request{username: username}), do: Wire.string(username)
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.WatchUser.Response do
+  alias Soulseek.Server.WatchUser.Info
+  alias Soulseek.{UserStatusCode, Wire}
+
+  def encode(%Soulseek.Server.WatchUser.Response{username: username, info: nil}),
+    do: [Wire.string(username), Wire.bool(false)]
+
+  def encode(%Soulseek.Server.WatchUser.Response{username: username, info: %Info{} = info}),
+    do: [
+      Wire.string(username),
+      Wire.bool(true),
+      info.status
+      |> UserStatusCode.to_wire()
+      |> Wire.uint32(),
+      Wire.uint32(info.avg_speed),
+      Wire.uint32(info.upload_num),
+      Wire.uint32(info.unknown),
+      Wire.uint32(info.files),
+      Wire.uint32(info.dirs),
+      encode_country(info.status, info.country_code)
+    ]
+
+  defp encode_country(status, country_code) when status in [:away, :online],
+    do: Wire.string(country_code)
+
+  defp encode_country(:offline, _country_code), do: []
 end

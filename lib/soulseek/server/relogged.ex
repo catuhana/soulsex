@@ -6,15 +6,11 @@ defmodule Soulseek.Server.Relogged do
   nickname, just before disconnecting us. The client sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
   defstruct []
 
   @type t :: %__MODULE__{}
+end
 
-  @impl true
-  def encode(%__MODULE__{}), do: []
-
-  @impl true
-  def decode(<<>>), do: %__MODULE__{}
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.Relogged do
+  def encode(%Soulseek.Server.Relogged{}), do: []
 end

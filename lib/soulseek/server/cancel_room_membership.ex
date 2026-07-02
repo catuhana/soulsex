@@ -16,9 +16,6 @@ defmodule Soulseek.Server.CancelRoomMembership do
   @type t :: %__MODULE__{room: String.t()}
 
   @impl true
-  def encode(%__MODULE__{room: room}), do: Wire.string(room)
-
-  @impl true
   def decode(binary) do
     {room, <<>>} = Wire.take_string(binary)
 

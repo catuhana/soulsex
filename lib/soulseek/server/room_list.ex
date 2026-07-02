@@ -19,9 +19,6 @@ defmodule Soulseek.Server.RoomList do
     @type t :: %__MODULE__{}
 
     @impl true
-    def encode(%__MODULE__{}), do: []
-
-    @impl true
     def decode(<<>>), do: %__MODULE__{}
   end
 
@@ -50,21 +47,6 @@ defmodule Soulseek.Server.RoomList do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        encode_rooms(struct.rooms),
-        encode_rooms(struct.owned_private_rooms),
-        encode_rooms(struct.private_rooms),
-        Wire.array(struct.operated_private_rooms, &Wire.string/1)
-      ]
-
-    defp encode_rooms(rooms),
-      do: [
-        Wire.array(rooms, fn room -> Wire.string(room.name) end),
-        Wire.array(rooms, fn room -> Wire.uint32(room.user_count) end)
-      ]
-
-    @impl true
     def decode(binary) do
       {rooms, rest} = take_rooms(binary)
       {owned, rest} = take_rooms(rest)
@@ -90,4 +72,27 @@ defmodule Soulseek.Server.RoomList do
       {rooms, rest}
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.RoomList.Request do
+  def encode(%Soulseek.Server.RoomList.Request{}), do: []
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.RoomList.Response do
+  alias Soulseek.Server.RoomList.Response.Room
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.RoomList.Response{} = struct),
+    do: [
+      encode_rooms(struct.rooms),
+      encode_rooms(struct.owned_private_rooms),
+      encode_rooms(struct.private_rooms),
+      Wire.array(struct.operated_private_rooms, &Wire.string/1)
+    ]
+
+  defp encode_rooms(rooms),
+    do: [
+      Wire.array(rooms, fn room -> Wire.string(room.name) end),
+      Wire.array(rooms, fn room -> Wire.uint32(room.user_count) end)
+    ]
 end

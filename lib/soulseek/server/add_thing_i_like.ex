@@ -16,9 +16,6 @@ defmodule Soulseek.Server.AddThingILike do
   @type t :: %__MODULE__{item: String.t()}
 
   @impl true
-  def encode(%__MODULE__{item: item}), do: Wire.string(item)
-
-  @impl true
   def decode(binary) do
     {item, <<>>} = Wire.take_string(binary)
 

@@ -20,9 +20,6 @@ defmodule Soulseek.Server.GetUserStatus do
     @type t :: %__MODULE__{username: String.t()}
 
     @impl true
-    def encode(%__MODULE__{username: username}), do: Wire.string(username)
-
-    @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
 
@@ -45,14 +42,6 @@ defmodule Soulseek.Server.GetUserStatus do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        Wire.string(struct.username),
-        struct.status |> UserStatusCode.to_wire() |> Wire.uint32(),
-        Wire.bool(struct.privileged)
-      ]
-
-    @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {status, rest} = Wire.take_uint32(rest)
@@ -65,4 +54,24 @@ defmodule Soulseek.Server.GetUserStatus do
       }
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GetUserStatus.Request do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.GetUserStatus.Request{username: username}),
+    do: Wire.string(username)
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GetUserStatus.Response do
+  alias Soulseek.{UserStatusCode, Wire}
+
+  def encode(%Soulseek.Server.GetUserStatus.Response{} = struct),
+    do: [
+      Wire.string(struct.username),
+      struct.status
+      |> UserStatusCode.to_wire()
+      |> Wire.uint32(),
+      Wire.bool(struct.privileged)
+    ]
 end

@@ -22,9 +22,6 @@ defmodule Soulseek.Server.GetPeerAddress do
           }
 
     @impl true
-    def encode(%__MODULE__{username: username}), do: Wire.string(username)
-
-    @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
 
@@ -49,16 +46,6 @@ defmodule Soulseek.Server.GetPeerAddress do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        Wire.string(struct.username),
-        Wire.uint32(struct.ip),
-        Wire.uint32(struct.port),
-        struct.obfuscation_type |> ObfuscationType.to_wire() |> Wire.uint32(),
-        Wire.uint16(struct.obfuscated_port)
-      ]
-
-    @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {ip, rest} = Wire.take_uint32(rest)
@@ -75,4 +62,26 @@ defmodule Soulseek.Server.GetPeerAddress do
       }
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GetPeerAddress.Request do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.GetPeerAddress.Request{username: username}),
+    do: Wire.string(username)
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GetPeerAddress.Response do
+  alias Soulseek.{ObfuscationType, Wire}
+
+  def encode(%Soulseek.Server.GetPeerAddress.Response{} = struct),
+    do: [
+      Wire.string(struct.username),
+      Wire.uint32(struct.ip),
+      Wire.uint32(struct.port),
+      struct.obfuscation_type
+      |> ObfuscationType.to_wire()
+      |> Wire.uint32(),
+      Wire.uint16(struct.obfuscated_port)
+    ]
 end

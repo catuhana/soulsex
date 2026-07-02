@@ -20,9 +20,6 @@ defmodule Soulseek.Server.GetUserStats do
     @type t :: %__MODULE__{username: String.t()}
 
     @impl true
-    def encode(%__MODULE__{username: username}), do: Wire.string(username)
-
-    @impl true
     def decode(binary) do
       {username, <<>>} = Wire.take_string(binary)
 
@@ -48,17 +45,6 @@ defmodule Soulseek.Server.GetUserStats do
           }
 
     @impl true
-    def encode(%__MODULE__{} = struct),
-      do: [
-        Wire.string(struct.username),
-        Wire.uint32(struct.avg_speed),
-        Wire.uint32(struct.upload_num),
-        Wire.uint32(struct.unknown),
-        Wire.uint32(struct.files),
-        Wire.uint32(struct.dirs)
-      ]
-
-    @impl true
     def decode(binary) do
       {username, rest} = Wire.take_string(binary)
       {avg_speed, rest} = Wire.take_uint32(rest)
@@ -77,4 +63,24 @@ defmodule Soulseek.Server.GetUserStats do
       }
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GetUserStats.Request do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.GetUserStats.Request{username: username}), do: Wire.string(username)
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.GetUserStats.Response do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.GetUserStats.Response{} = struct),
+    do: [
+      Wire.string(struct.username),
+      Wire.uint32(struct.avg_speed),
+      Wire.uint32(struct.upload_num),
+      Wire.uint32(struct.unknown),
+      Wire.uint32(struct.files),
+      Wire.uint32(struct.dirs)
+    ]
 end

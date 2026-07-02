@@ -16,9 +16,6 @@ defmodule Soulseek.Server.BranchRoot do
   @type t :: %__MODULE__{root: String.t()}
 
   @impl true
-  def encode(%__MODULE__{root: root}), do: Wire.string(root)
-
-  @impl true
   def decode(binary) do
     {root, <<>>} = Wire.take_string(binary)
 

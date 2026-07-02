@@ -40,20 +40,6 @@ defmodule Soulseek.Peer.FileSearchResponse do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct),
-    do:
-      Wire.compress([
-        Wire.string(struct.username),
-        Wire.uint32(struct.token),
-        Wire.array(struct.results, &SharedFile.encode/1),
-        Wire.bool(struct.slot_free),
-        Wire.uint32(struct.avg_speed),
-        Wire.uint32(struct.queue_length),
-        Wire.uint32(0),
-        Wire.array(struct.private_results, &SharedFile.encode/1)
-      ])
-
-  @impl true
   def decode(binary) do
     data = Wire.decompress(binary)
     {username, rest} = Wire.take_string(data)
@@ -75,4 +61,21 @@ defmodule Soulseek.Peer.FileSearchResponse do
       private_results: private_results
     }
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Peer.FileSearchResponse do
+  alias Soulseek.{SharedFile, Wire}
+
+  def encode(%Soulseek.Peer.FileSearchResponse{} = struct),
+    do:
+      Wire.compress([
+        Wire.string(struct.username),
+        Wire.uint32(struct.token),
+        Wire.array(struct.results, &SharedFile.encode/1),
+        Wire.bool(struct.slot_free),
+        Wire.uint32(struct.avg_speed),
+        Wire.uint32(struct.queue_length),
+        Wire.uint32(0),
+        Wire.array(struct.private_results, &SharedFile.encode/1)
+      ])
 end

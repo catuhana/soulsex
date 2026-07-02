@@ -22,14 +22,6 @@ defmodule Soulseek.PeerInit.PeerInit do
         }
 
   @impl true
-  def encode(%__MODULE__{username: username, type: type, token: token}),
-    do: [
-      Wire.string(username),
-      type |> ConnectionType.to_wire() |> Wire.string(),
-      Wire.uint32(token)
-    ]
-
-  @impl true
   def decode(binary) do
     {username, rest} = Wire.take_string(binary)
     {type, rest} = Wire.take_string(rest)
@@ -37,4 +29,17 @@ defmodule Soulseek.PeerInit.PeerInit do
 
     %__MODULE__{username: username, type: ConnectionType.from_wire(type), token: token}
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.PeerInit.PeerInit do
+  alias Soulseek.{ConnectionType, Wire}
+
+  def encode(%Soulseek.PeerInit.PeerInit{username: username, type: type, token: token}),
+    do: [
+      Wire.string(username),
+      type
+      |> ConnectionType.to_wire()
+      |> Wire.string(),
+      Wire.uint32(token)
+    ]
 end

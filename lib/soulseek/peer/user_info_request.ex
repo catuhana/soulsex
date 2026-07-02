@@ -13,8 +13,9 @@ defmodule Soulseek.Peer.UserInfoRequest do
   @type t :: %__MODULE__{}
 
   @impl true
-  def encode(%__MODULE__{}), do: []
-
-  @impl true
   def decode(<<>>), do: %__MODULE__{}
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Peer.UserInfoRequest do
+  def encode(%Soulseek.Peer.UserInfoRequest{}), do: []
 end

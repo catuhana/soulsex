@@ -22,25 +22,14 @@ defmodule Soulseek.Peer.TransferRequest do
         }
 
   @impl true
-  def encode(%__MODULE__{direction: :upload} = struct),
-    do: [base(struct), Wire.uint64(struct.file_size)]
-
-  def encode(%__MODULE__{direction: :download} = struct), do: base(struct)
-
-  defp base(%__MODULE__{direction: direction, token: token, filename: filename}),
-    do: [
-      direction |> TransferDirection.to_wire() |> Wire.uint32(),
-      Wire.uint32(token),
-      Wire.string(filename)
-    ]
-
-  @impl true
   def decode(binary) do
     {direction, rest} = Wire.take_uint32(binary)
     {token, rest} = Wire.take_uint32(rest)
     {filename, rest} = Wire.take_string(rest)
 
-    direction |> TransferDirection.from_wire() |> decode_size(token, filename, rest)
+    direction
+    |> TransferDirection.from_wire()
+    |> decode_size(token, filename, rest)
   end
 
   defp decode_size(:upload, token, filename, rest) do
@@ -51,4 +40,26 @@ defmodule Soulseek.Peer.TransferRequest do
 
   defp decode_size(:download, token, filename, <<>>),
     do: %__MODULE__{direction: :download, token: token, filename: filename, file_size: nil}
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Peer.TransferRequest do
+  alias Soulseek.{TransferDirection, Wire}
+
+  def encode(%Soulseek.Peer.TransferRequest{direction: :upload} = struct),
+    do: [base(struct), Wire.uint64(struct.file_size)]
+
+  def encode(%Soulseek.Peer.TransferRequest{direction: :download} = struct), do: base(struct)
+
+  defp base(%Soulseek.Peer.TransferRequest{
+         direction: direction,
+         token: token,
+         filename: filename
+       }),
+       do: [
+         direction
+         |> TransferDirection.to_wire()
+         |> Wire.uint32(),
+         Wire.uint32(token),
+         Wire.string(filename)
+       ]
 end

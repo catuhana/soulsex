@@ -6,22 +6,15 @@ defmodule Soulseek.Server.PrivilegedUsers do
   client sends no such message.
   """
 
-  @behaviour Soulseek.Message
-
-  alias Soulseek.Wire
-
   @enforce_keys [:users]
   defstruct [:users]
 
   @type t :: %__MODULE__{users: [String.t()]}
+end
 
-  @impl true
-  def encode(%__MODULE__{users: users}), do: Wire.array(users, &Wire.string/1)
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.PrivilegedUsers do
+  alias Soulseek.Wire
 
-  @impl true
-  def decode(binary) do
-    {users, <<>>} = Wire.take_array(binary, &Wire.take_string/1)
-
-    %__MODULE__{users: users}
-  end
+  def encode(%Soulseek.Server.PrivilegedUsers{users: users}),
+    do: Wire.array(users, &Wire.string/1)
 end

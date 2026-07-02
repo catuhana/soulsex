@@ -1,4 +1,5 @@
 # TODO: Find a way to deduplicate this module.
+# Idea: messages themselves define the codes.
 defmodule Soulseek.Server.Codes do
   @moduledoc """
   Registry of server message codes mapped to their message modules.
@@ -85,7 +86,14 @@ defmodule Soulseek.Server.Codes do
     1003 => Soulseek.Server.CantCreateRoom
   }
 
-  @modules Map.new(@codes, fn {code, module} -> {module, code} end)
+  @base_modules Map.new(@codes, fn {code, module} -> {module, code} end)
+  @nested_modules (for {code, base_module} <- @codes,
+                       nested_suffix <- [Request, Response, Success, Failure],
+                       into: %{} do
+                     {Module.concat(base_module, nested_suffix), code}
+                   end)
+
+  @modules Map.merge(@base_modules, @nested_modules)
 
   @spec module(non_neg_integer()) :: module() | nil
   def module(code), do: Map.get(@codes, code)

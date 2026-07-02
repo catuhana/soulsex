@@ -40,7 +40,12 @@ defmodule Soulseek.SharedFile do
     ]
 
   defp encode_attribute(%Attribute{type: type, value: value}),
-    do: [type |> FileAttributeType.to_wire() |> Wire.uint32(), Wire.uint32(value)]
+    do: [
+      type
+      |> FileAttributeType.to_wire()
+      |> Wire.uint32(),
+      Wire.uint32(value)
+    ]
 
   @spec take(binary()) :: {t(), binary()}
   def take(<<1, rest::binary>>) do

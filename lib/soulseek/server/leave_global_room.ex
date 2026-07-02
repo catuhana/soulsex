@@ -13,8 +13,5 @@ defmodule Soulseek.Server.LeaveGlobalRoom do
   @type t :: %__MODULE__{}
 
   @impl true
-  def encode(%__MODULE__{}), do: []
-
-  @impl true
   def decode(<<>>), do: %__MODULE__{}
 end

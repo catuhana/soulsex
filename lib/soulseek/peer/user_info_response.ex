@@ -25,26 +25,6 @@ defmodule Soulseek.Peer.UserInfoResponse do
         }
 
   @impl true
-  def encode(%__MODULE__{} = struct) do
-    [
-      Wire.string(struct.description),
-      encode_picture(struct.picture),
-      Wire.uint32(struct.total_uploads),
-      Wire.uint32(struct.queue_size),
-      Wire.bool(struct.slots_free),
-      encode_permission(struct.upload_permitted)
-    ]
-  end
-
-  defp encode_picture(nil), do: Wire.bool(false)
-  defp encode_picture(picture), do: [Wire.bool(true), Wire.bytes(picture)]
-
-  defp encode_permission(nil), do: []
-
-  defp encode_permission(permission),
-    do: permission |> UploadPermission.to_wire() |> Wire.uint32()
-
-  @impl true
   def decode(binary) do
     {description, rest} = Wire.take_string(binary)
     {picture, rest} = take_picture(rest)
@@ -77,4 +57,30 @@ defmodule Soulseek.Peer.UserInfoResponse do
 
     UploadPermission.from_wire(value)
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Peer.UserInfoResponse do
+  alias Soulseek.{UploadPermission, Wire}
+
+  def encode(%Soulseek.Peer.UserInfoResponse{} = struct) do
+    [
+      Wire.string(struct.description),
+      encode_picture(struct.picture),
+      Wire.uint32(struct.total_uploads),
+      Wire.uint32(struct.queue_size),
+      Wire.bool(struct.slots_free),
+      encode_permission(struct.upload_permitted)
+    ]
+  end
+
+  defp encode_picture(nil), do: Wire.bool(false)
+  defp encode_picture(picture), do: [Wire.bool(true), Wire.bytes(picture)]
+
+  defp encode_permission(nil), do: []
+
+  defp encode_permission(permission),
+    do:
+      permission
+      |> UploadPermission.to_wire()
+      |> Wire.uint32()
 end

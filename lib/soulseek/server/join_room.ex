@@ -20,10 +20,6 @@ defmodule Soulseek.Server.JoinRoom do
     @type t :: %__MODULE__{room: String.t(), private: boolean()}
 
     @impl true
-    def encode(%__MODULE__{room: room, private: private}),
-      do: [Wire.string(room), Wire.uint32_bool(private)]
-
-    @impl true
     def decode(binary) do
       {room, rest} = Wire.take_string(binary)
       {private, <<>>} = Wire.take_uint32_bool(rest)
@@ -95,32 +91,6 @@ defmodule Soulseek.Server.JoinRoom do
           }
 
     @impl true
-    def encode(%__MODULE__{room: room, users: users, private: private}),
-      do: [
-        Wire.string(room),
-        Wire.array(users, fn user -> Wire.string(user.username) end),
-        Wire.array(users, fn user -> user.status |> UserStatusCode.to_wire() |> Wire.uint32() end),
-        Wire.array(users, &encode_stats/1),
-        Wire.array(users, fn user -> Wire.uint32_bool(user.slots_full) end),
-        Wire.array(users, fn user -> Wire.string(user.country_code) end),
-        encode_private(private)
-      ]
-
-    defp encode_stats(user),
-      do: [
-        Wire.uint32(user.avg_speed),
-        Wire.uint32(user.upload_num),
-        Wire.uint32(user.unknown),
-        Wire.uint32(user.files),
-        Wire.uint32(user.dirs)
-      ]
-
-    defp encode_private(nil), do: []
-
-    defp encode_private(%Private{owner: owner, operators: operators}),
-      do: [Wire.string(owner), Wire.array(operators, &Wire.string/1)]
-
-    @impl true
     def decode(binary) do
       {room, rest} = Wire.take_string(binary)
       {usernames, rest} = Wire.take_array(rest, &Wire.take_string/1)
@@ -187,4 +157,45 @@ defmodule Soulseek.Server.JoinRoom do
       %Private{owner: owner, operators: operators}
     end
   end
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.JoinRoom.Request do
+  alias Soulseek.Wire
+
+  def encode(%Soulseek.Server.JoinRoom.Request{room: room, private: private}),
+    do: [Wire.string(room), Wire.uint32_bool(private)]
+end
+
+defimpl Soulseek.Message.Encoder, for: Soulseek.Server.JoinRoom.Response do
+  alias Soulseek.Server.JoinRoom.Response.Private
+  alias Soulseek.{UserStatusCode, Wire}
+
+  def encode(%Soulseek.Server.JoinRoom.Response{room: room, users: users, private: private}),
+    do: [
+      Wire.string(room),
+      Wire.array(users, fn user -> Wire.string(user.username) end),
+      Wire.array(users, fn user ->
+        user.status
+        |> UserStatusCode.to_wire()
+        |> Wire.uint32()
+      end),
+      Wire.array(users, &encode_stats/1),
+      Wire.array(users, fn user -> Wire.uint32_bool(user.slots_full) end),
+      Wire.array(users, fn user -> Wire.string(user.country_code) end),
+      encode_private(private)
+    ]
+
+  defp encode_stats(user),
+    do: [
+      Wire.uint32(user.avg_speed),
+      Wire.uint32(user.upload_num),
+      Wire.uint32(user.unknown),
+      Wire.uint32(user.files),
+      Wire.uint32(user.dirs)
+    ]
+
+  defp encode_private(nil), do: []
+
+  defp encode_private(%Private{owner: owner, operators: operators}),
+    do: [Wire.string(owner), Wire.array(operators, &Wire.string/1)]
 end
