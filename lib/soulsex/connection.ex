@@ -14,6 +14,7 @@ defmodule Soulsex.Connection do
 
   alias Soulseek.{Frame, Wire}
   alias Soulseek.Server.Codes
+  alias Soulsex.Connection.State
 
   @max_message_size 448 * 1024 * 1024
 
@@ -25,18 +26,21 @@ defmodule Soulsex.Connection do
   def init(ref, transport, _opts) do
     {:ok, socket} = :ranch.handshake(ref)
 
-    loop(socket, transport, <<>>)
+    %State{socket: socket, transport: transport}
+    |> loop
   end
 
-  @spec loop(:ranch_transport.socket(), module(), binary()) :: :ok
-  defp loop(socket, transport, buffer) do
+  @spec loop(State.t()) :: :ok
+  defp loop(%State{socket: socket, transport: transport} = state) do
     transport.setopts(socket, active: :once)
 
     receive do
       {:tcp, ^socket, data} ->
-        case process(buffer <> data) do
-          {:cont, buffer} ->
-            loop(socket, transport, buffer)
+        state = %{state | buffer: state.buffer <> data}
+
+        case process(state) do
+          {:cont, state} ->
+            loop(state)
 
           :stop ->
             transport.close(socket)
@@ -52,15 +56,15 @@ defmodule Soulsex.Connection do
     end
   end
 
-  @spec process(binary()) :: {:cont, binary()} | :stop
-  defp process(buffer) do
+  @spec process(State.t()) :: {:cont, State.t()} | :stop
+  defp process(%State{buffer: buffer} = state) do
     case Frame.decode(buffer, @max_message_size) do
       {:ok, body, rest} ->
-        handle_message(body)
-        process(rest)
+        handle_message(body, %{state | buffer: rest})
+        |> process
 
       :more ->
-        {:cont, buffer}
+        {:cont, state}
 
       {:error, :too_large} ->
         Logger.warning("server frame exceeds #{@max_message_size} bytes; closing connection")
@@ -68,28 +72,68 @@ defmodule Soulsex.Connection do
     end
   end
 
-  @spec handle_message(binary()) :: :ok
-  defp handle_message(body) do
+  @spec handle_message(binary(), State.t()) :: State.t()
+  defp handle_message(body, state) do
     {code, payload} = Wire.take_uint32(body)
 
     case Codes.module(code) do
       nil ->
         Logger.warning("unknown server code #{code}")
+        state
 
       module ->
         decoder = decoder(module)
         message = decoder.decode(payload)
 
-        Logger.debug("recv #{code} #{inspect(redact(message))}")
+        dispatch(module, message, state)
     end
-
-    :ok
   rescue
     # The protocol decoders are strict and raise on malformed input. Catching
     # here to log and skip a bad frame, keeping the connection open as the
     # official server does, is a deliberate boundary, not control flow by
     # exception.
-    error -> Logger.warning("failed to handle server frame: #{inspect(error)}")
+    error ->
+      Logger.warning("failed to handle server frame: #{inspect(error)}")
+      state
+  end
+
+  @spec dispatch(module(), Soulseek.Message.t(), State.t()) :: State.t()
+  defp dispatch(module, message, state) do
+    case Soulsex.HandlerRegistry.handler(module) do
+      nil ->
+        Logger.warning("unhandled server message: #{inspect(message)}")
+        state
+
+      handler ->
+        handler.handle_message(message, state)
+        |> handle_message_result
+    end
+  end
+
+  @spec handle_message_result(
+          {:ok, State.t()}
+          | {:reply, Soulseek.Message.t(), State.t()}
+          | {:error, term(), State.t()}
+        ) :: State.t()
+  defp handle_message_result({:ok, new_state}), do: new_state
+
+  defp handle_message_result({:reply, response, new_state}) do
+    send_message(new_state, response)
+    new_state
+  end
+
+  defp handle_message_result({:error, reason, new_state}) do
+    Logger.warning("failed to handle server message: #{inspect(reason)}")
+    new_state
+  end
+
+  @spec send_message(State.t(), Soulseek.Message.t()) :: :ok
+  defp send_message(%State{socket: socket, transport: transport}, response) do
+    module = response.__struct__
+    encoded = module.encode(response)
+    code = Codes.code(module)
+
+    transport.send(socket, [<<code::little-unsigned-32>>, encoded])
   end
 
   @spec decoder(module()) :: module()
@@ -100,12 +144,4 @@ defmodule Soulsex.Connection do
       do: request,
       else: module
   end
-
-  defp redact(%Soulseek.Server.Login.Request{} = request),
-    do: %{request | password: "[REDACTED]", hash: "[REDACTED]"}
-
-  defp redact(%Soulseek.Server.ChangePassword{} = message),
-    do: %{message | password: "[REDACTED]"}
-
-  defp redact(message), do: message
 end
