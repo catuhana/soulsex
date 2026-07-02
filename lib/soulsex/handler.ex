@@ -3,9 +3,11 @@ defmodule Soulsex.Handler do
   Behaviour for a Soulseek connection handler.
   """
 
+  @type result ::
+          {:ok, new_state :: Soulsex.Connection.State.t()}
+          | {:reply, response :: Soulseek.Message.t(), new_state :: Soulsex.Connection.State.t()}
+          | {:error, reason :: term(), new_state :: Soulsex.Connection.State.t()}
+
   @callback handle_message(message :: Soulseek.Message.t(), state :: Soulsex.Connection.State.t()) ::
-              {:ok, new_state :: Soulsex.Connection.State.t()}
-              | {:reply, response :: Soulseek.Message.t(),
-                 new_state :: Soulsex.Connection.State.t()}
-              | {:error, reason :: term(), new_state :: Soulsex.Connection.State.t()}
+              result()
 end

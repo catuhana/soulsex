@@ -1,21 +1,24 @@
 defmodule Soulsex.HandlerRegistry do
   @moduledoc """
   Registry of message handlers using a naming convention.
-
-  Instead of maintaining an explicit map, handlers are discovered dynamically using
-  a naming convention: `Soulseek.Server.Login` → `Soulsex.Handlers.Login`.
   """
 
-  # TODO: Do a compile-time generation of a map of message modules to handler modules,
-  # to avoid the reflection cost on every message.
+  alias Soulseek.Server.Codes
+
   @spec handler(module()) :: module() | nil
-  def handler(message_module) do
+
+  for message_module <- Codes.modules() do
     handler_module =
       Module.concat(Soulsex.Handlers, message_module |> Module.split() |> List.last())
 
-    if Code.ensure_loaded?(handler_module) and
-         function_exported?(handler_module, :handle_message, 2),
-       do: handler_module,
-       else: nil
+    case Code.ensure_compiled(handler_module) do
+      {:module, ^handler_module} ->
+        def handler(unquote(message_module)), do: unquote(handler_module)
+
+      {:error, _reason} ->
+        :ok
+    end
   end
+
+  def handler(_message_module), do: nil
 end
