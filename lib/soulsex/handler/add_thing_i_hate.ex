@@ -1,4 +1,4 @@
-defmodule Soulsex.Handlers.AddThingIHate do
+defmodule Soulsex.Handler.AddThingIHate do
   @moduledoc """
   Handler for the `Soulseek.Server.AddThingIHate` message.
   """

@@ -1,4 +1,4 @@
-defmodule Soulsex.Handlers.AddThingILike do
+defmodule Soulsex.Handler.AddThingILike do
   @moduledoc """
   Handler for the `Soulseek.Server.AddThingILike` message.
   """

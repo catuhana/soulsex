@@ -9,7 +9,7 @@ defmodule Soulsex.HandlerRegistry do
 
   for message_module <- Codes.modules() do
     handler_module =
-      Module.concat(Soulsex.Handlers, message_module |> Module.split() |> List.last())
+      Module.concat(Soulsex.Handler, message_module |> Module.split() |> List.last())
 
     case Code.ensure_compiled(handler_module) do
       {:module, ^handler_module} ->

@@ -1,4 +1,4 @@
-defmodule Soulsex.Handlers.Login do
+defmodule Soulsex.Handler.Login do
   @moduledoc """
   Handler for the `Soulseek.Server.Login` message.
   """
