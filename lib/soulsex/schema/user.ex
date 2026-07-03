@@ -22,8 +22,7 @@ defmodule Soulsex.Schema.User do
     user
     |> cast(params, [:username, :password])
     |> validate_required([:username, :password])
-    # TODO: Maybe have globals for things like this.
-    |> validate_length(:username, max: 30)
+    |> validate_length(:username, max: Soulsex.UsernameValidator.max_length())
     |> unique_constraint(:username)
     |> put_password_hash()
   end

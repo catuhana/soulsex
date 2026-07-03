@@ -5,6 +5,8 @@ defmodule Soulsex.UsernameValidator do
 
   @max_length 30
 
+  def max_length, do: @max_length
+
   @spec validate(String.t()) :: :ok | {:error, LoginRejectionDetail.t()}
   def validate(""), do: {:error, :nick_empty}
 

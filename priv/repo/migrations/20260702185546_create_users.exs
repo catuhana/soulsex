@@ -3,7 +3,7 @@ defmodule Soulsex.Repo.Migrations.CreateUsers do
 
   def change do
     create table(:users) do
-      add :username, :string, size: 30, null: false
+      add :username, :string, null: false
       add :password_hash, :string, null: false
 
       add :last_login_at, :utc_datetime
