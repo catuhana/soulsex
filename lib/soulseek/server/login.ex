@@ -13,6 +13,11 @@ defmodule Soulseek.Server.Login do
 
     @behaviour Soulseek.Message
 
+    @derive {
+      Inspect,
+      except: [:password, :hash]
+    }
+
     @enforce_keys [:username, :password, :version_major, :hash, :version_minor]
     defstruct [:username, :password, :version_major, :hash, :version_minor]
 
@@ -44,6 +49,11 @@ defmodule Soulseek.Server.Login do
 
   defmodule Success do
     @moduledoc "Payload of a successful login `Response`."
+
+    @derive {
+      Inspect,
+      except: [:hash]
+    }
 
     @enforce_keys [:greet, :ip_address, :hash, :supporter]
     defstruct [:greet, :ip_address, :hash, :supporter]
