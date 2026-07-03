@@ -20,11 +20,13 @@ defmodule Soulsex.MixProject do
 
   defp deps do
     [
+      {:argon2_elixir, "~> 4.1"},
       {:ecto, "~> 3.14"},
-      {:ecto_sqlite3, "~> 0.21"},
+      {:ecto_sqlite3, "~> 0.24.1"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ranch, "~> 2.2"}
+      {:ranch, "~> 2.2"},
+      {:typed_ecto_schema, "~> 0.4.3"}
     ]
   end
 end
