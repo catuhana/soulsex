@@ -119,15 +119,16 @@ defmodule Soulseek.Server.JoinRoom do
       {files, rest} = Wire.take_uint32(rest)
       {dirs, rest} = Wire.take_uint32(rest)
 
-      # TODO: Maybe create a custom struct for stats
-      # instead of returning a map?
-      {%{
-         avg_speed: avg_speed,
-         upload_num: upload_num,
-         unknown: unknown,
-         files: files,
-         dirs: dirs
-       }, rest}
+      {
+        %{
+          avg_speed: avg_speed,
+          upload_num: upload_num,
+          unknown: unknown,
+          files: files,
+          dirs: dirs
+        },
+        rest
+      }
     end
 
     defp zip_users(usernames, statuses, stats, slots, countries),
