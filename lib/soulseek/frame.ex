@@ -15,6 +15,19 @@ defmodule Soulseek.Frame do
   """
 
   @doc """
+  Wraps a message code and encoded payload into a length-delimited frame.
+
+  Returns iodata ready for `transport.send/2`.
+  """
+  @spec encode(non_neg_integer(), iodata()) :: iodata()
+  def encode(code, payload) do
+    body = [<<code::little-32>>, payload]
+    length = IO.iodata_length(body)
+
+    [<<length::little-32>>, body]
+  end
+
+  @doc """
   Peels one length-delimited frame off the front of `buffer`.
 
     - `{:ok, body, rest}` when a whole frame is present; `body` is the code plus

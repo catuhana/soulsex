@@ -134,16 +134,11 @@ defmodule Soulsex.Connection do
 
   @spec send_message(State.t(), Message.t()) :: :ok
   defp send_message(%State{socket: socket, transport: transport}, response) do
-    encoded = Message.Encoder.encode(response)
     code = Codes.code(response.__struct__)
+    encoded = Message.Encoder.encode(response)
 
-    # TODO: Move to `Soulseek.Frame`.
-    payload = [<<code::little-unsigned-32>>, encoded]
-    length = IO.iodata_length(payload)
-
-    frame = [<<length::little-unsigned-32>>, payload]
-
-    transport.send(socket, frame)
+    socket
+    |> transport.send(Frame.encode(code, encoded))
   end
 
   @spec decode_payload(module(), binary()) :: Message.t() | :ignore
