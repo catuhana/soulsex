@@ -18,7 +18,7 @@ let
     pname = "${pname}-deps";
     inherit version src;
 
-    hash = "sha256-65eNsH6a3LLhpWC4X1DKLat5ROfbpAJuugvPDlt+b7g=";
+    hash = "sha256-k8mYMlkBYh4ucoY7ikl7IGa2oYoNPh7QOfVp6qhgdy8=";
   };
 
   removeCookie = false;
