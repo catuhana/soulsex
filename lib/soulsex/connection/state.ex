@@ -6,8 +6,10 @@ defmodule Soulsex.Connection.State do
   @type t :: %__MODULE__{
           socket: :ranch_transport.socket(),
           transport: module(),
-          buffer: binary()
+          buffer: binary(),
+          user_id: pos_integer() | nil,
+          username: String.t() | nil
         }
 
-  defstruct [:socket, :transport, buffer: <<>>]
+  defstruct [:socket, :transport, :user_id, :username, buffer: <<>>]
 end

@@ -60,8 +60,13 @@ defmodule Soulsex.Connection do
   defp process(%State{buffer: buffer} = state) do
     case Frame.decode(buffer, @max_message_size) do
       {:ok, body, rest} ->
-        handle_message(body, %{state | buffer: rest})
-        |> process
+        case handle_message(body, %{state | buffer: rest}) do
+          {:cont, state} ->
+            process(state)
+
+          :stop ->
+            :stop
+        end
 
       :more ->
         {:cont, state}
@@ -72,40 +77,32 @@ defmodule Soulsex.Connection do
     end
   end
 
-  @spec handle_message(binary(), State.t()) :: State.t()
+  @spec handle_message(binary(), State.t()) :: {:cont, State.t()} | :stop
   defp handle_message(body, state) do
     {code, payload} = Wire.take_uint32(body)
 
     case Codes.module(code) do
       nil ->
         Logger.warning("unknown server code #{code}")
-        state
+        {:cont, state}
 
       module ->
         case decode_payload(module, payload) do
           :ignore ->
-            state
+            {:cont, state}
 
           message ->
             dispatch(module, message, state)
         end
     end
-  rescue
-    # The protocol decoders are strict and raise on malformed input. Catching
-    # here to log and skip a bad frame, keeping the connection open as the
-    # official server does, is a deliberate boundary, not control flow by
-    # exception.
-    error ->
-      Logger.warning("failed to handle server frame: #{inspect(error)}")
-      state
   end
 
-  @spec dispatch(module(), Message.t(), State.t()) :: State.t()
+  @spec dispatch(module(), Message.t(), State.t()) :: {:cont, State.t()} | :stop
   defp dispatch(module, message, state) do
     case Soulsex.HandlerRegistry.handler(module) do
       nil ->
         Logger.warning("unhandled server message: #{inspect(message)}")
-        state
+        {:cont, state}
 
       handler ->
         handler.handle_message(message, state)
@@ -117,17 +114,22 @@ defmodule Soulsex.Connection do
           {:ok, State.t()}
           | {:reply, Message.t(), State.t()}
           | {:error, term(), State.t()}
-        ) :: State.t()
-  defp handle_message_result({:ok, new_state}), do: new_state
+        ) :: {:cont, State.t()} | :stop
+  defp handle_message_result({:ok, state}), do: {:cont, state}
 
-  defp handle_message_result({:reply, response, new_state}) do
-    send_message(new_state, response)
-    new_state
+  defp handle_message_result({:reply, response, state}) do
+    send_message(state, response)
+    {:cont, state}
   end
 
-  defp handle_message_result({:error, reason, new_state}) do
+  defp handle_message_result({:reply_and_close, response, state}) do
+    send_message(state, response)
+    :stop
+  end
+
+  defp handle_message_result({:error, reason, state}) do
     Logger.warning("failed to handle server message: #{inspect(reason)}")
-    new_state
+    {:cont, state}
   end
 
   @spec send_message(State.t(), Message.t()) :: :ok
@@ -135,7 +137,13 @@ defmodule Soulsex.Connection do
     encoded = Message.Encoder.encode(response)
     code = Codes.code(response.__struct__)
 
-    transport.send(socket, [<<code::little-unsigned-32>>, encoded])
+    # TODO: Move to `Soulseek.Frame`.
+    payload = [<<code::little-unsigned-32>>, encoded]
+    length = IO.iodata_length(payload)
+
+    frame = [<<length::little-unsigned-32>>, payload]
+
+    transport.send(socket, frame)
   end
 
   @spec decode_payload(module(), binary()) :: Message.t() | :ignore
