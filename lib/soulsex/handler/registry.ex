@@ -1,5 +1,4 @@
-# TODO: Rename to `Soulsex.Handler.Registry` I think.
-defmodule Soulsex.HandlerRegistry do
+defmodule Soulsex.Handler.Registry do
   @moduledoc """
   Registry of message handlers using a naming convention.
   """

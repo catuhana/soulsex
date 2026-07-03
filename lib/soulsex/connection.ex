@@ -99,7 +99,7 @@ defmodule Soulsex.Connection do
 
   @spec dispatch(module(), Message.t(), State.t()) :: {:cont, State.t()} | :stop
   defp dispatch(module, message, state) do
-    case Soulsex.HandlerRegistry.handler(module) do
+    case Soulsex.Handler.Registry.handler(module) do
       nil ->
         Logger.warning("unhandled server message: #{inspect(message)}")
         {:cont, state}
