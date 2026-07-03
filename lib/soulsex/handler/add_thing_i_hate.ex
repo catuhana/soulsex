@@ -3,8 +3,6 @@ defmodule Soulsex.Handler.AddThingIHate do
   Handler for the `Soulseek.Server.AddThingIHate` message.
   """
 
-  require Logger
-
   @behaviour Soulsex.Handler
 
   alias Soulseek.Server.AddThingIHate
@@ -13,11 +11,9 @@ defmodule Soulsex.Handler.AddThingIHate do
   @impl true
   @spec handle_message(AddThingIHate.t(), State.t()) :: Soulsex.Handler.result()
   def handle_message(
-        %AddThingIHate{} = message,
+        %AddThingIHate{} = _message,
         state
       ) do
-    Logger.debug("received AddThingIHate message: #{inspect(message)}")
-
-    {:error, :not_implemented, state}
+    {:ok, state}
   end
 end
