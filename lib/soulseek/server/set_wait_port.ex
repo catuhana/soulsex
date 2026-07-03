@@ -17,6 +17,7 @@ defmodule Soulseek.Server.SetWaitPort do
   @type t :: %__MODULE__{
           port: 0..65_535,
           obfuscation_type: ObfuscationType.t() | nil,
+          # TODO: Replace with `:inet.port_number()`
           obfuscated_port: 0..65_535 | nil
         }
 
