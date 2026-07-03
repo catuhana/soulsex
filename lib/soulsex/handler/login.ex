@@ -8,6 +8,7 @@ defmodule Soulsex.Handler.Login do
   alias Soulseek.Server.Login.{Failure, Request, Success}
   alias Soulsex.Accounts
   alias Soulsex.Connection.{Registry, State}
+  alias Soulsex.Schema
 
   # TODO: Align with `Soulseek.LoginRejectionReason` somehow.
   @known_rejection_reasons [
@@ -28,7 +29,7 @@ defmodule Soulsex.Handler.Login do
     |> reply(password, state)
   end
 
-  @spec reply({:ok, Accounts.User.t()} | {:error, Accounts.login_error()}, String.t(), State.t()) ::
+  @spec reply({:ok, Schema.User.t()} | {:error, Accounts.login_error()}, String.t(), State.t()) ::
           Soulsex.Handler.result()
   defp reply({:ok, user}, password, state) do
     Accounts.touch_last_login(user)
@@ -53,8 +54,7 @@ defmodule Soulsex.Handler.Login do
       hash:
         :crypto.hash(:md5, password)
         |> Base.encode16(case: :lower),
-      # TODO: Fetch from `supporters` table.
-      supporter: false
+      supporter: Accounts.supporter?(user)
     }
 
     Logger.debug("login succeeded=#{inspect(success)}")

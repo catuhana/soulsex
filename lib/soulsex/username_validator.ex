@@ -1,4 +1,4 @@
-defmodule Soulsex.Accounts.UsernameValidator do
+defmodule Soulsex.UsernameValidator do
   @moduledoc false
 
   alias Soulseek.LoginRejectionDetail

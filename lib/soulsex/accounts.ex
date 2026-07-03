@@ -3,9 +3,11 @@ defmodule Soulsex.Accounts do
 
   require Logger
 
+  import Ecto.Query
+
   alias Soulseek.{LoginRejectionDetail, LoginRejectionReason}
-  alias Soulsex.Accounts.{User, UsernameValidator}
-  alias Soulsex.Repo
+  alias Soulsex.{Repo, UsernameValidator}
+  alias Soulsex.Schema.User
 
   @type login_error ::
           LoginRejectionReason.t()
@@ -31,7 +33,16 @@ defmodule Soulsex.Accounts do
   end
 
   defp find_or_register(username, password) do
-    case Repo.get_by(User, username: username) do
+    user =
+      Repo.one(
+        from(u in User,
+          left_join: p in assoc(u, :privilege),
+          where: u.username == ^username,
+          preload: [privilege: p]
+        )
+      )
+
+    case user do
       nil -> register(username, password)
       user -> verify(user, password)
     end
@@ -62,6 +73,17 @@ defmodule Soulsex.Accounts do
     else
       {:error, :invalid_password}
     end
+  end
+
+  @spec supporter?(User.t()) :: boolean()
+  def supporter?(%User{privilege: %Ecto.Association.NotLoaded{}} = user) do
+    supporter?(Repo.preload(user, :privilege))
+  end
+
+  def supporter?(%User{privilege: nil}), do: false
+
+  def supporter?(%User{privilege: %{expires_at: expires_at}}) do
+    DateTime.compare(expires_at, DateTime.utc_now()) == :gt
   end
 
   @spec touch_last_login(User.t()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}

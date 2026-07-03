@@ -1,4 +1,4 @@
-defmodule Soulsex.Accounts.User do
+defmodule Soulsex.Schema.User do
   @moduledoc false
 
   use TypedEctoSchema
@@ -12,6 +12,8 @@ defmodule Soulsex.Accounts.User do
     field :password_hash, :string, null: false, redact: true
 
     field :last_login_at, :utc_datetime
+
+    has_one :privilege, Soulsex.Schema.Privilege
 
     timestamps(type: :utc_datetime)
   end
