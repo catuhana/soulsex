@@ -87,6 +87,7 @@ defmodule Soulsex.Handler.Login do
   end
 
   defp ip_uint32({a, b, c, d}) do
-    d + c * 256 + b * 65_536 + a * 16_777_216
+    <<int::big-32>> = <<a, b, c, d>>
+    int
   end
 end
