@@ -40,9 +40,9 @@ defmodule Soulseek.Server.GetPeerAddress do
     @type t :: %__MODULE__{
             username: String.t(),
             ip: non_neg_integer(),
-            port: 0..65_535,
+            port: :inet.port_number(),
             obfuscation_type: ObfuscationType.t(),
-            obfuscated_port: 0..65_535
+            obfuscated_port: :inet.port_number()
           }
 
     @impl true

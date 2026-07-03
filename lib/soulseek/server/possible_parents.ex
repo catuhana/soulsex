@@ -12,7 +12,7 @@ defmodule Soulseek.Server.PossibleParents do
     @enforce_keys [:username, :ip, :port]
     defstruct [:username, :ip, :port]
 
-    @type t :: %__MODULE__{username: String.t(), ip: non_neg_integer(), port: 0..65_535}
+    @type t :: %__MODULE__{username: String.t(), ip: non_neg_integer(), port: :inet.port_number()}
   end
 
   @enforce_keys [:parents]

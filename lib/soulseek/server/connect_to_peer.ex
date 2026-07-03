@@ -63,11 +63,11 @@ defmodule Soulseek.Server.ConnectToPeer do
             username: String.t(),
             type: ConnectionType.t(),
             ip: non_neg_integer(),
-            port: 0..65_535,
+            port: :inet.port_number(),
             token: non_neg_integer(),
             privileged: boolean(),
             obfuscation_type: ObfuscationType.t(),
-            obfuscated_port: 0..65_535
+            obfuscated_port: :inet.port_number()
           }
 
     @impl true
