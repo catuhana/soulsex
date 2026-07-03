@@ -48,8 +48,7 @@ defmodule Soulsex.Handler.Login do
     end
 
     success = %Success{
-      # TODO: Make this configurable and a *global*.
-      greet: "meow",
+      greet: Application.get_env(:soulsex, :greet),
       ip_address: ip_uint32(ip),
       hash:
         :crypto.hash(:md5, password)
