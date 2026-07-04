@@ -70,6 +70,12 @@ defmodule Soulsex.Handler.Login do
     {:reply_and_close, failure, state}
   end
 
+  defp reply({:error, :registration_failed}, _password, state) do
+    Logger.warning("registration failed for username=#{state.username}")
+
+    :close
+  end
+
   defp reply({:error, reason}, _password, state) when reason in @known_rejection_reasons do
     failure = %Failure{reason: reason, detail: nil}
 

@@ -63,7 +63,7 @@ defmodule Soulsex.Accounts do
 
       {:error, changeset} ->
         Logger.error("registration failed for username=#{username}: #{inspect(changeset.errors)}")
-        {:error, changeset}
+        {:error, :registration_failed}
     end
   end
 
