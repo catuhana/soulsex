@@ -7,10 +7,12 @@ defmodule Soulsex.Handler.Login do
 
   alias Soulseek.Server.Login.{Failure, Request, Success}
   alias Soulsex.Accounts
-  alias Soulsex.Connection.{Registry, State}
+  alias Soulsex.Connection.State
+  alias Soulsex.PeerDirectory
+  alias Soulsex.PeerDirectory.Entry.Pending
   alias Soulsex.Schema
 
-  # TODO: Align with `Soulseek.LoginRejectionReason` somehow.
+  # TODO: Find a way to keep in sync with `LoginRejectionReason`.
   @known_rejection_reasons [
     :empty_password,
     :invalid_password,
@@ -18,6 +20,8 @@ defmodule Soulsex.Handler.Login do
     :server_full,
     :server_private
   ]
+
+  @takeover_timeout :timer.seconds(5)
 
   @impl true
   @spec handle_message(Request.t(), State.t()) :: Soulsex.Handler.result()
@@ -29,24 +33,18 @@ defmodule Soulsex.Handler.Login do
     |> reply(password, state)
   end
 
-  @spec reply({:ok, Schema.User.t()} | {:error, Accounts.login_error()}, String.t(), State.t()) ::
+  @spec reply(
+          {:ok, Schema.User.t()}
+          | {:error, Accounts.login_error()},
+          String.t(),
+          State.t()
+        ) ::
           Soulsex.Handler.result()
   defp reply({:ok, user}, password, state) do
     Accounts.touch_last_login(user)
 
     ip = peer_ip(state.socket, state.transport)
-
-    meta = %{
-      ip: ip,
-      port: nil,
-      obfuscation_type: nil,
-      obfuscated_port: nil
-    }
-
-    case Registry.register(user.username, meta) do
-      {:ok, _pid} ->
-        :ok
-    end
+    {:ok, _pid} = register_peer(user.username, ip)
 
     success = %Success{
       greet: Application.get_env(:soulsex, :greet),
@@ -82,6 +80,43 @@ defmodule Soulsex.Handler.Login do
     Logger.warning("login rejected=#{inspect(failure)}")
 
     {:reply_and_close, failure, state}
+  end
+
+  @spec register_peer(String.t(), :inet.ip4_address()) :: {:ok, pid()}
+  defp register_peer(username, ip) do
+    entry = %Pending{ip: ip}
+
+    case PeerDirectory.register(username, entry) do
+      {:ok, pid} ->
+        {:ok, pid}
+
+      {:error, {:already_logged_in, old_pid}} ->
+        take_over(username, entry, old_pid)
+    end
+  end
+
+  defp take_over(username, entry, old_pid) do
+    ref = Process.monitor(old_pid)
+    send(old_pid, :relogged)
+
+    receive do
+      {:DOWN, ^ref, :process, ^old_pid, _reason} ->
+        Logger.debug("relogged previous session username=#{username} old_pid=#{inspect(old_pid)}")
+
+        PeerDirectory.register(username, entry)
+    after
+      @takeover_timeout ->
+        Logger.warning(
+          "previous session unresponsive, force-killing username=#{username} old_pid=#{inspect(old_pid)}"
+        )
+
+        Process.exit(old_pid, :kill)
+
+        receive do
+          {:DOWN, ^ref, :process, ^old_pid, _reason} ->
+            PeerDirectory.register(username, entry)
+        end
+    end
   end
 
   defp peer_ip(socket, transport) do

@@ -7,7 +7,7 @@ defmodule Soulsex.Application do
   def start(_type, _args) do
     children = [
       Soulsex.Repo,
-      Soulsex.Connection.Registry,
+      Soulsex.PeerDirectory,
       :ranch.child_spec(
         :soulsex,
         :ranch_tcp,

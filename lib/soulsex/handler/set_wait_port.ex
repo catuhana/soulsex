@@ -6,7 +6,8 @@ defmodule Soulsex.Handler.SetWaitPort do
   @behaviour Soulsex.Handler
 
   alias Soulseek.Server.SetWaitPort
-  alias Soulsex.Connection.{Registry, State}
+  alias Soulsex.Connection.State
+  alias Soulsex.PeerDirectory
 
   @impl true
   @spec handle_message(SetWaitPort.t(), State.t()) :: Soulsex.Handler.result()
@@ -20,17 +21,20 @@ defmodule Soulsex.Handler.SetWaitPort do
       ) do
     Logger.debug("#{inspect(__MODULE__)}=#{inspect(message)}")
 
-    Registry.update(state.username, fn meta ->
-      meta = %{
-        meta
-        | port: port,
-          obfuscation_type: obfuscation_type,
-          obfuscated_port: obfuscated_port
+    PeerDirectory.set_wait_port(
+      state.username,
+      %SetWaitPort{
+        port: port,
+        obfuscation_type: obfuscation_type,
+        obfuscated_port: obfuscated_port
       }
+    )
+    |> case do
+      {_new_entry, _old_entry} ->
+        {:ok, state}
 
-      meta
-    end)
-
-    {:ok, state}
+      :error ->
+        {:stop, {:unregistered_peer, state.username}, state}
+    end
   end
 end

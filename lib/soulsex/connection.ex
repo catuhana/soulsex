@@ -54,6 +54,11 @@ defmodule Soulsex.Connection do
       {:tcp_error, ^socket, reason} ->
         Logger.error("error on socket #{inspect(socket)}: #{inspect(reason)}")
         :ok
+
+      :relogged ->
+        send_message(state, %Soulseek.Server.Relogged{})
+        transport.close(socket)
+        :ok
     end
   end
 
