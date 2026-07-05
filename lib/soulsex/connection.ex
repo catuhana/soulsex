@@ -96,9 +96,9 @@ defmodule Soulsex.Connection do
     :stop
   end
 
-  defp handle_message_result({:error, reason, state}) do
+  defp handle_message_result({:error, reason, _state}) do
     Logger.warning("failed to handle server message: #{inspect(reason)}")
-    {:cont, state}
+    :stop
   end
 
   defp handle_message_result(:close) do
