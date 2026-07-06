@@ -3,14 +3,15 @@ defmodule Soulsex.Handler.AddThingIHate do
   Handler for the `Soulseek.Server.AddThingIHate` message.
   """
 
-  @behaviour Soulsex.Handler
-
   alias Soulseek.Server.AddThingIHate
   alias Soulsex.Connection.State
+  alias Soulsex.Handler.Notification
+
+  @behaviour Notification
 
   @impl true
-  @spec handle_message(AddThingIHate.t(), State.t()) :: Soulsex.Handler.result()
-  def handle_message(
+  @spec acknowledge(AddThingIHate.t(), State.t()) :: Notification.result()
+  def acknowledge(
         %AddThingIHate{} = _message,
         state
       ) do

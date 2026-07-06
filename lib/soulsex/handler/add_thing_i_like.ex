@@ -3,14 +3,15 @@ defmodule Soulsex.Handler.AddThingILike do
   Handler for the `Soulseek.Server.AddThingILike` message.
   """
 
-  @behaviour Soulsex.Handler
-
   alias Soulseek.Server.AddThingILike
   alias Soulsex.Connection.State
+  alias Soulsex.Handler.Notification
+
+  @behaviour Notification
 
   @impl true
-  @spec handle_message(AddThingILike.t(), State.t()) :: Soulsex.Handler.result()
-  def handle_message(
+  @spec acknowledge(AddThingILike.t(), State.t()) :: Notification.result()
+  def acknowledge(
         %AddThingILike{} = _message,
         state
       ) do

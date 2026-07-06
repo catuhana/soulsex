@@ -3,15 +3,16 @@ defmodule Soulsex.Handler.SetWaitPort do
 
   require Logger
 
-  @behaviour Soulsex.Handler
-
   alias Soulseek.Server.SetWaitPort
   alias Soulsex.Connection.State
+  alias Soulsex.Handler.Notification
   alias Soulsex.PeerDirectory
 
+  @behaviour Notification
+
   @impl true
-  @spec handle_message(SetWaitPort.t(), State.t()) :: Soulsex.Handler.result()
-  def handle_message(
+  @spec acknowledge(SetWaitPort.t(), State.t()) :: Notification.result()
+  def acknowledge(
         %SetWaitPort{
           port: port,
           obfuscation_type: obfuscation_type,
@@ -34,7 +35,7 @@ defmodule Soulsex.Handler.SetWaitPort do
         {:ok, state}
 
       :error ->
-        {:stop, {:unregistered_peer, state.username}, state}
+        {:error, {:unregistered_peer, state.username}, state}
     end
   end
 end

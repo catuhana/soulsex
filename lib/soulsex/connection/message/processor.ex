@@ -5,8 +5,9 @@ defmodule Soulsex.Connection.Message.Processor do
 
   alias Soulseek.Server.Codes
   alias Soulseek.Wire
-  alias Soulsex.Connection.Message.{Decoder, Dispatcher}
+  alias Soulsex.Connection.Message.Decoder
   alias Soulsex.Connection.State
+  alias Soulsex.Handler.Registry
 
   @spec process(binary(), State.t()) :: Soulsex.Handler.result()
   def process(body, state) do
@@ -25,7 +26,7 @@ defmodule Soulsex.Connection.Message.Processor do
   defp dispatch_decoded(module, payload, state) do
     case Decoder.decode(module, payload) do
       :ignore -> {:ok, state}
-      message -> Dispatcher.dispatch(module, message, state)
+      message -> Registry.dispatch(module, message, state)
     end
   end
 end

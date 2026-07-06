@@ -3,14 +3,15 @@ defmodule Soulsex.Handler.Login do
 
   require Logger
 
-  @behaviour Soulsex.Handler
-
   alias Soulseek.Server.Login.{Failure, Request, Success}
   alias Soulsex.Accounts
   alias Soulsex.Connection.State
+  alias Soulsex.Handler.Repliable
   alias Soulsex.PeerDirectory
   alias Soulsex.PeerDirectory.Entry.Pending
   alias Soulsex.Schema
+
+  @behaviour Repliable
 
   # TODO: Find a way to keep in sync with `LoginRejectionReason`.
   @known_rejection_reasons [
@@ -24,8 +25,8 @@ defmodule Soulsex.Handler.Login do
   @takeover_timeout :timer.seconds(5)
 
   @impl true
-  @spec handle_message(Request.t(), State.t()) :: Soulsex.Handler.result()
-  def handle_message(%Request{username: username, password: password} = request, state) do
+  @spec respond(Request.t(), State.t()) :: Repliable.result()
+  def respond(%Request{username: username, password: password} = request, state) do
     Logger.debug("#{inspect(__MODULE__)}=#{inspect(request)}")
 
     username

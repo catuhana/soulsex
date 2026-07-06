@@ -16,6 +16,7 @@ defmodule Soulsex.Connection do
   alias Soulseek.Server.Codes
   alias Soulsex.Connection.Message.Processor
   alias Soulsex.Connection.State
+  alias Soulsex.Handler
 
   @max_message_size 448 * 1024 * 1024
 
@@ -83,12 +84,12 @@ defmodule Soulsex.Connection do
     end
   end
 
-  @spec handle_message_result(
-          {:ok, State.t()}
-          | {:reply, Message.t(), State.t()}
-          | {:reply_and_close, Message.t(), State.t()}
-          | {:error, term(), State.t()}
-        ) :: {:cont, State.t()} | :stop
+  @spec handle_message_result(Handler.result()) ::
+          {
+            :cont,
+            State.t()
+          }
+          | :stop
   defp handle_message_result({:ok, state}), do: {:cont, state}
 
   defp handle_message_result({:reply, response, state}) do
