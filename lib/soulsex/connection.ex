@@ -38,7 +38,7 @@ defmodule Soulsex.Connection do
 
     receive do
       {:tcp, ^socket, data} ->
-        state = %{state | buffer: state.buffer <> data}
+        state = %{state | in_buffer: state.in_buffer <> data}
 
         process(state)
         |> case do
@@ -65,11 +65,11 @@ defmodule Soulsex.Connection do
   end
 
   @spec process(State.t()) :: {:cont, State.t()} | :stop
-  defp process(%State{buffer: buffer} = state) do
-    Frame.decode(buffer, @max_message_size)
+  defp process(%State{in_buffer: in_buffer} = state) do
+    Frame.decode(in_buffer, @max_message_size)
     |> case do
       {:ok, body, rest} ->
-        Processor.process(body, %{state | buffer: rest})
+        Processor.process(body, %{state | in_buffer: rest})
         |> handle_message_result()
         |> case do
           {:cont, state} ->
