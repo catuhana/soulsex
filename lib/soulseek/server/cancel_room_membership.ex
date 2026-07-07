@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.CancelRoomMembership do
-  @moduledoc """
-  The CancelRoomMembership message (server code 136).
-
-  The client cancels its own membership of a private room. The server sends no
-  reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

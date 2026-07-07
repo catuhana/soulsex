@@ -1,14 +1,6 @@
 defmodule Soulseek.FileAttributeType do
-  @moduledoc "Attribute types describing a shared audio file."
+  @moduledoc false
 
-  @typedoc """
-  - `:bitrate` - Bitrate in kbps (`0`).
-  - `:duration` - Duration in seconds (`1`).
-  - `:vbr` - VBR flag, 0 or 1 (`2`).
-  - `:encoder` - Encoder, unused (`3`).
-  - `:sample_rate` - Sample rate in Hz (`4`).
-  - `:bit_depth` - Bit depth in bits (`5`).
-  """
   @type t :: :bitrate | :duration | :vbr | :encoder | :sample_rate | :bit_depth
 
   @spec to_wire(t) :: 0..5

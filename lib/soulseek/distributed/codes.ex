@@ -1,7 +1,5 @@
 defmodule Soulseek.Distributed.Codes do
-  @moduledoc """
-  Registry of distributed message codes mapped to their message modules.
-  """
+  @moduledoc false
 
   @codes %{
     3 => Soulseek.Distributed.Search,

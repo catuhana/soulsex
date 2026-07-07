@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.MessageUsers do
-  @moduledoc """
-  The MessageUsers message (server code 149).
-
-  The client broadcasts a private message to a list of online users. The server
-  sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

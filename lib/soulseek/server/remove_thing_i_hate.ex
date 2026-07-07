@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RemoveThingIHate do
-  @moduledoc """
-  The RemoveThingIHate message (server code 118).
-
-  The client sends this to remove an item from its hate list. The server sends
-  no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

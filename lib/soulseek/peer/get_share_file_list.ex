@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.GetShareFileList do
-  @moduledoc """
-  The GetShareFileList message (peer code 4).
-
-  An empty message asking a peer for its list of shared files. The peer replies
-  with a `Soulseek.Peer.SharedFileListResponse`.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

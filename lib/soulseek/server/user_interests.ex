@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.UserInterests do
-  @moduledoc """
-  The UserInterests message (server code 57).
-
-  The client sends a `Request` with a username; the server replies with a
-  `Response` listing that user's liked and hated interests.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A request for a user's interests, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -27,7 +22,7 @@ defmodule Soulseek.Server.UserInterests do
   end
 
   defmodule Response do
-    @moduledoc "A user's liked and hated interests, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

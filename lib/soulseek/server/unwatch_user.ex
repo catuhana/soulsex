@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.UnwatchUser do
-  @moduledoc """
-  The UnwatchUser message (server code 6).
-
-  The client sends this to stop being kept updated about a user's status. The
-  server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

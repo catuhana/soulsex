@@ -1,15 +1,5 @@
 defmodule Soulseek.Peer.SharedFileListResponse do
-  @moduledoc """
-  The SharedFileListResponse message (peer code 5).
-
-  A peer's reply to a SharedFileListRequest: its public and private shared
-  directories. The payload is zlib-compressed on the wire, so `encode/1`
-  compresses and `decode/1` decompresses.
-
-  An "unknown" `uint32`, which official clients always set to `0`, sits between
-  the public and private directories; it is written as `0` and asserted to be
-  `0`, so it is not stored on the struct.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

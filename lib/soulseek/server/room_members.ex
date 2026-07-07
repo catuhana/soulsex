@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomMembers do
-  @moduledoc """
-  The RoomMembers message (server code 133).
-
-  The server sends the list of members (excluding the owner) of a private room
-  we are in. The client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room, :members]
   defstruct [:room, :members]

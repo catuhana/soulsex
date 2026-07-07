@@ -1,9 +1,5 @@
 defmodule Soulseek.SharedDirectory do
-  @moduledoc """
-  A directory entry shared by peer file listings (SharedFileList and
-  FolderContents responses): a name and the list of `Soulseek.SharedFile`
-  entries it contains.
-  """
+  @moduledoc false
 
   alias Soulseek.SharedFile
   alias Soulseek.Wire

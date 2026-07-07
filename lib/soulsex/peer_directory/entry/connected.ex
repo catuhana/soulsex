@@ -1,7 +1,5 @@
 defmodule Soulsex.PeerDirectory.Entry.Connected do
-  @moduledoc """
-  A peer with a known listening port, established via `SetWaitPort`.
-  """
+  @moduledoc false
 
   alias Soulseek.ObfuscationType
 

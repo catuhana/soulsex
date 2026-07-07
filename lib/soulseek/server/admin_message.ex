@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.AdminMessage do
-  @moduledoc """
-  The AdminMessage message (server code 66).
-
-  The server delivers a global message from the server admin. The client sends
-  no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:message]
   defstruct [:message]

@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.CheckPrivileges do
-  @moduledoc """
-  The CheckPrivileges message (server code 92).
-
-  The client sends an empty `Request` to ask how much privilege time is left;
-  the server replies with a `Response` carrying the remaining time in seconds.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "An empty request for remaining privilege time, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -22,7 +17,7 @@ defmodule Soulseek.Server.CheckPrivileges do
   end
 
   defmodule Response do
-    @moduledoc "The remaining privilege time in seconds, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

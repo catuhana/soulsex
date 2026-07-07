@@ -1,9 +1,5 @@
 defmodule Soulseek.File.TransferInit do
-  @moduledoc """
-  The FileTransferInit message, sent over a file ('F') connection to tell a peer
-  we want to start uploading a file. The token matches the one from the earlier
-  TransferRequest peer message.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

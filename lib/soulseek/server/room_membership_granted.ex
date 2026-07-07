@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomMembershipGranted do
-  @moduledoc """
-  The RoomMembershipGranted message (server code 139).
-
-  The server tells us we were added to a private room. The client sends no such
-  message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room]
   defstruct [:room]

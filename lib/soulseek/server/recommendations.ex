@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.Recommendations do
-  @moduledoc """
-  The Recommendations message (server code 54).
-
-  The client sends an empty `Request`; the server replies with a `Response`
-  listing personal recommendations and unrecommendations, each with a score.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "An empty request for recommendations, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -22,7 +17,7 @@ defmodule Soulseek.Server.Recommendations do
   end
 
   defmodule Recommendation do
-    @moduledoc "A recommendation and its score (negative for unrecommendations)."
+    @moduledoc false
 
     @enforce_keys [:item, :score]
     defstruct [:item, :score]
@@ -31,7 +26,7 @@ defmodule Soulseek.Server.Recommendations do
   end
 
   defmodule Response do
-    @moduledoc "Personal recommendations, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

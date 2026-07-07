@@ -1,12 +1,5 @@
 defmodule Soulseek.Peer.UserInfoResponse do
-  @moduledoc """
-  The UserInfoResponse message (peer code 16).
-
-  A peer's reply to a UserInfoRequest: a description, an optional picture, the
-  total number of uploads, the queue size, and whether a slot is free. The
-  upload permission is optional (not sent by SoulseekQt) and is `nil` when
-  absent.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

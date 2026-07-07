@@ -1,5 +1,5 @@
 defmodule Soulseek.PeerInit.Codes do
-  @moduledoc "Registry of peer init message codes mapped to their message modules."
+  @moduledoc false
 
   @codes %{
     0 => Soulseek.PeerInit.PierceFirewall,

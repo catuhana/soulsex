@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.ParentMinSpeed do
-  @moduledoc """
-  The ParentMinSpeed message (server code 83).
-
-  The server tells us the minimum upload speed required to become a parent in
-  the distributed network. The client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:speed]
   defstruct [:speed]

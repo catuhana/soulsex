@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.BranchRoot do
-  @moduledoc """
-  The BranchRoot message (server code 127).
-
-  The client tells the server the username of the root of its branch in the
-  distributed network. The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

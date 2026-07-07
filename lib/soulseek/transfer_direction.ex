@@ -1,10 +1,6 @@
 defmodule Soulseek.TransferDirection do
-  @moduledoc "The direction of a file transfer relative to the peer."
+  @moduledoc false
 
-  @typedoc """
-  - `:download` - Download from peer (`0`)
-  - `:upload` - Upload to peer (`1`)
-  """
   @type t :: :download | :upload
 
   @spec to_wire(t()) :: 0 | 1

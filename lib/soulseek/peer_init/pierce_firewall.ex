@@ -1,11 +1,5 @@
 defmodule Soulseek.PeerInit.PierceFirewall do
-  @moduledoc """
-  The PierceFireWall message (peer init code 0).
-
-  Sent in response to an indirect connection request; if it reaches the peer,
-  the connection is ready. The token comes from the `ConnectToPeer` server
-  message. The same shape is used in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

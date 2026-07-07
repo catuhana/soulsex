@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.RoomList do
-  @moduledoc """
-  The RoomList message (server code 64).
-
-  The client sends an empty `Request`; the server replies with a `Response`
-  listing public rooms, owned private rooms, and other private rooms (each with
-  their user counts), plus operated private rooms.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "An empty request for the room list, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -23,12 +17,12 @@ defmodule Soulseek.Server.RoomList do
   end
 
   defmodule Response do
-    @moduledoc "The server's room list, sent to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
     defmodule Room do
-      @moduledoc "A room and its user count."
+      @moduledoc false
 
       @enforce_keys [:name, :user_count]
       defstruct [:name, :user_count]

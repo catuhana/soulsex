@@ -1,10 +1,5 @@
 defmodule Soulseek.Distributed.BranchRoot do
-  @moduledoc """
-  The DistribBranchRoot message (distributed code 5).
-
-  The username of the root of the branch we're in in the distributed network. A
-  branch root sends its own username.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

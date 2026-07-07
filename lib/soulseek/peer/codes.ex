@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.Codes do
-  @moduledoc """
-  Registry of peer message codes mapped to their message modules.
-
-  The code keys a message's namespace module; resolving the `Request`/`Response`
-  variant for a given direction is the caller's concern.
-  """
+  @moduledoc false
 
   @codes %{
     4 => Soulseek.Peer.SharedFileListRequest,

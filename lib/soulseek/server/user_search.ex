@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.UserSearch do
-  @moduledoc """
-  The UserSearch message (server code 42).
-
-  The client sends this to search a specific user's shares; the server forwards
-  it to that user as a `FileSearch` message and sends us no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

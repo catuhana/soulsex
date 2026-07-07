@@ -1,14 +1,5 @@
 defmodule Soulseek.Distributed.Search do
-  @moduledoc """
-  The DistribSearch message (distributed code 3).
-
-  A search request arriving through the distributed network: the originating
-  username, the search token, and the query.
-
-  Each message carries a leading `uint32` identifier that is always the code
-  point of ASCII character `1` (`0x31`); it is written and asserted, so it is not
-  stored on the struct, and any other value is rejected.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

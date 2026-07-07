@@ -1,13 +1,7 @@
 # TODO: Find a way to deduplicate this module.
 # Idea: messages themselves define the codes.
 defmodule Soulseek.Server.Codes do
-  @moduledoc """
-  Registry of server message codes mapped to their message modules.
-
-  The code keys a message's namespace module (e.g. `Soulseek.Server.Login`);
-  resolving the `Request`/`Response` variant for a given direction is the
-  caller's concern.
-  """
+  @moduledoc false
 
   @codes %{
     1 => Soulseek.Server.Login,

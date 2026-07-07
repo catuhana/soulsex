@@ -1,13 +1,8 @@
 defmodule Soulseek.Server.RoomTickers do
-  @moduledoc """
-  The RoomTickers message (server code 113).
-
-  The server returns the list of tickers (per-user wall messages) in a room. The
-  client sends no such message.
-  """
+  @moduledoc false
 
   defmodule Ticker do
-    @moduledoc "A user's ticker in a room."
+    @moduledoc false
 
     @enforce_keys [:username, :ticker]
     defstruct [:username, :ticker]

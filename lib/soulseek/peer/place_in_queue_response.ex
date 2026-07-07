@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.PlaceInQueueResponse do
-  @moduledoc """
-  The PlaceInQueueResponse message (peer code 44).
-
-  A peer replies with the upload queue placement of the requested file. Carries
-  the filename and its place, in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

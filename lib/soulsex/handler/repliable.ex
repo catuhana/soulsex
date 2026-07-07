@@ -1,7 +1,5 @@
 defmodule Soulsex.Handler.Repliable do
-  @moduledoc """
-  Behaviour for handlers of messages that always send a response to the peer.
-  """
+  @moduledoc false
 
   alias Soulseek.Message
   alias Soulsex.Connection.State

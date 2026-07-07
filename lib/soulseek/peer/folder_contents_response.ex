@@ -1,12 +1,5 @@
 defmodule Soulseek.Peer.FolderContentsResponse do
-  @moduledoc """
-  The FolderContentsResponse message (peer code 37).
-
-  A peer's reply to a FolderContentsRequest: the request token, the requested
-  folder, and the folders (with all subfolders) it contains. The payload is
-  zlib-compressed on the wire, so `encode/1` compresses and `decode/1`
-  decompresses.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

@@ -1,11 +1,6 @@
 defmodule Soulseek.ConnectionType do
-  @moduledoc "Connection types negotiated during peer initialization."
+  @moduledoc false
 
-  @typedoc """
-  - `:peer` - Peer to peer (`"P"`)
-  - `:file` - File transfer (`"F"`)
-  - `:distributed` - Distributed network (`"D"`)
-  """
   @type t :: :peer | :file | :distributed
 
   @spec to_wire(t()) :: String.t()

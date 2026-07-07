@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.AddThingILike do
-  @moduledoc """
-  The AddThingILike message (server code 51).
-
-  The client sends this to add an item to its likes list. The server sends no
-  reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

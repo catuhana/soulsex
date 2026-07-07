@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RemoveThingILike do
-  @moduledoc """
-  The RemoveThingILike message (server code 52).
-
-  The client sends this to remove an item from its likes list. The server sends
-  no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

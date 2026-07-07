@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.ItemSimilarUsers do
-  @moduledoc """
-  The ItemSimilarUsers message (server code 112).
-
-  The client sends a `Request` with an item; the server replies with a
-  `Response` listing users with similar interests for that item.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A request for similar users for an item, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -27,7 +22,7 @@ defmodule Soulseek.Server.ItemSimilarUsers do
   end
 
   defmodule Response do
-    @moduledoc "Similar users for an item, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

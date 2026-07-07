@@ -1,10 +1,9 @@
 defmodule Soulseek.Message do
-  @moduledoc "Behaviour for protocol messages that encode to and decode from the wire."
+  @moduledoc false
 
   @type t :: struct()
 
   @callback decode(binary()) :: t()
-
   @optional_callbacks decode: 1
 
   @spec resolve_decoder(module()) :: module()

@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.FolderContentsRequest do
-  @moduledoc """
-  The FolderContentsRequest message (peer code 36).
-
-  Asks a peer for the contents of a single folder. Carries a token and the
-  folder path, in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

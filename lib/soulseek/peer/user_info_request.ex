@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.UserInfoRequest do
-  @moduledoc """
-  The UserInfoRequest message (peer code 15).
-
-  An empty message asking a peer for its user information. The peer replies with
-  a `Soulseek.Peer.UserInfoResponse`.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

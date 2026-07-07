@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomOperators do
-  @moduledoc """
-  The RoomOperators message (server code 148).
-
-  The server sends the list of operators of a private room we are in. The client
-  sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room, :operators]
   defstruct [:room, :operators]

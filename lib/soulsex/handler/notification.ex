@@ -1,8 +1,5 @@
 defmodule Soulsex.Handler.Notification do
-  @moduledoc """
-  Behaviour for handlers of messages that never send a response
-  back to the peer and update the local state instead.
-  """
+  @moduledoc false
 
   alias Soulseek.Message
   alias Soulsex.Connection.State

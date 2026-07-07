@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.AddRoomMember do
-  @moduledoc """
-  The AddRoomMember message (server code 134).
-
-  The client adds a member to a private room (if owner or operator); the server
-  echoes it to room members. Both directions carry room and username.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

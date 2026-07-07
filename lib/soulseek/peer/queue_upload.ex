@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.QueueUpload do
-  @moduledoc """
-  The QueueUpload message (peer code 43).
-
-  Tells a peer that an upload of the named file should be queued on their end.
-  Carries only the filename, in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

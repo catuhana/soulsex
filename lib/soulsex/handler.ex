@@ -1,8 +1,5 @@
 defmodule Soulsex.Handler do
-  @moduledoc """
-  Dispatches to a Soulseek connection handler module, regardless of whether
-  it implements `Soulsex.Handler.Notification` or `Soulsex.Handler.Repliable`.
-  """
+  @moduledoc false
 
   alias Soulsex.Connection.State
   alias Soulsex.Handler.{Notification, Repliable}

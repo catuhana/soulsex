@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.AddRoomOperator do
-  @moduledoc """
-  The AddRoomOperator message (server code 143).
-
-  The client gives operator abilities to a private room member; the server
-  echoes it to room members. Both directions carry room and username.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

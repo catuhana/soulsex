@@ -1,7 +1,5 @@
 defmodule Soulsex.Handler.Registry do
-  @moduledoc """
-  Compile-time registry of message handlers.
-  """
+  @moduledoc false
 
   require Logger
 

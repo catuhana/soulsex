@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.UploadFailed do
-  @moduledoc """
-  The UploadFailed message (peer code 46).
-
-  Sent when a file connection for an active upload closes. Carries only the
-  filename, in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

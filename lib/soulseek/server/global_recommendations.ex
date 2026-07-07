@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.GlobalRecommendations do
-  @moduledoc """
-  The GlobalRecommendations message (server code 56).
-
-  The client sends an empty `Request`; the server replies with a `Response`
-  listing global recommendations and unrecommendations, each with a score.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "An empty request for global recommendations, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -22,7 +17,7 @@ defmodule Soulseek.Server.GlobalRecommendations do
   end
 
   defmodule Recommendation do
-    @moduledoc "A global recommendation and its score (negative for unrecommendations)."
+    @moduledoc false
 
     @enforce_keys [:item, :score]
     defstruct [:item, :score]
@@ -31,7 +26,7 @@ defmodule Soulseek.Server.GlobalRecommendations do
   end
 
   defmodule Response do
-    @moduledoc "Global recommendations, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

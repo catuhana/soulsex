@@ -1,12 +1,5 @@
 defmodule Soulseek.PeerInit.PeerInit do
-  @moduledoc """
-  The PeerInit message (peer init code 1).
-
-  Sent to initiate a direct connection to a peer, carrying our username and the
-  connection type. The token is always 0 today (it was once used with the
-  obsolete SendConnectToken server message). The same shape is used in both
-  directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

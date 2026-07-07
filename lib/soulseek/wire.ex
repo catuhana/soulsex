@@ -1,20 +1,5 @@
 defmodule Soulseek.Wire do
-  @moduledoc """
-  Encoders and decoders for the Soulseek protocol's primitive data types.
-
-  Every primitive from the protocol's packing format has two halves:
-
-    - an encoder (`uint8/1`, `string/1`, ...) that turns an Elixir term into its
-      wire representation, and
-    - a `take_*` decoder that reads one value off the front of a binary and
-      returns `{value, rest}`, where `rest` is the unconsumed remainder.
-
-  Decoders are meant to be chained: feed the `rest` of one into the next to walk
-  through a message field by field.
-
-  Integers are little-endian. See the "Packing" section of the Nicotine+
-  protocol documentation for the underlying reference.
-  """
+  @moduledoc false
 
   @spec uint8(integer()) :: binary()
   def uint8(value) when value in 0..255, do: <<value::little-8>>
@@ -39,12 +24,6 @@ defmodule Soulseek.Wire do
   def uint32_bool(true), do: uint32(1)
   def uint32_bool(false), do: uint32(0)
 
-  @doc """
-  Encodes a length-prefixed string.
-
-  Soulseek strings are UTF-8 on the wire. The value is written verbatim and is
-  not validated, so callers may pass latin-1 produced by older clients.
-  """
   @spec string(binary()) :: iodata()
   def string(value) when is_binary(value),
     do: [
@@ -105,11 +84,6 @@ defmodule Soulseek.Wire do
   def take_uint32_bool(<<1::little-32, rest::binary>>), do: {true, rest}
   def take_uint32_bool(<<0::little-32, rest::binary>>), do: {false, rest}
 
-  @doc """
-  Reads a length-prefixed string and returns `{value, rest}`.
-
-  The bytes are returned verbatim with no UTF-8 validation.
-  """
   @spec take_string(binary()) :: {binary(), binary()}
   def take_string(<<length::little-32, value::binary-size(length), rest::binary>>),
     do: {value, rest}

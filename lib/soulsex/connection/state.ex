@@ -1,7 +1,5 @@
 defmodule Soulsex.Connection.State do
-  @moduledoc """
-  State of a Soulseek connection process.
-  """
+  @moduledoc false
 
   @type t :: %__MODULE__{
           socket: :ranch_transport.socket(),

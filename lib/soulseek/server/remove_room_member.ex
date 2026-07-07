@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RemoveRoomMember do
-  @moduledoc """
-  The RemoveRoomMember message (server code 135).
-
-  The client removes a member from a private room (if owner or operator); the
-  server echoes it to room members. Both directions carry room and username.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

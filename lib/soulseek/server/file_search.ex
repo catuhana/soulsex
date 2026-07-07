@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.FileSearch do
-  @moduledoc """
-  The FileSearch message (server code 26).
-
-  The client sends a `Request` with a token and query to search the network; the
-  server relays searches from other users to us as a `Response` carrying the
-  searcher's username, token, and query.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A file search, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -29,7 +23,7 @@ defmodule Soulseek.Server.FileSearch do
   end
 
   defmodule Response do
-    @moduledoc "A relayed file search from another user, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.SetStatus do
-  @moduledoc """
-  The SetStatus message (server code 28).
-
-  The client sends its new status to the server (only away and online are used
-  in practice). The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

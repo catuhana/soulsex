@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomSearch do
-  @moduledoc """
-  The RoomSearch message (server code 120).
-
-  The client sends this to search files shared by users in a specific room. The
-  server forwards it to room users as a `FileSearch` message and sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

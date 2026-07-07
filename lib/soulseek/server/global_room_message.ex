@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.GlobalRoomMessage do
-  @moduledoc """
-  The GlobalRoomMessage message (server code 152).
-
-  The server sends a message written in the public room feed (every line written
-  in every public room). The client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room, :username, :message]
   defstruct [:room, :username, :message]

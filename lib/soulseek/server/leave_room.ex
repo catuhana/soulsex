@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.LeaveRoom do
-  @moduledoc """
-  The LeaveRoom message (server code 15).
-
-  The client sends this to leave a room; the server echoes it back to confirm.
-  Both directions carry only the room name.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

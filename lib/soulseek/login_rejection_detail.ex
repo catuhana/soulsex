@@ -1,14 +1,6 @@
 defmodule Soulseek.LoginRejectionDetail do
-  @moduledoc """
-  Detail accompanying an `:invalid_username` `Soulseek.LoginRejectionReason`.
-  """
+  @moduledoc false
 
-  @typedoc """
-  - `:nick_empty` - Nick empty (`"Nick empty."`)
-  - `:nick_too_long` - Nick too long, maximum 30 characters allowed (`"Nick too long."`)
-  - `:nick_invalid_characters` - Invalid characters in nick, only printable ASCII characters allowed (`"Invalid characters in nick."`)
-  - `:nick_leading_or_trailing_space` - No leading and trailing spaces allowed (`"No leading and trailing spaces allowed in nick."`)
-  """
   @type t ::
           :nick_empty
           | :nick_too_long

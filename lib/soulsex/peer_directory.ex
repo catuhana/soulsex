@@ -1,7 +1,5 @@
 defmodule Soulsex.PeerDirectory do
-  @moduledoc """
-  A directory of peers keyed by username to make them discoverable by other peers.
-  """
+  @moduledoc false
 
   alias Soulsex.PeerDirectory.Entry
   alias Soulsex.PeerDirectory.Entry.{Connected, Pending}

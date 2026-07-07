@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.GetUserStats do
-  @moduledoc """
-  The GetUserStats message (server code 36).
-
-  The client sends a `Request` with a username; the server replies with a
-  `Response` carrying that user's stats. The server also sends this unprompted
-  when a user's stats change in a room we share.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A request for a user's stats, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -28,7 +22,7 @@ defmodule Soulseek.Server.GetUserStats do
   end
 
   defmodule Response do
-    @moduledoc "A user's stats, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

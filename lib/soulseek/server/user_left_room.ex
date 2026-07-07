@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.UserLeftRoom do
-  @moduledoc """
-  The UserLeftRoom message (server code 17).
-
-  The server tells us someone has left a room we're in. The client sends no such
-  message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room, :username]
   defstruct [:room, :username]

@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomTickerRemoved do
-  @moduledoc """
-  The RoomTickerRemoved message (server code 115).
-
-  The server tells us a ticker was removed from a room. The client sends no such
-  message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room, :username]
   defstruct [:room, :username]

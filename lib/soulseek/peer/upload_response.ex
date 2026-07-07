@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.UploadResponse do
-  @moduledoc """
-  The TransferResponse message, upload variant (peer code 41).
-
-  Replies to a `TransferRequest`, either allowing the upload or giving a
-  rejection reason. The `reason` is present only when not allowed.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

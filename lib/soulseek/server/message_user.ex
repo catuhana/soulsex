@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.MessageUser do
-  @moduledoc """
-  The MessageUser message (server code 22).
-
-  The client sends a `Request` to deliver a private chat message to a user; the
-  server delivers a private message to us as a `Response` carrying an ID,
-  timestamp, sender, and whether the message is new.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A private message to send to a user, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -29,7 +23,7 @@ defmodule Soulseek.Server.MessageUser do
   end
 
   defmodule Response do
-    @moduledoc "A private message delivered to us, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

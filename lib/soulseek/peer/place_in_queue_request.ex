@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.PlaceInQueueRequest do
-  @moduledoc """
-  The PlaceInQueueRequest message (peer code 51).
-
-  Asks a peer for the upload queue placement of a file. Carries only the
-  filename, in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

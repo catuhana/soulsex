@@ -1,13 +1,8 @@
 defmodule Soulseek.Server.PossibleParents do
-  @moduledoc """
-  The PossibleParents message (server code 102).
-
-  The server sends a list of possible distributed parents to connect to. The
-  client sends no such message.
-  """
+  @moduledoc false
 
   defmodule Parent do
-    @moduledoc "A possible distributed parent's address."
+    @moduledoc false
 
     @enforce_keys [:username, :ip, :port]
     defstruct [:username, :ip, :port]

@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.WatchUser do
-  @moduledoc """
-  The WatchUser message (server code 5).
-
-  The client sends a `Request` with a username to be kept updated about that
-  user's status; the server replies with a `Response` carrying the user's
-  current status and stats when the user exists.
-  """
+  @moduledoc false
 
   alias Soulseek.{UserStatusCode, Wire}
 
   defmodule Request do
-    @moduledoc "A request to watch a user, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -28,7 +22,7 @@ defmodule Soulseek.Server.WatchUser do
   end
 
   defmodule Info do
-    @moduledoc "A watched user's status and stats, present when the user exists."
+    @moduledoc false
 
     @enforce_keys [:status, :avg_speed, :upload_num, :unknown, :files, :dirs]
     defstruct [:status, :avg_speed, :upload_num, :unknown, :files, :dirs, :country_code]
@@ -45,7 +39,7 @@ defmodule Soulseek.Server.WatchUser do
   end
 
   defmodule Response do
-    @moduledoc "A watched user's information, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

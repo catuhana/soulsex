@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.EnableRoomInvitations do
-  @moduledoc """
-  The EnableRoomInvitations message (server code 141).
-
-  The client enables or disables private room invitations; the server echoes the
-  setting back. Both directions carry only the flag.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

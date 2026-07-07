@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.GetPeerAddress do
-  @moduledoc """
-  The GetPeerAddress message (server code 3).
-
-  The client sends a `Request` with a username; the server replies with a
-  `Response` carrying that user's IP address, listening port, and obfuscation
-  settings.
-  """
+  @moduledoc false
 
   alias Soulseek.{ObfuscationType, Wire}
 
   defmodule Request do
-    @moduledoc "A request for a peer's address, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -30,7 +24,7 @@ defmodule Soulseek.Server.GetPeerAddress do
   end
 
   defmodule Response do
-    @moduledoc "A peer's address, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

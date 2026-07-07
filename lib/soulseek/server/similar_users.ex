@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.SimilarUsers do
-  @moduledoc """
-  The SimilarUsers message (server code 110).
-
-  The client sends an empty `Request`; the server replies with a `Response`
-  listing users with similar interests, each with a rating.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "An empty request for similar users, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -22,7 +17,7 @@ defmodule Soulseek.Server.SimilarUsers do
   end
 
   defmodule User do
-    @moduledoc "A similar user and their rating."
+    @moduledoc false
 
     @enforce_keys [:username, :rating]
     defstruct [:username, :rating]
@@ -31,7 +26,7 @@ defmodule Soulseek.Server.SimilarUsers do
   end
 
   defmodule Response do
-    @moduledoc "A list of similar users, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

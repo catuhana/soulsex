@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.CantConnectToPeer do
-  @moduledoc """
-  The CantConnectToPeer message (server code 1001).
-
-  The client sends a `Request` (token and username) when it can't respond to an
-  indirect connection request; the server forwards a `Response` (token) to the
-  peer that initiated it. The token comes from `ConnectToPeer`.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A failed indirect connection report, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -29,7 +23,7 @@ defmodule Soulseek.Server.CantConnectToPeer do
   end
 
   defmodule Response do
-    @moduledoc "A forwarded failed indirect connection report, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

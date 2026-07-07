@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.WishlistInterval do
-  @moduledoc """
-  The WishlistInterval message (server code 104).
-
-  The server tells us the wishlist search interval in seconds. The client sends
-  no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:interval]
   defstruct [:interval]

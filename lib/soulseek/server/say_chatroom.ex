@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.SayChatroom do
-  @moduledoc """
-  The SayChatroom message (server code 13).
-
-  The client sends a `Request` to post a message to a room; the server relays it
-  to room members as a `Response` that also carries the author's username.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A chat message to post to a room, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -28,7 +23,7 @@ defmodule Soulseek.Server.SayChatroom do
   end
 
   defmodule Response do
-    @moduledoc "A chat message posted to a room, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

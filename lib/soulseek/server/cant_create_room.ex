@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.CantCreateRoom do
-  @moduledoc """
-  The CantCreateRoom message (server code 1003).
-
-  The server tells us a room cannot be created (it only seems to be sent when
-  the name matches an existing private room). The client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room]
   defstruct [:room]

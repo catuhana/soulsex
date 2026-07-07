@@ -1,12 +1,5 @@
 defmodule Soulseek.Server.EmbeddedMessage do
-  @moduledoc """
-  The EmbeddedMessage message (server code 93).
-
-  The server sends an embedded distributed message (a distributed code and the
-  message bytes) when we are a branch root. The distributed message is the raw
-  remaining bytes of the payload with no length prefix. The client sends no such
-  message.
-  """
+  @moduledoc false
 
   @enforce_keys [:code, :message]
   defstruct [:code, :message]

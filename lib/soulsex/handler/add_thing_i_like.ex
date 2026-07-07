@@ -1,7 +1,5 @@
 defmodule Soulsex.Handler.AddThingILike do
-  @moduledoc """
-  Handler for the `Soulseek.Server.AddThingILike` message.
-  """
+  @moduledoc false
 
   alias Soulseek.Server.AddThingILike
   alias Soulsex.Connection.State

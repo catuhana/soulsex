@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.GetUserStatus do
-  @moduledoc """
-  The GetUserStatus message (server code 7).
-
-  The client sends a `Request` with a username; the server replies with a
-  `Response` carrying the user's status and whether they are privileged. The
-  server also sends this unprompted when a watched user's status changes.
-  """
+  @moduledoc false
 
   alias Soulseek.{UserStatusCode, Wire}
 
   defmodule Request do
-    @moduledoc "A request for a user's status, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -28,7 +22,7 @@ defmodule Soulseek.Server.GetUserStatus do
   end
 
   defmodule Response do
-    @moduledoc "A user's status, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

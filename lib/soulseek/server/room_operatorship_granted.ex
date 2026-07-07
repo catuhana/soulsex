@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomOperatorshipGranted do
-  @moduledoc """
-  The RoomOperatorshipGranted message (server code 145).
-
-  The server tells us we were given operator abilities in a private room. The
-  client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room]
   defstruct [:room]

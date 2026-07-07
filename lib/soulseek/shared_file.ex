@@ -1,17 +1,10 @@
 defmodule Soulseek.SharedFile do
-  @moduledoc """
-  A file entry shared by peer file listings and search results (SharedFileList,
-  FileSearch, FolderContents responses): a filename, size, extension, and a list
-  of attributes.
-
-  The leading `1` "code" byte each entry carries on the wire is written by
-  `encode/1` and asserted by `take/1`, so it is not stored on the struct.
-  """
+  @moduledoc false
 
   alias Soulseek.{FileAttributeType, Wire}
 
   defmodule Attribute do
-    @moduledoc "A file attribute: a `Soulseek.FileAttributeType` and its value."
+    @moduledoc false
 
     @enforce_keys [:type, :value]
     defstruct [:type, :value]

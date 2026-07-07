@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomMembershipRevoked do
-  @moduledoc """
-  The RoomMembershipRevoked message (server code 140).
-
-  The server tells us we were removed from a private room. The client sends no
-  such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room]
   defstruct [:room]

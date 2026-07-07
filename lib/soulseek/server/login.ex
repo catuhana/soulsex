@@ -1,15 +1,10 @@
 defmodule Soulseek.Server.Login do
-  @moduledoc """
-  The Login message (server code 1).
-
-  The client sends a `Request` right after the connection is established; the
-  server replies with a `Response`.
-  """
+  @moduledoc false
 
   alias Soulseek.{LoginRejectionDetail, LoginRejectionReason, Wire}
 
   defmodule Request do
-    @moduledoc "Login credentials sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -48,7 +43,7 @@ defmodule Soulseek.Server.Login do
   end
 
   defmodule Success do
-    @moduledoc "Payload of a successful login `Response`."
+    @moduledoc false
 
     @derive {
       Inspect,
@@ -67,7 +62,7 @@ defmodule Soulseek.Server.Login do
   end
 
   defmodule Failure do
-    @moduledoc "Payload of a rejected login `Response`."
+    @moduledoc false
 
     @enforce_keys [:reason]
     defstruct [:reason, :detail]
@@ -79,7 +74,7 @@ defmodule Soulseek.Server.Login do
   end
 
   defmodule Response do
-    @moduledoc "The server's reply to a login `Request`: a `Success` or a `Failure`."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

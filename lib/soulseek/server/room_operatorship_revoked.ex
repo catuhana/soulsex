@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomOperatorshipRevoked do
-  @moduledoc """
-  The RoomOperatorshipRevoked message (server code 146).
-
-  The server tells us our operator abilities were removed in a private room. The
-  client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room]
   defstruct [:room]

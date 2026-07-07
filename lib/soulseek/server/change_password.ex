@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.ChangePassword do
-  @moduledoc """
-  The ChangePassword message (server code 142).
-
-  The client sends a new password; the server echoes the new password back to
-  confirm the change. Both directions carry only the password.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

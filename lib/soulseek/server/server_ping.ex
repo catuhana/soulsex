@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.ServerPing do
-  @moduledoc """
-  The ServerPing message (server code 32).
-
-  An empty message the client sends to keep the connection alive. The server no
-  longer replies.
-  """
+  @moduledoc false
 
   defstruct []
 

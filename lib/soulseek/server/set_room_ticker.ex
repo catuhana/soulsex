@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.SetRoomTicker do
-  @moduledoc """
-  The SetRoomTicker message (server code 116).
-
-  The client sets its own ticker in a room (an empty ticker removes it). The
-  server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

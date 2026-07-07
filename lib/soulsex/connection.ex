@@ -1,12 +1,5 @@
 defmodule Soulsex.Connection do
-  @moduledoc """
-  `:ranch` protocol that accepts an incoming Soulseek server connection.
-
-  Each accepted socket gets its own process. The process buffers incoming bytes,
-  peels complete protocol frames off the buffer, decodes each as a client-to-server
-  message, and logs it (redacting credentials). Malformed or unknown messages are
-  logged and skipped; an oversized frame closes the connection.
-  """
+  @moduledoc false
 
   @behaviour :ranch_protocol
 

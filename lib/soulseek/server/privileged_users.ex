@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.PrivilegedUsers do
-  @moduledoc """
-  The PrivilegedUsers message (server code 69).
-
-  The server sends a list of privileged users (those who have donated). The
-  client sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:users]
   defstruct [:users]

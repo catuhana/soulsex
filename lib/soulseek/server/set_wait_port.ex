@@ -1,11 +1,5 @@
 defmodule Soulseek.Server.SetWaitPort do
-  @moduledoc """
-  The SetWaitPort message (server code 2).
-
-  The client sends this to indicate the port it listens on for peer connections
-  (2234 by default). Some clients (e.g. SoulseekQt) also obfuscate peer messages
-  and supply an obfuscation type and obfuscated port; the server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

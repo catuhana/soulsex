@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.AddThingIHate do
-  @moduledoc """
-  The AddThingIHate message (server code 117).
-
-  The client sends this to add an item to its hate list. The server sends no
-  reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

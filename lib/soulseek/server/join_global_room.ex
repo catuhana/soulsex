@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.JoinGlobalRoom do
-  @moduledoc """
-  The JoinGlobalRoom message (server code 150).
-
-  An empty message the client sends to subscribe to the public room feed
-  (messages from all public rooms). The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

@@ -1,9 +1,5 @@
 defmodule Soulseek.File.Offset do
-  @moduledoc """
-  The FileOffset message, sent over a file ('F') connection at its start to tell
-  the uploading peer how many bytes of the file we have already downloaded. The
-  offset is `0` when nothing was downloaded.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

@@ -1,7 +1,5 @@
 defmodule Soulsex.Handler.AddThingIHate do
-  @moduledoc """
-  Handler for the `Soulseek.Server.AddThingIHate` message.
-  """
+  @moduledoc false
 
   alias Soulseek.Server.AddThingIHate
   alias Soulsex.Connection.State

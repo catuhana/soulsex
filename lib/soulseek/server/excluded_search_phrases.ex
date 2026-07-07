@@ -1,11 +1,5 @@
 defmodule Soulseek.Server.ExcludedSearchPhrases do
-  @moduledoc """
-  The ExcludedSearchPhrases message (server code 160).
-
-  The server sends a list of phrases not allowed on the search network; file
-  paths containing them should be excluded from search responses. The client
-  sends no such message.
-  """
+  @moduledoc false
 
   @enforce_keys [:phrases]
   defstruct [:phrases]

@@ -1,10 +1,5 @@
 defmodule Soulseek.Peer.UploadDenied do
-  @moduledoc """
-  The UploadDenied message (peer code 50).
-
-  Rejects a `QueueUpload` attempt or a previously queued file. Carries the
-  filename and a rejection reason, in both directions.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

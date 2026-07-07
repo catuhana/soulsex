@@ -1,17 +1,5 @@
 defmodule Soulseek.Peer.FileSearchResponse do
-  @moduledoc """
-  The FileSearchResponse message (peer code 9).
-
-  A peer's reply to a file search, carrying the responding username, the search
-  token, the matching results, whether an upload slot is free, the average
-  upload speed, the queue length, and any privately shared results. The payload
-  is zlib-compressed on the wire, so `encode/1` compresses and `decode/1`
-  decompresses.
-
-  An "unknown" `uint32`, which official clients always set to `0`, sits between
-  the queue length and the private results; it is written as `0` and asserted to
-  be `0`, so it is not stored on the struct.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

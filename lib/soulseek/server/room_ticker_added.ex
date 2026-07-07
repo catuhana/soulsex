@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RoomTickerAdded do
-  @moduledoc """
-  The RoomTickerAdded message (server code 114).
-
-  The server tells us a ticker was added to a room. The client sends no such
-  message.
-  """
+  @moduledoc false
 
   @enforce_keys [:room, :username, :ticker]
   defstruct [:room, :username, :ticker]

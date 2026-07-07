@@ -1,9 +1,5 @@
 defmodule Soulseek.Server.CancelRoomOwnership do
-  @moduledoc """
-  The CancelRoomOwnership message (server code 137).
-
-  The client stops owning a private room. The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

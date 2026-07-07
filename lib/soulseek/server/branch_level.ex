@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.BranchLevel do
-  @moduledoc """
-  The BranchLevel message (server code 126).
-
-  The client tells the server its position (nth generation) in its branch of the
-  distributed network. The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

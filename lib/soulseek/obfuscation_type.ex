@@ -1,10 +1,6 @@
 defmodule Soulseek.ObfuscationType do
-  @moduledoc "Message obfuscation schemes used on a peer connection."
+  @moduledoc false
 
-  @typedoc """
-  - `:none` - No obfuscation (`0`)
-  - `:rotated` - Rotated-key obfuscation (`1`)
-  """
   @type t :: :none | :rotated
 
   @spec to_wire(t()) :: 0 | 1

@@ -1,18 +1,10 @@
 defmodule Soulseek.Server.ItemRecommendations do
-  @moduledoc """
-  The ItemRecommendations message (server code 111).
-
-  The client sends a `Request` with an item; the server replies with a
-  `Response` listing recommendations related to that item, each with a score.
-
-  The protocol document labels the score `uint32` but notes it can be negative,
-  so it is treated as a signed `int32` here.
-  """
+  @moduledoc false
 
   alias Soulseek.Wire
 
   defmodule Request do
-    @moduledoc "A request for recommendations related to an item, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -30,7 +22,7 @@ defmodule Soulseek.Server.ItemRecommendations do
   end
 
   defmodule Recommendation do
-    @moduledoc "A recommendation related to an item, and its score."
+    @moduledoc false
 
     @enforce_keys [:item, :score]
     defstruct [:item, :score]
@@ -39,7 +31,7 @@ defmodule Soulseek.Server.ItemRecommendations do
   end
 
   defmodule Response do
-    @moduledoc "Recommendations related to an item, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

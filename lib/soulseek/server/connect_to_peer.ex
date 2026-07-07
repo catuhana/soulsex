@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.ConnectToPeer do
-  @moduledoc """
-  The ConnectToPeer message (server code 18).
-
-  The client sends a `Request` to ask the server to arrange an indirect
-  connection with a user; the server forwards it to that user as a `Response`
-  carrying our address so they can connect back.
-  """
+  @moduledoc false
 
   alias Soulseek.{ConnectionType, ObfuscationType, Wire}
 
   defmodule Request do
-    @moduledoc "A request to connect to a peer, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -34,7 +28,7 @@ defmodule Soulseek.Server.ConnectToPeer do
   end
 
   defmodule Response do
-    @moduledoc "A forwarded peer connection request, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 

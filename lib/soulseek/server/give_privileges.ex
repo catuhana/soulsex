@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.GivePrivileges do
-  @moduledoc """
-  The GivePrivileges message (server code 123).
-
-  The client gives part of its privileges (in days) to another user. The server
-  sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

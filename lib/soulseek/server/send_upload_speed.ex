@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.SendUploadSpeed do
-  @moduledoc """
-  The SendUploadSpeed message (server code 121).
-
-  The client sends its upload speed after a finished upload so the server can
-  update its speed statistics. The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

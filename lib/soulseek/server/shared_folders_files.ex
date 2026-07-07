@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.SharedFoldersFiles do
-  @moduledoc """
-  The SharedFoldersFiles message (server code 35).
-
-  The client sends the number of folders and files it shares. The server sends
-  no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

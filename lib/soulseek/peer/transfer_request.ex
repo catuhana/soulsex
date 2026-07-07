@@ -1,11 +1,5 @@
 defmodule Soulseek.Peer.TransferRequest do
-  @moduledoc """
-  The TransferRequest message (peer code 40).
-
-  Sent when a peer is ready to start a transfer. Carries the transfer direction,
-  a token, and the filename; the file size is present only for uploads
-  (direction `:upload`).
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

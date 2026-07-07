@@ -1,16 +1,10 @@
 defmodule Soulseek.Server.JoinRoom do
-  @moduledoc """
-  The JoinRoom message (server code 14).
-
-  The client sends a `Request` to join a room (creating it if it doesn't exist);
-  the server replies with a `Response` listing the room's users with their
-  statuses and stats, plus owner and operators for private rooms.
-  """
+  @moduledoc false
 
   alias Soulseek.{UserStatusCode, Wire}
 
   defmodule Request do
-    @moduledoc "A request to join or create a room, sent by the client to the server."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
@@ -29,12 +23,12 @@ defmodule Soulseek.Server.JoinRoom do
   end
 
   defmodule Response do
-    @moduledoc "The users of a joined room, sent by the server to the client."
+    @moduledoc false
 
     @behaviour Soulseek.Message
 
     defmodule User do
-      @moduledoc "A user present in a joined room."
+      @moduledoc false
 
       @enforce_keys [
         :username,
@@ -73,7 +67,7 @@ defmodule Soulseek.Server.JoinRoom do
     end
 
     defmodule Private do
-      @moduledoc "The owner and operators of a private room."
+      @moduledoc false
 
       @enforce_keys [:owner, :operators]
       defstruct [:owner, :operators]

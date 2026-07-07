@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.HaveNoParent do
-  @moduledoc """
-  The HaveNoParent message (server code 71).
-
-  The client tells the server whether it has a distributed parent. The server
-  sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

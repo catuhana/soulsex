@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.UserJoinedRoom do
-  @moduledoc """
-  The UserJoinedRoom message (server code 16).
-
-  The server tells us someone has joined a room we're in, along with that user's
-  status and stats. The client sends no such message.
-  """
+  @moduledoc false
 
   alias Soulseek.UserStatusCode
 

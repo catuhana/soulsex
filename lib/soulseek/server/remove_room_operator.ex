@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.RemoveRoomOperator do
-  @moduledoc """
-  The RemoveRoomOperator message (server code 144).
-
-  The client removes operator abilities from a private room member; the server
-  echoes it to room members. Both directions carry room and username.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

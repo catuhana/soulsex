@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.AcceptChildren do
-  @moduledoc """
-  The AcceptChildren message (server code 100).
-
-  The client tells the server whether it wants to accept child nodes in the
-  distributed network. The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

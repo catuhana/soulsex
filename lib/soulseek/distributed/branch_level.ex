@@ -1,10 +1,5 @@
 defmodule Soulseek.Distributed.BranchLevel do
-  @moduledoc """
-  The DistribBranchLevel message (distributed code 4).
-
-  Our position (nth generation) in our branch of the distributed network. A
-  branch root's level is `0`.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 

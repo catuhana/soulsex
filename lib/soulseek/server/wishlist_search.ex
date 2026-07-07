@@ -1,10 +1,5 @@
 defmodule Soulseek.Server.WishlistSearch do
-  @moduledoc """
-  The WishlistSearch message (server code 103).
-
-  The client sends a wishlist search query (with a tracking token) at each
-  interval. The server sends no reply.
-  """
+  @moduledoc false
 
   @behaviour Soulseek.Message
 
