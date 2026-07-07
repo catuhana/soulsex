@@ -87,7 +87,8 @@ defmodule Soulsex.Handler.Login do
   defp register_peer(username, ip) do
     entry = %Pending{ip: ip}
 
-    case PeerDirectory.register(username, entry) do
+    PeerDirectory.register(username, entry)
+    |> case do
       {:ok, pid} ->
         {:ok, pid}
 
@@ -121,7 +122,8 @@ defmodule Soulsex.Handler.Login do
   end
 
   defp peer_ip(socket, transport) do
-    case transport.peername(socket) do
+    transport.peername(socket)
+    |> case do
       {:ok, {ip, _port}} -> ip
       {:error, _reason} -> {0, 0, 0, 0}
     end

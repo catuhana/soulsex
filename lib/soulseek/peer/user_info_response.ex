@@ -44,7 +44,8 @@ defmodule Soulseek.Peer.UserInfoResponse do
   end
 
   defp take_picture(binary) do
-    case Wire.take_bool(binary) do
+    Wire.take_bool(binary)
+    |> case do
       {true, rest} -> Wire.take_bytes(rest)
       {false, rest} -> {nil, rest}
     end

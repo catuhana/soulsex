@@ -26,7 +26,8 @@ defmodule Soulsex.Accounts do
   defp validate_password(_password), do: :ok
 
   defp validate_username(username) do
-    case UsernameValidator.validate(username) do
+    UsernameValidator.validate(username)
+    |> case do
       :ok -> :ok
       {:error, detail} -> {:error, {:invalid_username, detail}}
     end

@@ -13,7 +13,8 @@ defmodule Soulsex.Connection.Message.Processor do
   def process(body, state) do
     {code, payload} = Wire.take_uint32(body)
 
-    case Codes.module(code) do
+    Codes.module(code)
+    |> case do
       nil ->
         Logger.warning("unknown server code #{code}")
         {:ok, state}
@@ -24,7 +25,8 @@ defmodule Soulsex.Connection.Message.Processor do
   end
 
   defp dispatch_decoded(module, payload, state) do
-    case Decoder.decode(module, payload) do
+    Decoder.decode(module, payload)
+    |> case do
       :ignore -> {:ok, state}
       message -> Registry.dispatch(module, message, state)
     end
