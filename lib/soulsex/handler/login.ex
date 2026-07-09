@@ -9,18 +9,8 @@ defmodule Soulsex.Handler.Login do
   alias Soulsex.Handler.Repliable
   alias Soulsex.PeerDirectory
   alias Soulsex.PeerDirectory.Entry.Pending
-  alias Soulsex.Schema
 
   @behaviour Repliable
-
-  # TODO: Find a way to keep in sync with `LoginRejectionReason`.
-  @known_rejection_reasons [
-    :empty_password,
-    :invalid_password,
-    :invalid_version,
-    :server_full,
-    :server_private
-  ]
 
   @takeover_timeout :timer.seconds(5)
 
@@ -34,13 +24,6 @@ defmodule Soulsex.Handler.Login do
     |> reply(password, state)
   end
 
-  @spec reply(
-          {:ok, Schema.User.t()}
-          | {:error, Accounts.login_error()},
-          String.t(),
-          State.t()
-        ) ::
-          Soulsex.Handler.result()
   defp reply({:ok, user}, password, state) do
     Accounts.touch_last_login(user)
 
@@ -69,13 +52,13 @@ defmodule Soulsex.Handler.Login do
     {:reply_and_close, failure, state}
   end
 
-  defp reply({:error, :registration_failed}, _password, state) do
+  defp reply({:error, {:registration_failed, _changeset}}, _password, state) do
     Logger.warning("registration failed for username=#{state.username}")
 
     :close
   end
 
-  defp reply({:error, reason}, _password, state) when reason in @known_rejection_reasons do
+  defp reply({:error, {:rejected, reason}}, _password, state) do
     failure = %Failure{reason: reason, detail: nil}
 
     Logger.warning("login rejected=#{inspect(failure)}")

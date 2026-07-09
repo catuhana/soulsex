@@ -1,8 +1,6 @@
 defmodule Soulsex.Connection.Message.Processor do
   @moduledoc false
 
-  require Logger
-
   alias Soulseek.Server.Codes
   alias Soulseek.Wire
   alias Soulsex.Connection.Message.Decoder
@@ -16,19 +14,14 @@ defmodule Soulsex.Connection.Message.Processor do
     Codes.module(code)
     |> case do
       nil ->
-        Logger.warning("unknown server code #{code}")
-        {:ok, state}
+        {:error, {:unknown_code, code}, state}
 
       module ->
-        dispatch_decoded(module, payload, state)
-    end
-  end
-
-  defp dispatch_decoded(module, payload, state) do
-    Decoder.decode(module, payload)
-    |> case do
-      :ignore -> {:ok, state}
-      message -> Registry.dispatch(module, message, state)
+        Decoder.decode(module, payload)
+        |> case do
+          {:ok, message} -> Registry.dispatch(module, message, state)
+          {:error, :decode_failed} -> {:error, {:decode_failed, module}, state}
+        end
     end
   end
 end

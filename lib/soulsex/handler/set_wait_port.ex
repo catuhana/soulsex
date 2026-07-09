@@ -31,10 +31,10 @@ defmodule Soulsex.Handler.SetWaitPort do
       }
     )
     |> case do
-      {_new_entry, _old_entry} ->
+      {:ok, {_new_entry, _old_entry}} ->
         {:ok, state}
 
-      :error ->
+      {:error, :not_registered} ->
         {:error, {:unregistered_peer, state.username}, state}
     end
   end

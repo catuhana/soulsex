@@ -38,10 +38,13 @@ defmodule Soulsex.PeerDirectory do
           Soulseek.Server.SetWaitPort.t()
         ) ::
           {
-            Connected.t(),
-            Pending.t() | Connected.t()
+            :ok,
+            {
+              Connected.t(),
+              Pending.t() | Connected.t()
+            }
           }
-          | :error
+          | {:error, :not_registered}
   def set_wait_port(username, %Soulseek.Server.SetWaitPort{
         port: port,
         obfuscation_type: obfuscation_type,
@@ -60,28 +63,19 @@ defmodule Soulsex.PeerDirectory do
         already
     end)
     |> case do
-      {%Connected{} = new_entry, old_entry} ->
-        {new_entry, old_entry}
-
-      :error ->
-        :error
+      {%Connected{} = new_entry, old_entry} -> {:ok, {new_entry, old_entry}}
+      :error -> {:error, :not_registered}
     end
   end
 
   @spec lookup(String.t()) ::
-          {
-            pid(),
-            Entry.t()
-          }
-          | :error
+          {:ok, {pid(), Entry.t()}}
+          | {:error, :not_registered}
   def lookup(username) do
     Registry.lookup(@registry, username)
     |> case do
-      [{pid, entry}] ->
-        {pid, entry}
-
-      [] ->
-        :error
+      [{pid, entry}] -> {:ok, {pid, entry}}
+      [] -> {:error, :not_registered}
     end
   end
 end

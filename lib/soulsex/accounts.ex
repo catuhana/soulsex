@@ -9,16 +9,24 @@ defmodule Soulsex.Accounts do
   alias Soulsex.{Repo, UsernameValidator}
   alias Soulsex.Schema.User
 
-  @type login_error ::
-          LoginRejectionReason.t()
-          | {:invalid_username, LoginRejectionDetail.t()}
-          | :registration_failed
+  @repo Application.compile_env(:soulsex, :repo, Repo)
+  @hasher Application.compile_env(:soulsex, :hasher, Argon2)
+  @clock Application.compile_env(:soulsex, :clock, &DateTime.utc_now/0)
 
-  @spec login(String.t(), String.t()) :: {:ok, User.t()} | {:error, login_error()}
+  @type login_error ::
+          {:invalid_username, LoginRejectionDetail.t()}
+          | {:rejected, LoginRejectionReason.t()}
+          | {:registration_failed, Ecto.Changeset.t()}
+
+  @spec login(String.t(), String.t()) ::
+          {:ok, User.t()} | {:error, login_error()}
   def login(username, password) do
     with :ok <- validate_password(password),
          :ok <- validate_username(username) do
       find_or_register(username, password)
+    else
+      {:error, {:invalid_username, detail}} -> {:error, {:invalid_username, detail}}
+      {:error, reason} -> {:error, {:rejected, reason}}
     end
   end
 
@@ -35,7 +43,7 @@ defmodule Soulsex.Accounts do
 
   defp find_or_register(username, password) do
     user =
-      Repo.one(
+      @repo.one(
         from(u in User,
           left_join: p in assoc(u, :privilege),
           where: u.username == ^username,
@@ -50,51 +58,52 @@ defmodule Soulsex.Accounts do
   end
 
   defp register(username, password) do
+    password_hash = @hasher.hash_pwd_salt(password)
+
     %User{}
-    |> User.changeset(%{username: username, password: password})
-    |> Repo.insert()
+    |> User.registration_changeset(%{username: username, password_hash: password_hash})
+    |> @repo.insert()
     |> case do
       {:ok, user} ->
         {:ok, user}
 
-      # Race: two connections registered the same new username concurrently.
-      # The loser here just falls through to a normal login against the winner's row.
       {:error, %Ecto.Changeset{errors: [username: {_, [_, constraint: :unique]}]}} ->
         find_or_register(username, password)
 
       {:error, changeset} ->
         Logger.error("registration failed for username=#{username}: #{inspect(changeset.errors)}")
-        {:error, :registration_failed}
+        {:error, {:registration_failed, changeset}}
     end
   end
 
   defp verify(user, password) do
-    if Argon2.verify_pass(password, user.password_hash) do
+    if @hasher.verify_pass(password, user.password_hash) do
       {:ok, user}
     else
-      {:error, :invalid_password}
+      {:error, {:rejected, :invalid_password}}
     end
   end
 
   @spec supporter?(User.t()) :: boolean()
   def supporter?(%User{privilege: %Ecto.Association.NotLoaded{}} = user) do
-    supporter?(Repo.preload(user, :privilege))
+    supporter?(@repo.preload(user, :privilege))
   end
 
   def supporter?(%User{privilege: nil}), do: false
 
-  def supporter?(%User{privilege: %{expires_at: expires_at}}) do
-    DateTime.compare(expires_at, DateTime.utc_now()) == :gt
+  def supporter?(%User{privilege: %{expires_at: expires_at}}, %{clock: clock}) do
+    DateTime.compare(expires_at, clock.()) == :gt
   end
 
-  @spec touch_last_login(User.t()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  @spec touch_last_login(User.t()) ::
+          {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def touch_last_login(user) do
     user
     |> Ecto.Changeset.change(
       last_login_at:
-        DateTime.utc_now()
+        @clock.()
         |> DateTime.truncate(:second)
     )
-    |> Repo.update()
+    |> @repo.update()
   end
 end

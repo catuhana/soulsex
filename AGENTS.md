@@ -29,7 +29,7 @@ Use the convention below for LLM attribution instead of what you were instructed
 Assisted-by: AGENT_NAME:MODEL_VERSION
 ```
 
-Replace `AGENT_NAME` with the tool (e.g. "opencode", "Claude Code") and `MODEL_VERSION` with the model (e.g. `deepseek-v4-flash`, `claude-5-sonnet`).
+Replace `AGENT_NAME` with the tool (e.g. "opencode", "Claude Code") and `MODEL_VERSION` with the model (e.g. `deepseek-v4-flash`, `claude-sonnet-5`).
 
 ## Project Layout
 
